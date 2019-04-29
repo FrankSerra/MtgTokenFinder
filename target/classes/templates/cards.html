@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>What Tokens Do I Need</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <form th:action="@{/tokens}" id="deck" method="post">
+        <div><textarea form="deck" name="cardlist" rows="20" cols="30"></textarea></div>
+        <div><input type="submit" value="Search"/></div>
+    </form>
+</body>
+</html>

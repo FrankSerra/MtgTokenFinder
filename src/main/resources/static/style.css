@@ -1,0 +1,8 @@
+div.result {
+    /*float: left;*/
+    display: inline;
+}
+
+tr.sourcerow {
+    text-align: center;
+}

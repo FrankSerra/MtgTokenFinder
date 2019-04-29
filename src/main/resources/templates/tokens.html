@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>What Tokens Do I Need</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+    <p th:if="${cardlist != null}">
+        <ul class="errorlist">
+            <li th:each="error: ${cardlist}" th:text="${error}"></li>
+        </ul>
+    </p>
+    <div th:each="result: ${results}" class="result">
+        <table>
+            <tr class="tokenrow"><td><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></td></tr>
+            <tr th:each="source: ${result.sources}" class="sourcerow">
+                <td><a th:href="${source.scryfall_uri}" class="sourcelink"><span th:text="${source.name}"></span></a></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
