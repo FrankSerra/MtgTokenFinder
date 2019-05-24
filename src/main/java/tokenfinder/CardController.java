@@ -31,6 +31,7 @@ public class CardController {
     	SearchResult sr = tokenResults(cardlist);
     	model.addAttribute("cardlist", sr.errors);
     	model.addAttribute("results", sr.tokenResults);
+    	model.addAttribute("contains_create", sr.containsCreate);
     	
     	return "tokens";
     }
@@ -38,6 +39,8 @@ public class CardController {
     public SearchResult tokenResults(String cardlist) {
     	List<String> errors = new ArrayList<String>();
     	List<TokenResult> results = new ArrayList<TokenResult>();
+    	List<Card> containsCreate = new ArrayList<Card>();
+    	
     	try { 		
 	    	List<Card> cards = loadCards();
 	    	List<Card> tokens = loadTokens();
@@ -51,13 +54,21 @@ public class CardController {
 				
 				Card found = findCardByName(cards, term);
 				if(found != null && found.all_parts != null) {			
+					boolean goteem = false;
 					for (Iterator<Related_Card> r = found.all_parts.iterator(); r.hasNext();) {
 						Related_Card rc = r.next();
 						Card token = findToken(tokens, rc.id);
 						if(token != null) {
+							goteem = true;
 							results = addTokenAndSources(results, token, found);
 						}
 					}
+					if(!goteem && StringUtils.containsIgnoreCase(found.oracle_text, " create")) {
+						containsCreate.add(found);
+					}
+				}
+				else if(found != null && StringUtils.containsIgnoreCase(found.oracle_text, " create")) {
+					containsCreate.add(found);
 				}
 				else if(found == null){
 					errors.add(term + " not found.");
@@ -73,7 +84,7 @@ public class CardController {
     	if(errors.size() == 0)
     		errors = null;
     	
-    	return new SearchResult(errors, results);
+    	return new SearchResult(errors, results, containsCreate.size() > 0 ? containsCreate : null);
     }
     
     public List<Card> loadCards() throws Exception {

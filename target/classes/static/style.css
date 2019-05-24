@@ -1,6 +1,5 @@
 div.result {
-    /*float: left;*/
-    display: inline;
+    float: left;
 }
 
 tr.sourcerow {

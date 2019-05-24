@@ -19,5 +19,13 @@
             </tr>
         </table>
     </div>
+    <p th:if="${contains_create != null}">
+        These cards might create tokens, but have no officially associated token card:
+        <table>
+            <tr class="sourcerow">
+                <td th:each="source: ${contains_create}"><a th:href="${source.scryfall_uri}" class="sourcelink"><span th:text="${source.name}"></span></a></td>
+            </tr>
+        </table>
+    </p>
 </body>
 </html>
