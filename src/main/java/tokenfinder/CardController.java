@@ -48,7 +48,7 @@ public class CardController {
 	    	//Search terms
 			String[] terms = cardlist.split("\\n");
 			for (String term: terms) {
-				term = term.replace("\r", "").replaceAll("\\d", "").trim();
+				term = term.replace("\r", "").replaceAll("[0-9]+\\w* ", "").trim();
 				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard"))
 					continue;
 				

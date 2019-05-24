@@ -1,12 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>What Tokens Do I Need</title>
+    <title>TokenFinder</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
+    <p class="explanation">
+        <h3>MTG TokenFinder</h3>
+        Enter any number of cards separated by newlines. Don't worry about leading numbers (e.g., "2 Raise the Alarm", "3x Lingering Souls"), they will be ignored.
+    </p>
     <form th:action="@{/tokens}" id="deck" method="post">
-        <div><textarea form="deck" name="cardlist" rows="20" cols="30"></textarea></div>
+        <div><textarea form="deck" name="cardlist" placeholder="Enter cards here..." rows="20" cols="30"></textarea></div>
         <div><input type="submit" value="Search"/></div>
     </form>
 </body>
