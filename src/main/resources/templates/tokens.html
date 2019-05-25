@@ -6,15 +6,7 @@
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
     <main role="main" class="container">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${cardlist != null}">
-            <strong>The following cards were not found:</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <ul class="list-group">
-                <li class="list-group" th:each="error: ${cardlist}" th:text="${error}"></li>
-            </ul>
-        </div>
+        <div th:insert="error_alerts(${cardlist})"></div>
 
         <div class="accordion" id="accordionExample">
             <div class="card">
