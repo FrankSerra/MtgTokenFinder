@@ -31,6 +31,11 @@ public class CardController {
         return "search";
     }
     
+    @GetMapping("/about")
+    public String about(Model model) {
+        return "about";
+    }
+    
     @PostMapping("/tokens")
     public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, Model model) {
     	SearchResult sr = tokenResults(cardlist);

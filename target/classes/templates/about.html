@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header.html :: headerfiles('About')"></head>
+<body>
+    <div th:insert="fragments/header.html :: scripts"></div>
+    <nav th:insert="fragments/header.html :: navbar"></nav>
+
+    <main role="main" class="container">
+        <div class="container">
+            <p>
+                TokenFinder is built using <a target+"_blank" href="https://spring.io/">Spring</a>, <a target+"_blank" href="https://spring.io/projects/spring-boot">Spring Boot</a>, 
+                <a target+"_blank" href="https://www.thymeleaf.org/">Thymeleaf 3</a> and <a target+"_blank" href="https://getbootstrap.com/">Bootstrap 4</a>.
+            </p>
+        </div>
+    </main>
+    <footer th:insert="fragments/footer.html :: footer"></footer>
+</body>
+</html>
