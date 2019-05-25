@@ -6,7 +6,7 @@
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
     <main role="main" class="container">
-        <div th:insert="error_alerts(${cardlist})"></div>
+        <div th:insert="fragments/error_alerts.html :: error_alerts(${cardlist})"></div>
 
         <div class="accordion" id="accordionExample">
             <div class="card">
