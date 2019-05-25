@@ -35,7 +35,7 @@ public class CardController {
     public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, Model model) {
     	SearchResult sr = tokenResults(cardlist);
     	model.addAttribute("cardlist", sr.errors);
-    	model.addAttribute("results", sr.tokenResults);
+    	model.addAttribute("results", sr.tokenResults.size() > 0 ? sr.tokenResults : null);
     	model.addAttribute("contains_create", sr.containsCreate);
     	
     	return "tokens";
