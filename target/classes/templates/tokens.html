@@ -1,31 +1,48 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>TokenFinder</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="style.css" rel="stylesheet"/>
-</head>
+<head th:insert="fragments/header.html :: headerfiles"></head>
 <body>
-    <p th:if="${cardlist != null}">
-        <ul class="errorlist">
-            <li th:each="error: ${cardlist}" th:text="${error}"></li>
-        </ul>
-    </p>
-    <div th:each="result: ${results}" class="result">
-        <table>
-            <tr class="tokenrow"><td><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></td></tr>
-            <tr th:each="source: ${result.sources}" class="sourcerow">
-                <td><a th:href="${source.scryfall_uri}" class="sourcelink"><span th:text="${source.name}"></span></a></td>
-            </tr>
-        </table>
-    </div>
-    <p th:if="${contains_create != null}">
-        These cards might create tokens, but have no officially associated token card:
-        <table>
-            <tr class="sourcerow">
-                <td th:each="source: ${contains_create}"><a th:href="${source.scryfall_uri}" class="sourcelink"><span th:text="${source.name}"></span></a></td>
-            </tr>
-        </table>
-    </p>
+    <div th:insert="fragments/header.html :: scripts"></div>
+    <nav th:insert="fragments/header.html :: navbar"></nav>
+
+    <main role="main" class="container">
+        <div class="container" th:if="${cardlist != null}">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="#" data-toggle="collapse" data-target="#collapseErrors" aria-expanded="true" aria-controls="collapseErrors">
+                        Errors found. Click here to view them.
+                    </a>
+                </li>
+                <div class="collapse" id="collapseErrors">
+                    <li class="list-group-item list-group-item-danger error-collapsible" th:each="error: ${cardlist}" th:text="${error}"></li>
+                </div>
+            </ul>
+        </div>
+            <div class="collapse" id="errorCollapsible">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-danger" th:each="error: ${cardlist}" th:text="${error}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="d-inline-block" th:each="result: ${results}">
+                <ul class="list-group list-group-flush sourcerow">
+                    <li class="list-group-item"><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></li>
+                    <li class="list-group-item" th:each="source: ${result.sources}"><a th:href="${source.scryfall_uri}"><span th:text="${source.name}"></span></a></li>
+                </ul>
+            </div>
+        </div>
+                
+        <div class="container" th:if="${contains_create != null}">
+            These cards might create tokens, but have no officially associated token card:
+                <ul class="list-unstyled" th:each="source: ${contains_create}">
+                    <li>
+                        <a th:href="${source.scryfall_uri}" class="sourcelink"><span th:text="${source.name}"></span></a>
+                    </li>
+                </ul>
+            </div>
+    </main>
+    <footer th:insert="fragments/footer.html :: footer"></footer>
 </body>
 </html>

@@ -23,7 +23,12 @@ public class CardController {
 
     @GetMapping({"/", "/tokens"})
     public String cards(Model model) {
-        return "cards";
+        return "redirect:/search";
+    }
+    
+    @GetMapping("/search")
+    public String search(Model model) {
+        return "search";
     }
     
     @PostMapping("/tokens")
