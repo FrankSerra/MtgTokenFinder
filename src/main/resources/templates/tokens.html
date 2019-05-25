@@ -8,24 +8,7 @@
     <main role="main" class="container">
         <div th:insert="fragments/error_alerts.html :: error_alerts(${cardlist})"></div>
 
-        <div class="accordion" id="accordionExample">
-            <div class="card">
-                <div class="card-header">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#foundTokens" aria-expanded="true" aria-controls="foundTokens">
-                    Tokens Needed
-                    </button>
-                </div>
-                <div class="card-body collapse show" id="foundTokens">
-                    <div class="d-inline-block" th:if="${results != null}" th:each="result: ${results}">
-                        <ul class="list-group list-group-flush sourcerow">
-                            <li class="list-group-item"><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></li>
-                            <li class="list-group-item" th:each="source: ${result.sources}"><a th:href="${source.scryfall_uri}"><span th:text="${source.name}"></span></a></li>
-                        </ul>
-                    </div>
-                    <p th:if="${results == null}">No tokens found.</p>
-                </div>
-            </div>
-        </div>
+        <div th:insert="fragments/token_results.html :: token_results(${results})"></div>
                 
         <div th:insert="fragments/contains_create.html :: contains_create(${contains_create})"></div>
     </main>
