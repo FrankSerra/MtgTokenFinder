@@ -6,43 +6,49 @@
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
     <main role="main" class="container">
-        <div class="container" th:if="${cardlist != null}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${cardlist != null}">
+            <strong>The following cards were not found:</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             <ul class="list-group">
-                <li class="list-group-item">
-                    <a href="#" data-toggle="collapse" data-target="#collapseErrors" aria-expanded="true" aria-controls="collapseErrors">
-                        Errors found. Click here to view them.
-                    </a>
-                </li>
-                <div class="collapse" id="collapseErrors">
-                    <li class="list-group-item list-group-item-danger error-collapsible" th:each="error: ${cardlist}" th:text="${error}"></li>
-                </div>
+                <li class="list-group" th:each="error: ${cardlist}" th:text="${error}"></li>
             </ul>
         </div>
-            <div class="collapse" id="errorCollapsible">
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-danger" th:each="error: ${cardlist}" th:text="${error}"></li>
-                </ul>
-            </div>
-        </div>
 
-        <div class="container-fluid">
-            <div class="d-inline-block" th:each="result: ${results}">
-                <ul class="list-group list-group-flush sourcerow">
-                    <li class="list-group-item"><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></li>
-                    <li class="list-group-item" th:each="source: ${result.sources}"><a th:href="${source.scryfall_uri}"><span th:text="${source.name}"></span></a></li>
-                </ul>
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#foundTokens" aria-expanded="true" aria-controls="foundTokens">
+                    Tokens Needed
+                    </button>
+                </div>
+                <div class="card-body collapse show" id="foundTokens">
+                    <div class="d-inline-block" th:each="result: ${results}">
+                        <ul class="list-group list-group-flush sourcerow">
+                            <li class="list-group-item"><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></li>
+                            <li class="list-group-item" th:each="source: ${result.sources}"><a th:href="${source.scryfall_uri}"><span th:text="${source.name}"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
                 
-        <div class="container" th:if="${contains_create != null}">
-            These cards might create tokens, but have no officially associated token card:
-                <ul class="list-unstyled" th:each="source: ${contains_create}">
-                    <li>
-                        <a th:href="${source.scryfall_uri}" class="sourcelink"><span th:text="${source.name}"></span></a>
-                    </li>
-                </ul>
+        <div class="card" th:if="${contains_create != null}">
+            <div class="card-header">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#mightMakeTokens" aria-expanded="true" aria-controls="mightMakeTokens">
+                Other Tokens
+                </button>
             </div>
+            <div class="card-body  collapse show" id="mightMakeTokens">
+                <h5 class="">These cards might create tokens, but have no officially associated token card.</h5>
+                <div class="d-inline-block" th:each="source: ${contains_create}">
+                    <a th:href="${source.scryfall_uri}"><img th:src="${source.image_uris.normal}" height="400" /></a>
+                </div>
+            </div>
+        </div>
     </main>
+
     <footer th:insert="fragments/footer.html :: footer"></footer>
 </body>
 </html>

@@ -76,7 +76,7 @@ public class CardController {
 					containsCreate.add(found);
 				}
 				else if(found == null){
-					errors.add(term + " not found.");
+					errors.add(term);
 				}
 			}
 			
