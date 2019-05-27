@@ -5,11 +5,14 @@
     <div th:insert="fragments/header.html :: scripts"></div>
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
-    <main role="main" class="container">
+    <main role="main" class="container" th:with="title='TokenFinder'">
         <div class="container">
             <p>
-                TokenFinder is built using <a target+"_blank" href="https://spring.io/">Spring</a>, <a target+"_blank" href="https://spring.io/projects/spring-boot">Spring Boot</a>, 
+                <span th:text="${title}"></span> is built using <a target+"_blank" href="https://spring.io/">Spring</a>, <a target+"_blank" href="https://spring.io/projects/spring-boot">Spring Boot</a>, 
                 <a target+"_blank" href="https://www.thymeleaf.org/">Thymeleaf 3</a> and <a target+"_blank" href="https://getbootstrap.com/">Bootstrap 4</a>.
+            </p>
+            <p>
+                <span th:text="${title}"></span> uses <a target="_blank" href="https://scryfall.com/docs/api/bulk-data">Scryfall Bulk Data</a> to analyze card=token relationships. It does not use live data, and may not have very recently recently card data.
             </p>
         </div>
     </main>
