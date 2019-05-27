@@ -9,8 +9,18 @@
         <div class="container">
             <form th:action="@{/tokens}" id="deck" method="post">
                 <div class="form-group">
-                    <label for="cardlist">Enter any number of cards separated by newlines.</label>
+                    <label for="cardlist">Enter cards separated by newlines.</label>
                     <textarea class="form-control" rows="10" form="deck" name="cardlist" placeholder="Don't worry about leading numbers (e.g., &quot;2&nbsp;Raise&nbsp;the&nbsp;Alarm&quot;, &quot;3x&nbsp;Lingering&nbsp;Souls&quot;), they will be ignored."></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
+            </form>
+        </div>
+        <div class="container">
+            <form th:action="@{/deckbox}" id="deckbox" method="post">
+                <div class="form-group">
+                    <label for="deckboxurl">Enter Deckbox.org URL</label>
+                    <input class="form-control" form="deckbox" type="text" name="deckboxurl" />
                 </div>
                 
                 <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>

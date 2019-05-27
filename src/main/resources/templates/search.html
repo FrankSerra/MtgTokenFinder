@@ -16,6 +16,16 @@
                 <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
             </form>
         </div>
+        <div class="container">
+            <form th:action="@{/deckbox}" id="deckbox" method="post">
+                <div class="form-group">
+                    <label for="deckboxurl">Enter Deckbox.org URL</label>
+                    <input class="form-control" form="deckbox" type="text" name="deckboxurl" />
+                </div>
+                
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
+            </form>
+        </div>
     </main>
     <footer th:insert="fragments/footer.html :: footer"></footer>
 </body>

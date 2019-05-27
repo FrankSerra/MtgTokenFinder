@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -199,7 +195,12 @@ public class CardController {
     public List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
     	boolean found = false;
     	
-    	for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
+    	//Edit source name for double-faced cards
+    	int split = source.name.indexOf(" // ");
+    	if(split >= 0)   	
+    		source.name = source.name.substring(0, split);
+    	
+    		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
     		TokenResult tr = i.next();
     		if(tr.token.oracle_id.equals(token.oracle_id)) {
     			found = true;
