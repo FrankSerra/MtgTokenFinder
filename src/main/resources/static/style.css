@@ -28,3 +28,16 @@ footer.footer {
 div.card {
     margin-bottom: 20px;
 }
+
+
+@media (min-width: 768px) {
+    main.searchForm {
+	    max-width: 60%;
+    }
+}
+
+@media (min-width: 992px) {
+    main.searchForm {
+	    max-width: 40%;
+    }
+}
