@@ -9,7 +9,7 @@
             <div class="card-body collapse show" id="foundTokens">
                 <div class="d-inline-block" th:each="result: ${results}">
                     <ul class="list-group list-group-flush sourcerow">
-                        <li class="list-group-item"><a th:href="${result.token.scryfall_uri}"><img th:src="${result.token.image_uris.normal}" height="400" /></a></li>
+                        <li class="list-group-item"><div th:insert="fragments/card_image_link.html :: card_image(${result.token})"></div></li>
                         <li class="list-group-item" th:each="source: ${result.sources}"><a th:href="${source.scryfall_uri}"><span th:text="${source.name}"></span></a></li>
                     </ul>
                 </div>
