@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 public class Card {
 	public String oracle_id, id, oracle_text;
-	public String name, type_line;
+	public String name;
 	public Image_URI image_uris;
 	public ArrayList<Related_Card> all_parts;
 	public ArrayList<CardFace> card_faces;
 	String scryfall_uri;
-	public String small_image;
 	
 	public String getOracle_id() {
 		return oracle_id;
@@ -28,12 +27,6 @@ public class Card {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getType_line() {
-		return type_line;
-	}
-	public void setType_line(String type_line) {
-		this.type_line = type_line;
 	}
 	public Image_URI getImage_uris() {
 		return image_uris;
@@ -64,12 +57,5 @@ public class Card {
 	}
 	public void setCard_faces(ArrayList<CardFace> card_faces) {
 		this.card_faces = card_faces;
-	}
-	public String getSmall_image() {
-		return small_image;
-	}
-	public void setSmall_image(String small_image) {
-		this.small_image = small_image;
-	}
-	
+	}	
 }

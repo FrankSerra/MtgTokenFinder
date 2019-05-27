@@ -170,17 +170,6 @@ public class CardController {
     public List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
     	boolean found = false;
     	
-    	//Determine image to use for source
-    	try {
-	    	if(source.image_uris != null)
-	    		source.small_image = source.image_uris.small;
-	    	else if(source.card_faces != null)
-	    		source.small_image = source.card_faces.get(0).image_uris.small;
-    	}
-    	catch(Exception e) {
-    		source.small_image = "";
-    	}
-    	
     	for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
     		TokenResult tr = i.next();
     		if(tr.token.oracle_id.equals(token.oracle_id)) {
