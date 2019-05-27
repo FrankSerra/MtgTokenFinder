@@ -1,14 +1,22 @@
 package tokenfinder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +29,7 @@ import com.google.gson.reflect.TypeToken;
 @Controller
 public class CardController {
 
-    @GetMapping({"/", "/tokens"})
+    @GetMapping({"/", "/tokens", "/deckbox"})
     public String cards(Model model) {
         return "redirect:/search";
     }
@@ -44,6 +52,27 @@ public class CardController {
     	model.addAttribute("contains_create", sr.containsCreate);
     	
     	return "tokens";
+    }
+    
+    @PostMapping("/deckbox")
+    public String deckbox(@RequestParam(name="deckboxurl", required=true, defaultValue="") String deckboxurl, Model model) {
+    	if(!deckboxurl.endsWith("/export"))
+    		deckboxurl = deckboxurl + "/export";
+    	
+    	Document doc = null;
+		try {
+			doc = Jsoup.connect(deckboxurl).get();
+		} catch (IOException e) {
+			model.addAttribute("error", "Unable to connect to Deckbox.org - try again later.");
+			return "error";
+		}
+    	
+		Element cards = doc.select("body").first();
+		doc.select("p").remove();
+    	String list = cards.html();
+    	list = list.replace("<br>", "\n");
+    	
+		return tokens(list, model);
     }
     
     public SearchResult tokenResults(String cardlist) {
