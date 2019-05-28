@@ -87,7 +87,7 @@ public class CardController {
 				
 				int cut = Math.max(term.indexOf("("), term.indexOf("["));
 				if(cut >= 0)
-					term = term.substring(0, cut).strip();
+					term = term.substring(0, cut).trim();
 				
 				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard"))
 					continue;
