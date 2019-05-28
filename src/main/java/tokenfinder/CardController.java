@@ -103,11 +103,11 @@ public class CardController {
 							results = addTokenAndSources(results, token, found);
 						}
 					}
-					if(!goteem && StringUtils.containsIgnoreCase(found.oracle_text, " create")) {
+					if(!goteem && this.oracle_text_contains_create(found)) {
 						containsCreate.add(found);
 					}
 				}
-				else if(found != null && StringUtils.containsIgnoreCase(found.oracle_text, " create")) {
+				else if(found != null && this.oracle_text_contains_create(found)) {
 					containsCreate.add(found);
 				}
 				else if(found == null){
@@ -125,6 +125,20 @@ public class CardController {
     		errors = null;
     	
     	return new SearchResult(errors, results, containsCreate.size() > 0 ? containsCreate : null);
+    }
+    
+    public boolean oracle_text_contains_create(Card c) {
+    	if(c.oracle_text != null) {
+    		return (StringUtils.containsIgnoreCase(c.oracle_text, " create") || c.oracle_text.startsWith("Create"));
+    	}
+    	else if(c.card_faces.size() > 0) {
+    		for (CardFace face : c.card_faces) {
+				if(StringUtils.containsIgnoreCase(face.oracle_text, " create") || face.oracle_text.startsWith("Create"))
+					return true;
+			}
+    	}
+    	
+    	return false;
     }
     
     public List<Card> loadCards() throws Exception {
@@ -200,17 +214,12 @@ public class CardController {
     public List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
     	boolean found = false;
     	
-    	//Edit source name for double-faced cards
-    	int split = source.name.indexOf(" // ");
-    	if(split >= 0)   	
-    		source.name = source.name.substring(0, split);
-    	
-    		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
-    		TokenResult tr = i.next();
-    		if(tr.token.oracle_id.equals(token.oracle_id)) {
-    			found = true;
-    			tr.sources.add(source);
-    		}
+		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
+			TokenResult tr = i.next();
+			if(tr.token.oracle_id.equals(token.oracle_id)) {
+				found = true;
+				tr.sources.add(source);
+			}
     	}
     	
     	if(found == false) {
