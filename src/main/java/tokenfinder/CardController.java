@@ -85,7 +85,7 @@ public class CardController {
 			for (String term: terms) {
 				term = term.replace("\r", "").replaceAll("[0-9]+\\w* ", "").trim();
 				
-				int cut = Math.max(term.indexOf("("), term.indexOf("["));
+				int cut = Math.min(term.indexOf("("), term.indexOf("["));
 				if(cut >= 0)
 					term = term.substring(0, cut).trim();
 				
