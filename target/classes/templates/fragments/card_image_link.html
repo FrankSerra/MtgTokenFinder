@@ -1,5 +1,0 @@
-<a th:fragment="card_image(source)" th:href="${source.scryfall_uri}" target="_blank">
-    <img class="d-block d-sm-none mx-auto" th:src="${source.image_uris.small}" width="120" />
-    <img class="d-none d-sm-block d-md-none mx-auto" th:src="${source.image_uris.small}" />
-    <img class="d-none d-md-block mx-auto" th:src="${source.image_uris.normal}" height="360" />
-</a>
