@@ -29,15 +29,24 @@ div.card {
     margin-bottom: 20px;
 }
 
-
+/*Tablets*/
 @media (min-width: 768px) {
     main.searchForm {
 	    max-width: 60%;
     }
 }
 
+/*Desktops*/
 @media (min-width: 992px) {
     main.searchForm {
 	    max-width: 40%;
     }
+}
+
+img.dfc {
+    object-fit: cover;
+}
+
+div.dfc {
+    display: inline-block !important;
 }
