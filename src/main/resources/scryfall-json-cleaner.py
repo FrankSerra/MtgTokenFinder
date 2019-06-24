@@ -27,7 +27,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
 
     no_token_cards = [x for x in clean_cards if x['oracle_id'] not in token_ids if 'all_parts' not in x.keys() if not token_ids.add(x['oracle_id'])]
 
-    tokens = [x for x in all_cards if x['layout'] in ["token", "emblem"]]
+    tokens = [x for x in all_cards if x['layout'] in ["token", "emblem", "double_faced_token"]]
 
     #List of keys to remove
     remove_keys = ('arena_id',
