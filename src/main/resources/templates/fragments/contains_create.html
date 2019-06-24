@@ -11,10 +11,13 @@
             </div>
         </div>
         <div class="card-body  collapse show" id="mightMakeTokens">
-            <h5>These cards might create tokens, but have no token card.</h5>
+            <h5 class="text-center">These cards don't have an official token, but here are our best guesses.</h5>
             <div class="row justify-content-center">
-                <div class="col w-50" th:each="source: ${cardlist}">
-                    <a th:insert="fragments/card_image_link.html :: card_image(${source})"></a>
+                <div class="col w-50" th:each="result: ${cardlist}">
+                    <ul class="list-group list-group-flush sourcerow">
+                        <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.card})"></a></li>
+                        <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank"><span th:if="${#lists.size(result.guesses) > 1}" th:text="${source.display_name}"></span><span th:if="${#lists.size(result.guesses) <= 1}" th:text="${source.name}"></span></a></li>
+                    </ul>
                 </div>
             </div>
         </div>            

@@ -6,8 +6,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -75,6 +79,7 @@ public class CardController {
     	List<String> errors = new ArrayList<String>();
     	List<TokenResult> results = new ArrayList<TokenResult>();
     	List<Card> containsCreate = new ArrayList<Card>();
+    	List<ContainsCreateResult> ccResults = new ArrayList<ContainsCreateResult>();
     	
     	try { 		
 	    	List<Card> cards = loadCards();
@@ -115,6 +120,26 @@ public class CardController {
 				}
 			}
 			
+			//Process containsCreate for token guesses			
+			for(Card cc : containsCreate) {
+				Pattern pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
+		        Matcher matcher = pattern.matcher(cc.oracle_text);
+		        List<Card> guess = null;
+		        
+			    if(matcher.find()) {
+			    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());
+			    	Pattern clausePattern = Pattern.compile("\\b[A-Z].*?\\b");
+			        Matcher clauseMatcher = clausePattern.matcher(tokenClause);
+			    	
+			        if(clauseMatcher.find()) { 
+			        	String tokenName = tokenClause.substring(clauseMatcher.start(), clauseMatcher.end());
+			        	guess = findTokensByName(tokens, tokenName);
+			        }
+		        }
+			    
+			    ccResults.add(new ContainsCreateResult(cc, guess, ""));
+			}
+			
 			errors.removeIf(p -> p.isEmpty());
     	}
     	catch(Exception e) {
@@ -124,7 +149,7 @@ public class CardController {
     	if(errors.size() == 0)
     		errors = null;
     	
-    	return new SearchResult(errors, results, containsCreate.size() > 0 ? containsCreate : null);
+    	return new SearchResult(errors, results, ccResults);
     }
     
     public boolean oracle_text_contains_create(Card c) {
@@ -209,6 +234,63 @@ public class CardController {
     			return c;
     	}
     	return null;
+    }
+    
+    public List<Card> findTokensByName(List<Card> cards, String name) {
+    	List<Card> matches = new ArrayList<Card>();
+    	Set<String> ids = new HashSet<String>();
+    	
+    	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
+    		Card c = i.next();
+    		
+    		if(c.name.equals(name)) {
+    			if(ids.add(c.oracle_id)) {
+    				String disp = "";
+    				if(c.power != null) {
+    					disp += c.power + "/" + c.toughness + " ";
+    				}
+    				
+    				if(c.color_identity.size() == 0) {
+    					disp += "Colorless ";
+    				}
+    				else {
+    					for(int idx=0; idx<c.color_identity.size(); idx++) {
+    						if(idx > 0)
+    							disp += "-";
+    						
+        					switch(c.color_identity.get(idx)) {
+        					case "W":
+        						disp += "White";
+        						break;
+        					case "U":
+        						disp += "Blue";
+        						break;
+        					case "B":
+        						disp += "Black";
+        						break;
+        					case "R":
+        						disp += "Red";
+        						break;
+        					case "G":
+        						disp += "Green";
+        						break;
+        					}
+        				}
+    				}
+    				
+    				disp += " " + c.name;
+    				
+    				if(!c.oracle_text.isEmpty()) {
+    					disp += " with " + c.oracle_text;
+    				}
+    				
+    				c.display_name = disp;
+					matches.add(c);
+    			}
+    		}
+    	}
+
+    	return matches;
     }
     
     public List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
