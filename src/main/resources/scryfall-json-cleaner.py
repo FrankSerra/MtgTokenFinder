@@ -35,7 +35,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'border_color',
                    'collector_number',
                    'cmc',
-                   'color_identity',
                    'color_indicator',
                    'colors',
                    'digital',
@@ -59,7 +58,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'nonfoil',
                    'object',
                    'oversized',
-                   'power', 
                    'prints_search_uri',
                    'promo',
                    'rarity', 
@@ -75,7 +73,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'set_uri', 
                    'story_spotlight',
                    'tcgplayer_id',
-                   'toughness',
                    'type_line',
                    'uri',
                    'watermark')
