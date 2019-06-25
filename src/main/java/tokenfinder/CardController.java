@@ -137,15 +137,24 @@ public class CardController {
 				Pattern pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
 		        Matcher matcher = pattern.matcher(cc.oracle_text);
 		        List<Card> guess = null;
+		        String power = null, toughness = null;
 		        
 			    if(matcher.find()) {
 			    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());  	
 			    			
-			    	//If it's a creature token, remove the P/T declaration
+			    	//If it's a creature token, get the P/T declaration
+			    	Pattern ptOnly = Pattern.compile("[0-9xX\\*]+/[0-9xX\\*]+");
+			    	Matcher ptOnlyMatcher = ptOnly.matcher(tokenClause);
+			    	
 			    	Pattern pt = Pattern.compile("(?<=[0-9xX\\*]/[0-9xX\\*])(.*)");
 			    	Matcher ptMatcher = pt.matcher(tokenClause);
 			    	if(ptMatcher.find()) {
+			    		ptOnlyMatcher.find();
+			    		String stats = tokenClause.substring(ptOnlyMatcher.start(), ptOnlyMatcher.end());
 			    		tokenClause = tokenClause.substring(ptMatcher.start(), ptMatcher.end());
+			    		
+			    		power = stats.substring(0, stats.indexOf("/"));
+			    		toughness = stats.substring(stats.indexOf("/")+1, stats.length());
 			    	}			    	
 			    	
 			    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b )+(\\b[A-Z].*\\b)*");
@@ -153,7 +162,7 @@ public class CardController {
 			    	
 			        if(clauseMatcher.find()) { 
 			        	String tokenName = tokenClause.substring(clauseMatcher.start(), clauseMatcher.end()).trim();
-			        	guess = findTokensByName(tokens, tokenName);
+			        	guess = findTokensByName(tokens, tokenName, power, toughness);
 			        }
 		        }
 			    
@@ -256,7 +265,7 @@ public class CardController {
     	return null;
     }
     
-    public List<Card> findTokensByName(List<Card> cards, String name) {
+    public List<Card> findTokensByName(List<Card> cards, String name, String power, String toughness) {
     	List<Card> matches = new ArrayList<Card>();
     	Set<String> ids = new HashSet<String>();
     	
@@ -264,51 +273,56 @@ public class CardController {
     		Card c = i.next();
     		
     		if(c.name.equals(name)) {
-    			if(ids.add(c.oracle_id)) {
-    				String disp = "";
-    				if(c.power != null) {
-    					disp += c.power + "/" + c.toughness + " ";
+    			if(power == null || c.power.equals(power)) {
+    				if(toughness == null || c.toughness.equals(toughness)) {
+    					
+    					if(ids.add(c.oracle_id)) {
+    	    				String disp = "";
+    	    				if(c.power != null) {
+    	    					disp += c.power + "/" + c.toughness + " ";
+    	    				}
+    	    				
+    	    				if(c.color_identity.size() == 0) {
+    	    					disp += "Colorless ";
+    	    				}
+    	    				else {
+    	    					for(int idx=0; idx<c.color_identity.size(); idx++) {
+    	    						if(idx > 0)
+    	    							disp += "-";
+    	    						
+    	        					switch(c.color_identity.get(idx)) {
+    	        					case "W":
+    	        						disp += "White";
+    	        						break;
+    	        					case "U":
+    	        						disp += "Blue";
+    	        						break;
+    	        					case "B":
+    	        						disp += "Black";
+    	        						break;
+    	        					case "R":
+    	        						disp += "Red";
+    	        						break;
+    	        					case "G":
+    	        						disp += "Green";
+    	        						break;
+    	        					}
+    	        				}
+    	    				}
+    	    				
+    	    				disp += " " + c.name;
+    	    				
+    	    				if(!c.oracle_text.isEmpty()) {
+    	    					disp += " with " + c.oracle_text;
+    	    				}
+    	    				
+    	    				c.display_name = disp;
+    						matches.add(c);
     				}
-    				
-    				if(c.color_identity.size() == 0) {
-    					disp += "Colorless ";
-    				}
-    				else {
-    					for(int idx=0; idx<c.color_identity.size(); idx++) {
-    						if(idx > 0)
-    							disp += "-";
-    						
-        					switch(c.color_identity.get(idx)) {
-        					case "W":
-        						disp += "White";
-        						break;
-        					case "U":
-        						disp += "Blue";
-        						break;
-        					case "B":
-        						disp += "Black";
-        						break;
-        					case "R":
-        						disp += "Red";
-        						break;
-        					case "G":
-        						disp += "Green";
-        						break;
-        					}
-        				}
-    				}
-    				
-    				disp += " " + c.name;
-    				
-    				if(!c.oracle_text.isEmpty()) {
-    					disp += " with " + c.oracle_text;
-    				}
-    				
-    				c.display_name = disp;
-					matches.add(c);
     			}
-    		}
-    	}
+			}
+		}
+	}
 
     	return matches;
     }
