@@ -133,17 +133,26 @@ public class CardController {
 			
 			//Process containsCreate for token guesses			
 			for(Card cc : containsCreate) {
+				//First find all text between the word "create" and the word "token"
 				Pattern pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
 		        Matcher matcher = pattern.matcher(cc.oracle_text);
 		        List<Card> guess = null;
 		        
 			    if(matcher.find()) {
-			    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());
-			    	Pattern clausePattern = Pattern.compile("\\b[A-Z].*?\\b");
+			    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());  	
+			    			
+			    	//If it's a creature token, remove the P/T declaration
+			    	Pattern pt = Pattern.compile("(?<=[0-9xX\\*]/[0-9xX\\*])(.*)");
+			    	Matcher ptMatcher = pt.matcher(tokenClause);
+			    	if(ptMatcher.find()) {
+			    		tokenClause = tokenClause.substring(ptMatcher.start(), ptMatcher.end());
+			    	}			    	
+			    	
+			    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b )+(\\b[A-Z].*\\b)*");
 			        Matcher clauseMatcher = clausePattern.matcher(tokenClause);
 			    	
 			        if(clauseMatcher.find()) { 
-			        	String tokenName = tokenClause.substring(clauseMatcher.start(), clauseMatcher.end());
+			        	String tokenName = tokenClause.substring(clauseMatcher.start(), clauseMatcher.end()).trim();
 			        	guess = findTokensByName(tokens, tokenName);
 			        }
 		        }
