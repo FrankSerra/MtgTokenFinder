@@ -11,5 +11,5 @@ public class Card {
 	public String scryfall_uri;
 	public String display_name;
 	public String power, toughness;
-	public ArrayList<String> color_identity;
+	public ArrayList<String> colors;
 }

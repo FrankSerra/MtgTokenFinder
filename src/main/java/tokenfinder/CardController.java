@@ -265,6 +265,118 @@ public class CardController {
     	return null;
     }
     
+    public String buildColorPhrase(List<String> color_identity) {
+    	String disp = "";
+    	if(color_identity.size() == 0) {
+			disp += "Colorless ";
+		}
+		else {
+			for(int idx=0; idx<color_identity.size(); idx++) {
+				if(idx > 0)
+					disp += "-";
+				
+				switch(color_identity.get(idx)) {
+				case "W":
+					disp += "White";
+					break;
+				case "U":
+					disp += "Blue";
+					break;
+				case "B":
+					disp += "Black";
+					break;
+				case "R":
+					disp += "Red";
+					break;
+				case "G":
+					disp += "Green";
+					break;
+				}
+			}
+		}
+    	return disp;
+    }
+    
+    public class MatchType {
+    	int card_face;
+    	boolean match;
+    	
+    	public MatchType(boolean _match, int _face) {
+    		this.match = _match;
+    		this.card_face = _face;
+    	}
+    }
+    
+    public MatchType doesTokenMatch(Card c, String name, String power, String toughness) {
+    	if(c.name.equals(name)) {
+			if(power == null || c.power.equals(power)) {
+				if(toughness == null || c.toughness.equals(toughness)) { 	
+					return new MatchType(true, -1);
+				}
+			}
+    	}
+    	else if(c.card_faces != null) {
+    		for(int face=0; face<c.card_faces.size(); face++) {
+    			CardFace cf = c.card_faces.get(face);
+    			
+    			if(cf.name.equals(name)) {
+    				if(power == null || cf.power.equals(power)) {
+    					if(toughness == null || cf.toughness.equals(toughness)) { 	
+    						return new MatchType(true, face);
+    					}
+    				}
+    	    	}
+    		}
+    	}
+    	
+    	return new MatchType(false, 0);
+    }
+
+    public String getPower(Card c, int face) {
+    	switch(face) {
+    	case -1:
+    		return c.power;
+    	default:
+    		return c.card_faces.get(face).power;
+    	}
+    }
+    
+    public String getToughness(Card c, int face) {
+    	switch(face) {
+    	case -1:
+    		return c.toughness;
+    	default:
+    		return c.card_faces.get(face).toughness;
+    	}
+    }
+    
+    public String getName(Card c, int face) {
+    	switch(face) {
+    	case -1:
+    		return c.name;
+    	default:
+    		return c.card_faces.get(face).name + " (DFC with: " + c.card_faces.get((face*-1)+1).name + ")";
+    	}
+    }
+    
+    public String getOracle(Card c, int face) {
+    	switch(face) {
+    	case -1:
+    		return c.oracle_text;
+    	default:
+    		return c.card_faces.get(face).oracle_text;
+    	}
+    }
+    
+    public List<String> getColors(Card c, int face) {
+    	switch(face) {
+    	case -1:
+    		return c.colors;
+    	default:
+    		return c.card_faces.get(face).colors;
+    	}
+    }
+    
     public List<Card> findTokensByName(List<Card> cards, String name, String power, String toughness) {
     	List<Card> matches = new ArrayList<Card>();
     	Set<String> ids = new HashSet<String>();
@@ -272,57 +384,27 @@ public class CardController {
     	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
     		Card c = i.next();
     		
-    		if(c.name.equals(name)) {
-    			if(power == null || c.power.equals(power)) {
-    				if(toughness == null || c.toughness.equals(toughness)) {
-    					
-    					if(ids.add(c.oracle_id)) {
-    	    				String disp = "";
-    	    				if(c.power != null) {
-    	    					disp += c.power + "/" + c.toughness + " ";
-    	    				}
-    	    				
-    	    				if(c.color_identity.size() == 0) {
-    	    					disp += "Colorless ";
-    	    				}
-    	    				else {
-    	    					for(int idx=0; idx<c.color_identity.size(); idx++) {
-    	    						if(idx > 0)
-    	    							disp += "-";
-    	    						
-    	        					switch(c.color_identity.get(idx)) {
-    	        					case "W":
-    	        						disp += "White";
-    	        						break;
-    	        					case "U":
-    	        						disp += "Blue";
-    	        						break;
-    	        					case "B":
-    	        						disp += "Black";
-    	        						break;
-    	        					case "R":
-    	        						disp += "Red";
-    	        						break;
-    	        					case "G":
-    	        						disp += "Green";
-    	        						break;
-    	        					}
-    	        				}
-    	    				}
-    	    				
-    	    				disp += " " + c.name;
-    	    				
-    	    				if(!c.oracle_text.isEmpty()) {
-    	    					disp += " with " + c.oracle_text;
-    	    				}
-    	    				
-    	    				c.display_name = disp;
-    						matches.add(c);
-    				}
-    			}
+    		MatchType match = doesTokenMatch(c, name, power, toughness);
+			if(match.match == true && ids.add(c.oracle_id)) {
+				String disp = "";
+				
+				if(power != null) {
+					disp += getPower(c, match.card_face) + "/" + getToughness(c, match.card_face) + " ";
+				}
+				
+				disp += buildColorPhrase(getColors(c, match.card_face));
+				
+				disp += " " + getName(c, match.card_face);
+				
+				String oracle = getOracle(c, match.card_face);
+				if(!oracle.isEmpty()) {
+					disp += " with " + oracle;
+				}
+				
+				c.display_name = disp;
+				matches.add(c);
 			}
 		}
-	}
 
     	return matches;
     }
