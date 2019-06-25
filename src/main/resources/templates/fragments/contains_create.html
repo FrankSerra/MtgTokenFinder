@@ -16,11 +16,11 @@
                 <div class="col w-50" th:each="result: ${cardlist}">
                     <ul class="list-group list-group-flush sourcerow">
                         <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.card})"></a></li>
-                        <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank"><span th:if="${#lists.size(result.guesses) > 1}" th:text="${source.display_name}"></span><span th:if="${#lists.size(result.guesses) <= 1}" th:text="${source.name}"></span></a></li>
+                        <li class="list-group-item" th:if="${#lists.size(result.guesses) < 1}">No suggestions found.</li>
+                        <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank"><span th:text="${source.display_name}"></span></a></li>
                     </ul>
                 </div>
             </div>
         </div>            
-
     </div>
 </div>
