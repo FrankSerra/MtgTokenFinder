@@ -11,6 +11,21 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 public class SearchHelper {
+	
+	public static boolean oracle_text_contains_create(Card c) {
+    	if(c.oracle_text != null) {
+    		return (StringUtils.containsIgnoreCase(c.oracle_text, " create") || c.oracle_text.startsWith("Create"));
+    	}
+    	else if(c.card_faces.size() > 0) {
+    		for (CardFace face : c.card_faces) {
+				if(StringUtils.containsIgnoreCase(face.oracle_text, " create") || face.oracle_text.startsWith("Create"))
+					return true;
+			}
+    	}
+    	
+    	return false;
+    }
+	
 	public static Card findCardByName(List<Card> cards, String name) {
     	Card ret = null;
     	Card backup = null;

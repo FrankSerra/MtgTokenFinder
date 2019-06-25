@@ -1,10 +1,6 @@
 package tokenfinder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,9 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class CardController {
@@ -78,8 +71,8 @@ public class CardController {
     	List<ContainsCreateResult> ccResults = new ArrayList<ContainsCreateResult>();
     	
     	try { 		
-	    	List<Card> cards = loadCards();
-	    	List<Card> tokens = loadTokens();
+	    	List<Card> cards = ScryfallDataManager.loadCards();
+	    	List<Card> tokens = ScryfallDataManager.loadTokens();
 	    	
 	    	//Search terms
 			String[] terms = cardlist.split("\\n");
@@ -100,11 +93,11 @@ public class CardController {
 							results = SearchHelper.addTokenAndSources(results, token, found);
 						}
 					}
-					if(!goteem && this.oracle_text_contains_create(found)) {
+					if(!goteem && SearchHelper.oracle_text_contains_create(found)) {
 						containsCreate.add(found);
 					}
 				}
-				else if(found != null && this.oracle_text_contains_create(found)) {
+				else if(found != null && SearchHelper.oracle_text_contains_create(found)) {
 					containsCreate.add(found);
 				}
 				else if(found == null){
@@ -135,53 +128,4 @@ public class CardController {
     	
     	return new SearchResult(errors, results, ccResults);
     }
-    
-    public boolean oracle_text_contains_create(Card c) {
-    	if(c.oracle_text != null) {
-    		return (StringUtils.containsIgnoreCase(c.oracle_text, " create") || c.oracle_text.startsWith("Create"));
-    	}
-    	else if(c.card_faces.size() > 0) {
-    		for (CardFace face : c.card_faces) {
-				if(StringUtils.containsIgnoreCase(face.oracle_text, " create") || face.oracle_text.startsWith("Create"))
-					return true;
-			}
-    	}
-    	
-    	return false;
-    }
-    
-    public List<Card> loadCards() throws Exception {
-		try {
-            InputStream in = CardController.class.getResourceAsStream("/scryfall-clean.json");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-            Type collectionType = new TypeToken<List<Card>>(){}.getType();
-            
-            @SuppressWarnings("unchecked")
-			List<Card> cards = (List<Card>) new Gson().fromJson(br, collectionType);
-            
-            return cards;
-		}
-		catch(Exception e) {
-            throw new Exception("Cannot load card information from file.");
-        }
-	}
-    
-    public List<Card> loadTokens() throws Exception {
-		try {
-            InputStream in = CardController.class.getResourceAsStream("/scryfall-tokens.json");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-            Type collectionType = new TypeToken<List<Card>>(){}.getType();
-            
-            @SuppressWarnings("unchecked")
-			List<Card> cards = (List<Card>) new Gson().fromJson(br, collectionType);
-            
-            return cards;
-		}
-		catch(Exception e) {
-            throw new Exception("Cannot load token information from file.");
-        }
-	}
-    
 }
