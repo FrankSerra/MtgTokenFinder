@@ -90,9 +90,20 @@ public class CardController {
 			for (String term: terms) {
 				term = term.replace("\r", "").replaceAll("[0-9]+\\w* ", "").trim();
 				
-				int cut = Math.min(term.indexOf("("), term.indexOf("["));
-				if(cut >= 0)
-					term = term.substring(0, cut).trim();
+				int cutParen = term.indexOf("(");
+				int cutBracket = term.indexOf("[");
+				
+				if(cutParen > -1 || cutBracket > -1) {
+					if(cutBracket == -1)
+						cutBracket = cutParen;
+					
+					if(cutParen == -1)
+						cutParen = cutBracket;
+					
+					int cut = Math.min(cutParen, cutBracket);
+					if(cut > -1)
+						term = term.substring(0, cut).trim();
+				}
 				
 				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard"))
 					continue;
