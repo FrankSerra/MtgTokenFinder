@@ -9,4 +9,4 @@ Given a decklist, find all cards that produce tokens. Find officially related to
 - [X] Support multi-word names for token guesses.
 
 ## Design TO-DO
-- [ ] Improve token guess display.
+- [X] Improve token guess display.
