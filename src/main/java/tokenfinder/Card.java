@@ -10,9 +10,12 @@ public class Card {
 	public ArrayList<Related_Card> all_parts;
 	public ArrayList<CardFace> card_faces;
 	public String scryfall_uri;
-	public String display_name;
 	public String power, toughness;
 	public ArrayList<String> colors;
+	
+	//These properties are for Thymeleaf and must be set manually
+	public String display_name;
+	public String display_oracle;
 	
 	public String buildColorPhrase(List<String> color_identity) {
     	String disp = "";

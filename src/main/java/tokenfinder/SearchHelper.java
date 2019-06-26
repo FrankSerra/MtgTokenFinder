@@ -83,7 +83,7 @@ public class SearchHelper {
 				
 				String oracle = c.getOracle(match.card_face);
 				if(!oracle.isEmpty()) {
-					disp += " with " + oracle;
+					c.display_oracle = oracle;
 				}
 				
 				c.display_name = disp;
