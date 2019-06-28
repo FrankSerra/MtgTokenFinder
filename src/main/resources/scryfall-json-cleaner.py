@@ -8,7 +8,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     #Initial set of desirable cards
     clean_cards = [x for x in all_cards if x['border_color'] not in ['silver', 'gold'] \
                                         if x['oversized'] is False if x['digital'] is False if x['layout'] not in ["token", "emblem"] \
-                                        if 'paper' in x['games'] if x['promo'] is False if x['lang'] == 'en']
+                                        if 'paper' in x['games'] if x['lang'] == 'en']
     
     #Heroes of the Realm is a black-border un-set
     clean_cards = [x for x in clean_cards if x['set'] != 'htr']
@@ -20,13 +20,15 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
             token_ids.add(x['oracle_id'])
     
     #Generate List
+    """
     out_cards = []
     for id in token_ids:
         newlist = sorted([x for x in clean_cards if x['oracle_id'] == id if 'all_parts' in x.keys()], key=lambda x: len(x['all_parts']), reverse=True)
         out_cards.append(newlist[0])
 
     no_token_cards = [x for x in clean_cards if x['oracle_id'] not in token_ids if 'all_parts' not in x.keys() if not token_ids.add(x['oracle_id'])]
-
+    """
+    
     tokens = [x for x in all_cards if x['layout'] in ["token", "emblem", "double_faced_token"]]
 
     #List of keys to remove
@@ -79,7 +81,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
 
     #Write search
     remaining_keys = set()
-    out_cards = out_cards + no_token_cards
+    out_cards = clean_cards #out_cards + no_token_cards
     for obj in out_cards:
         for key in remove_keys:
             try:
