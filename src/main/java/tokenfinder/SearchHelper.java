@@ -113,7 +113,7 @@ public class SearchHelper {
     }
     
     public static String prepareSearchTerm(String term) {
-		term = term.replace("\r", "").replaceAll("[0-9]+\\w* ", "").trim();
+		term = term.replace("\r", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
 		int cutParen = term.indexOf("(");
 		int cutBracket = term.indexOf("[");
