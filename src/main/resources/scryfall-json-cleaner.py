@@ -7,34 +7,31 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
 
     #Initial set of desirable cards
     clean_cards = [x for x in all_cards if x['border_color'] not in ['silver', 'gold'] \
-                                        if x['oversized'] is False if x['digital'] is False if x['layout'] not in ["token", "emblem"] \
+                                        if x['oversized'] is False if x['digital'] is False if x['layout'] not in ["token", "emblem", "double_faced_token"] \
                                         if 'paper' in x['games'] if x['lang'] == 'en']
     
-    #Heroes of the Realm is a black-border un-set
+    #Search for cards that only exist in promo form like "Nexus of Fate", "Impervious Greatwurm", etc.
+    no_promos  = [x for x in clean_cards if x['promo'] is False]
+    all_promos = [x for x in clean_cards if x['promo'] is True]
+
+    for card in all_promos:
+        if len([x for x in no_promos if x['oracle_id'] == card['oracle_id']]) == 0:
+            no_promos.append(card)
+
+    clean_cards = no_promos
+
+    #Heroes of the Realm is a black-border un-set, have to handle specially
     clean_cards = [x for x in clean_cards if x['set'] != 'htr']
 
-    #Set control
-    token_ids = set()
-    for x in clean_cards:
-        if x['oracle_id'] not in token_ids and 'all_parts' in x.keys():
-            token_ids.add(x['oracle_id'])
-    
-    #Generate List
-    """
-    out_cards = []
-    for id in token_ids:
-        newlist = sorted([x for x in clean_cards if x['oracle_id'] == id if 'all_parts' in x.keys()], key=lambda x: len(x['all_parts']), reverse=True)
-        out_cards.append(newlist[0])
-
-    no_token_cards = [x for x in clean_cards if x['oracle_id'] not in token_ids if 'all_parts' not in x.keys() if not token_ids.add(x['oracle_id'])]
-    """
-    
+    #Generate tokens
     tokens = [x for x in all_cards if x['layout'] in ["token", "emblem", "double_faced_token"]]
 
     #List of keys to remove
     remove_keys = ('arena_id',
                    'artist',
+                   'booster',
                    'border_color',
+                   'card_back_id',
                    'collector_number',
                    'cmc',
                    'color_identity',
@@ -62,6 +59,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'oversized',
                    'prints_search_uri',
                    'promo',
+                   'promo_types',
                    'rarity', 
                    'related_uris',
                    'released_at',
@@ -72,32 +70,51 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'set',
                    'set_name',
                    'set_search_uri',
+                   'set_type',
                    'set_uri', 
                    'story_spotlight',
                    'tcgplayer_id',
+                   'textless',
                    'type_line',
                    'uri',
+                   'variation',
                    'watermark')
 
-    #Write search
-    remaining_keys = set()
-    out_cards = clean_cards #out_cards + no_token_cards
+    #Trim search
+    out_cards = clean_cards
     for obj in out_cards:
         for key in remove_keys:
             try:
                 del obj[key]
             except:
                 continue
-    with open("scryfall-clean.json", mode='w') as fout:
-        json.dump(out_cards, fout)
-
-    #Write tokens
+    
+    #Trim tokens
     for obj in tokens:
         for key in remove_keys:
             try:
                 del obj[key]
             except:
                 continue
+    
+    #Cut image sizes we don't use
+    for size in ['png', 'art_crop', 'border_crop', 'large']:
+        for card in out_cards:
+            try:
+                del card[size]
+            except:
+                continue
+        for token in tokens:
+            try:
+                del token[size]
+            except:
+                continue
+    
+    #Write search
+    with open("scryfall-clean.json", mode='w') as fout:
+        json.dump(out_cards, fout)
+
+    #Write tokens
     with open("scryfall-tokens.json", mode='w') as fout:
         json.dump(tokens, fout)
 
