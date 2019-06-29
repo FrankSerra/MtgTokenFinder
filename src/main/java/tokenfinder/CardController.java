@@ -86,7 +86,7 @@ public class CardController {
 			for (String term: terms) {
 				term = SearchHelper.prepareSearchTerm(term);
 				
-				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard"))
+				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard") || StringUtils.containsIgnoreCase(term, "maybeboard"))
 					continue;
 				
 				Card found = SearchHelper.findCardByName(cards, term);
