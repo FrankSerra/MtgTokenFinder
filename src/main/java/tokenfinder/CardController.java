@@ -39,8 +39,9 @@ public class CardController {
     }
     
     @PostMapping("/tokens")
-    public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, Model model) {
-    	SearchResult sr = tokenResults(cardlist);
+    public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, @RequestParam(name="matchExact", required=true, defaultValue="") String matchExact, Model model) {
+    	boolean _match = matchExact.equals("on");
+    	SearchResult sr = tokenResults(cardlist, _match);
     	model.addAttribute("full_list", sr.full_list);
     	model.addAttribute("errors", sr.errors);
     	model.addAttribute("results", sr.tokenResults.isEmpty() ? null : sr.tokenResults);
@@ -67,10 +68,10 @@ public class CardController {
     	String list = cards.html();
     	list = list.replace("<br>", "\n");
     	
-		return tokens(list, model);
+		return tokens(list, "on", model);
     }
     
-    public SearchResult tokenResults(String cardlist) {
+    public SearchResult tokenResults(String cardlist, boolean matchExact) {
     	List<String> errors = new ArrayList<String>();
     	List<TokenResult> results = new ArrayList<TokenResult>();
     	List<Card> containsCreate = new ArrayList<Card>();
@@ -89,7 +90,7 @@ public class CardController {
 				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard") || StringUtils.containsIgnoreCase(term, "maybeboard"))
 					continue;
 				
-				Card found = SearchHelper.findCardByName(cards, term);
+				Card found = SearchHelper.findCardByName(cards, matchExact, term);
 				if(found == null) {
 					errors.add(term);
 				}

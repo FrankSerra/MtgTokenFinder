@@ -26,7 +26,7 @@ public class SearchHelper {
     	return false;
     }
 	
-	public static Card findCardByName(List<Card> cards, String name) {
+	public static Card findCardByName(List<Card> cards, boolean matchExact, String name) {
     	Card ret = null;
     	Card backup = null;
     	
@@ -40,7 +40,7 @@ public class SearchHelper {
 					ret = c;
     			}
     		}
-    		else if(StringUtils.containsIgnoreCase(c.name, name)) {
+    		else if(!matchExact && StringUtils.containsIgnoreCase(c.name, name)) {
     			if(backup == null)
     				backup = c;
     			else if(c.all_parts != null) {
