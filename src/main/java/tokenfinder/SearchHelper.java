@@ -127,6 +127,8 @@ public class SearchHelper {
 			term = term.substring(0, symbolCut.start()).trim();
 		}
 		
+		term = term.replace(" / ", " // ");
+		
 		return term;
     }
     
