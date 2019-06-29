@@ -120,19 +120,11 @@ public class SearchHelper {
     public static String prepareSearchTerm(String term) {
 		term = term.replace("\r", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
-		int cutParen = term.indexOf("(");
-		int cutBracket = term.indexOf("[");
+		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
+		Matcher symbolCut = symbolCutPattern.matcher(term);
 		
-		if(cutParen > -1 || cutBracket > -1) {
-			if(cutBracket == -1)
-				cutBracket = cutParen;
-			
-			if(cutParen == -1)
-				cutParen = cutBracket;
-			
-			int cut = Math.min(cutParen, cutBracket);
-			if(cut > -1)
-				term = term.substring(0, cut).trim();
+		if(symbolCut.find()) {
+			term = term.substring(0, symbolCut.start()).trim();
 		}
 		
 		return term;
