@@ -3,6 +3,7 @@ package tokenfinder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,7 +45,12 @@ public class CardController {
     @PostMapping("/tokens")
     public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, @RequestParam(name="matchExact", required=true, defaultValue="") String matchExact, Model model) {
     	boolean _match = matchExact.equals("on");
+    	
     	SearchResult sr = tokenResults(cardlist, _match);
+    	Collections.sort(sr.tokenResults);
+    	Collections.sort(sr.containsCreate);
+    	Collections.sort(sr.full_list);
+    	
     	model.addAttribute("full_list", sr.full_list);
     	model.addAttribute("errors", sr.errors);
     	model.addAttribute("results", sr.tokenResults.isEmpty() ? null : sr.tokenResults);

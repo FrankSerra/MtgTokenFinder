@@ -3,7 +3,7 @@ package tokenfinder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Card {
+public class Card implements Comparable<Card> {
 	public String oracle_id, id, oracle_text;
 	public String name;
 	public Image_URI image_uris;
@@ -103,5 +103,25 @@ public class Card {
     	
     	this.card_faces.remove(face);
     }
+
+	@Override
+	public int compareTo(Card o) {
+		int name = this.name.compareTo(o.name);
+		if(name == 0) {
+			int power = this.power.compareTo(o.power);
+			if(power == 0) {
+				int tough = this.toughness.compareTo(o.toughness);
+				if(tough == 0) {
+					int oracle = this.oracle_text.compareTo(o.oracle_text);
+					return oracle;
+				}
+				else return tough;
+			}
+			else
+				return power;
+		}
+		
+		return 0;
+	}
 
 }
