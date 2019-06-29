@@ -43,4 +43,8 @@ public class ScryfallDataManager {
             throw new Exception("Cannot load token information from file.");
         }
 	}
+    
+    public static String googleformURL() {
+    	return "https://forms.gle/vpwhqshxLTTV8eVa9";
+    }
 }

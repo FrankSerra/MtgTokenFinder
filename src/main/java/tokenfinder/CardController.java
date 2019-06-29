@@ -33,6 +33,11 @@ public class CardController {
         return "about";
     }
     
+    @GetMapping("/contact")
+    public String contact(Model model) {
+    	return "redirect:" + ScryfallDataManager.googleformURL();
+    }
+    
     @PostMapping("/tokens")
     public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, Model model) {
     	SearchResult sr = tokenResults(cardlist);
