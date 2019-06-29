@@ -36,9 +36,10 @@ public class CardController {
     @PostMapping("/tokens")
     public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, Model model) {
     	SearchResult sr = tokenResults(cardlist);
-    	model.addAttribute("cardlist", sr.errors);
-    	model.addAttribute("results", sr.tokenResults.size() > 0 ? sr.tokenResults : null);
-    	model.addAttribute("contains_create", sr.containsCreate);
+    	model.addAttribute("full_list", sr.full_list);
+    	model.addAttribute("errors", sr.errors);
+    	model.addAttribute("results", sr.tokenResults.isEmpty() ? null : sr.tokenResults);
+    	model.addAttribute("contains_create", sr.containsCreate.isEmpty() ? null : sr.containsCreate);
     	
     	return "tokens";
     }
@@ -69,6 +70,7 @@ public class CardController {
     	List<TokenResult> results = new ArrayList<TokenResult>();
     	List<Card> containsCreate = new ArrayList<Card>();
     	List<ContainsCreateResult> ccResults = new ArrayList<ContainsCreateResult>();
+    	List<String> full_list = new ArrayList<String>();
     	
     	try { 		
 	    	List<Card> cards = ScryfallDataManager.loadCards();
@@ -83,25 +85,28 @@ public class CardController {
 					continue;
 				
 				Card found = SearchHelper.findCardByName(cards, term);
-				if(found != null && found.all_parts != null) {			
-					boolean goteem = false;
-					for (Iterator<Related_Card> r = found.all_parts.iterator(); r.hasNext();) {
-						Related_Card rc = r.next();
-						Card token = SearchHelper.findToken(tokens, rc.id);
-						if(token != null) {
-							goteem = true;
-							results = SearchHelper.addTokenAndSources(results, token, found);
+				if(found == null) {
+					errors.add(term);
+				}
+				else {
+					full_list.add(term);
+					if(found.all_parts != null) {			
+						boolean goteem = false;
+						for (Iterator<Related_Card> r = found.all_parts.iterator(); r.hasNext();) {
+							Related_Card rc = r.next();
+							Card token = SearchHelper.findToken(tokens, rc.id);
+							if(token != null) {
+								goteem = true;
+								results = SearchHelper.addTokenAndSources(results, token, found);
+							}
+						}
+						if(!goteem && SearchHelper.oracle_text_contains_create(found)) {
+							containsCreate.add(found);
 						}
 					}
-					if(!goteem && SearchHelper.oracle_text_contains_create(found)) {
+					else if(SearchHelper.oracle_text_contains_create(found)) {
 						containsCreate.add(found);
 					}
-				}
-				else if(found != null && SearchHelper.oracle_text_contains_create(found)) {
-					containsCreate.add(found);
-				}
-				else if(found == null){
-					errors.add(term);
 				}
 			}
 			
@@ -126,6 +131,6 @@ public class CardController {
     	if(errors.size() == 0)
     		errors = null;
     	
-    	return new SearchResult(errors, results, ccResults);
+    	return new SearchResult(full_list, errors, results, ccResults);
     }
 }

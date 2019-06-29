@@ -6,11 +6,13 @@
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
     <main role="main" class="container">
-        <div th:insert="fragments/error_alerts.html :: error_alerts(${cardlist})"></div>
+        <div th:insert="fragments/error_alerts.html :: error_alerts(${errors})"></div>
 
         <div th:insert="fragments/token_results.html :: token_results(${results})"></div>
                 
         <div th:unless="${contains_create == null || contains_create.empty}" th:insert="fragments/contains_create.html :: contains_create(${contains_create})"></div>
+
+        <div th:insert="fragments/search_list.html :: search_list(${full_list})"></div>
     </main>
 
     <footer th:insert="fragments/footer.html :: footer"></footer>
