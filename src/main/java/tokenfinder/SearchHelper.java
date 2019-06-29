@@ -118,6 +118,7 @@ public class SearchHelper {
     }
     
     public static String prepareSearchTerm(String term) {
+    	term = term.trim();
 		term = term.replace("\r", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
 		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
