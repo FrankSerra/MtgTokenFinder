@@ -96,6 +96,11 @@ public class SearchHelper {
     
     public static List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
     	boolean found = false;
+    	String root = "https://api.scryfall.com/cards/" + token.set + "/" + token.collector_number;
+    	
+		//Calculated image links
+		token.calculated_small  = root + "?format=image&version=small";
+		token.calculated_normal = root + "?format=image&version=normal";
     	
 		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
 			TokenResult tr = i.next();

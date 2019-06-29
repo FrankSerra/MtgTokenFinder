@@ -32,7 +32,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'booster',
                    'border_color',
                    'card_back_id',
-                   'collector_number',
                    'cmc',
                    'color_identity',
                    'color_indicator',
@@ -67,7 +66,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'reserved',
                    'rulings_uri',
                    'scryfall_set_uri', 
-                   'set',
                    'set_name',
                    'set_search_uri',
                    'set_type',
@@ -101,12 +99,12 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     for size in ['png', 'art_crop', 'border_crop', 'large']:
         for card in out_cards:
             try:
-                del card[size]
+                del card['image_uris'][size]
             except:
                 continue
         for token in tokens:
             try:
-                del token[size]
+                del token['image_uris'][size]
             except:
                 continue
     
