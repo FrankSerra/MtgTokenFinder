@@ -41,7 +41,7 @@ public class SearchHelper {
     			else if(c.all_parts != null) {
 					ret = c;
     			}
-    		}
+    		}    		
     		else if(!matchExact && StringUtils.containsIgnoreCase(c.name, name)) {
     			if(backup == null)
     				backup = c;
@@ -49,7 +49,13 @@ public class SearchHelper {
     				backup = c;
     			}
     		}
-    		
+    		else if(c.card_faces != null) {
+    			for(int x=0; x<c.card_faces.size(); x++) {
+    				if(c.card_faces.get(x).name.equalsIgnoreCase(name)) {
+    					backup = c;
+    				}
+    			}
+    		}
     	}
     	return ret != null? ret : backup;
     }

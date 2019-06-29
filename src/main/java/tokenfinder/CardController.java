@@ -2,6 +2,7 @@ package tokenfinder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,7 +86,10 @@ public class CardController {
 	    	List<Card> tokens = ScryfallDataManager.loadTokens();
 	    	
 	    	//Search terms
-			String[] terms = cardlist.split("\\n");
+			ArrayList<String> terms = new ArrayList<String>();
+			terms.addAll(Arrays.asList(cardlist.split("\\n")));
+			terms.removeIf(p -> p.isEmpty());
+			
 			for (String term: terms) {
 				term = SearchHelper.prepareSearchTerm(term);
 				
