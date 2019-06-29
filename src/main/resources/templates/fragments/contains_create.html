@@ -1,26 +1,24 @@
 <div th:fragment="contains_create(cardlist)">
-    <div class="card" th:if="${cardlist != null}">
-        <div class="card-header">
-            <div class="row">
-                <div class="col">
-                    <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#mightMakeTokens" aria-expanded="true" aria-controls="mightMakeTokens">Other Tokens</button>
-                </div>
-                <div class="col-auto">
-                    <a tabindex="0" class="btn btn-md btn-outline-primary" role="button" data-toggle="popover" data-trigger="focus" data-html="true" data-content="Cards that create tokens are linked only to tokens printed within the same set.<br /><br />Since tokens were not printed in the same set as their source card until roughly 2007, older cards will appear in this section even if they create a common type of token.">Why?</a>
-                </div>
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#mightMakeTokens" aria-expanded="true" aria-controls="mightMakeTokens">Other Tokens</button>
+            </div>
+            <div class="col-auto">
+                <a tabindex="0" class="btn btn-md btn-outline-primary" role="button" data-toggle="popover" data-trigger="focus" data-html="true" data-content="Cards that create tokens are linked only to tokens printed within the same set.<br /><br />Since tokens were not printed in the same set as their source card until roughly 2007, older cards will appear in this section even if they create a common type of token.">Why?</a>
             </div>
         </div>
-        <div class="card-body  collapse show" id="mightMakeTokens">
-            <h5 class="text-center">These cards don't have an official token, but here are our best guesses.</h5>
-            <div class="row justify-content-center">
-                <div class="col w-50" th:each="result: ${cardlist}">
-                    <ul class="list-group list-group-flush sourcerow">
-                        <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.card})"></a></li>
-                        <li class="list-group-item" th:if="${result.guesses == null || #lists.size(result.guesses) < 1}">No suggestions found.</li>
-                        <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank"><span th:text="${source.display_name}"></span></a><span class="font-weight-light d-block w-75 mx-auto" th:unless="${source.display_oracle == null}" th:text="${source.display_oracle}"></span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>            
     </div>
-</div>
+    <div class="card-body  collapse show" id="mightMakeTokens">
+        <h5 class="text-center">These cards don't have an official token, but here are our best guesses.</h5>
+        <div class="row justify-content-center">
+            <div class="col w-50" th:each="result: ${cardlist}">
+                <ul class="list-group list-group-flush sourcerow">
+                    <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.card})"></a></li>
+                    <li class="list-group-item" th:if="${result.guesses == null || #lists.size(result.guesses) < 1}">No suggestions found.</li>
+                    <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank"><span th:text="${source.display_name}"></span></a><span class="font-weight-light d-block w-75 mx-auto" th:unless="${source.display_oracle == null}" th:text="${source.display_oracle}"></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>            
+ </div>

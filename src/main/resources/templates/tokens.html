@@ -10,7 +10,7 @@
 
         <div th:insert="fragments/token_results.html :: token_results(${results})"></div>
                 
-        <div th:insert="fragments/contains_create.html :: contains_create(${contains_create})"></div>
+        <div th:unless="${contains_create == null || contains_create.empty}" th:insert="fragments/contains_create.html :: contains_create(${contains_create})"></div>
     </main>
 
     <footer th:insert="fragments/footer.html :: footer"></footer>
