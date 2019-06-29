@@ -124,6 +124,12 @@ public class CardController {
 					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness);
 			    }
 			    
+		    	String root = "https://api.scryfall.com/cards/" + cc.set + "/" + cc.collector_number;
+		    	
+				//Calculated image links
+		    	cc.calculated_small  = root + "?format=image&version=small";
+		    	cc.calculated_normal = root + "?format=image&version=normal";
+				
 			    ccResults.add(new ContainsCreateResult(cc, guess, ""));
 			}
 			

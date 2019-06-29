@@ -137,8 +137,8 @@ public class SearchHelper {
         String 		power = null, toughness = null;
         
 	    if(matcher.find()) {
-	    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());  	
-	    			
+	    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());  
+	    	
 	    	//If it's a creature token, get the P/T declaration
 	    	Pattern ptOnly = Pattern.compile("[0-9xX\\*]+/[0-9xX\\*]+");
 	    	Matcher ptOnlyMatcher = ptOnly.matcher(tokenClause);
@@ -152,9 +152,16 @@ public class SearchHelper {
 	    		
 	    		power = stats.substring(0, stats.indexOf("/"));
 	    		toughness = stats.substring(stats.indexOf("/")+1, stats.length());
-	    	}			    	
+	    	}
 	    	
-	    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b )+(\\b[A-Z].*\\b)*");
+	    	//Check if this uses the "token named N" oracle text pattern
+	    	Pattern namedN = Pattern.compile("(?<=token named ).*");
+	    	Matcher namedNmatch = namedN.matcher(cc.oracle_text);
+	    	if(namedNmatch.find()) {
+	    		tokenClause = cc.oracle_text.substring(namedNmatch.start(), namedNmatch.end());
+	    	}	 
+	    	
+	    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b )+(of |the )*(\\b[A-Z].*\\b)*");
 	        Matcher clauseMatcher = clausePattern.matcher(tokenClause);
 	        
 	        if(clauseMatcher.find()) { 
