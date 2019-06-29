@@ -1,0 +1,16 @@
+<div th:fragment="search_list(full_list)">
+    <div class="accordion" id="accordionSearchList">
+        <div class="card">
+            <div class="card-header">
+                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#searchList" aria-expanded="true" aria-controls="searchList">
+                Decklist
+                </button>
+            </div>
+            <div class="card-body collapse show" id="searchList">
+                <div class="row" th:each="result: ${full_list}">
+                    <p class="text-left" th:text="${result}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
