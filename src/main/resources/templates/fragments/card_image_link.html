@@ -6,9 +6,9 @@
     </div>
     <div class="d-inline-block" th:unless="${#lists.isEmpty(source.card_faces)}">
         <div class="dfc" th:each="face: ${source.card_faces}">
-            <img class="d-inline-block d-sm-none mx-auto dfc" th:src="${face.image_uris.small}" height="168" width="46" />
-            <img class="d-none d-sm-inline-block d-md-none mx-auto dfc" th:src="${face.image_uris.small}" />
-            <img class="d-none d-md-inline-block mx-auto dfc" th:src="${face.image_uris.normal}" height="360" width="130" />
+            <img class="d-inline-block d-sm-none mx-auto" th:src="${face.image_uris.small}" width="120" />
+            <img class="d-none d-sm-inline-block d-md-none mx-auto" th:src="${face.image_uris.small}" />
+            <img class="d-none d-md-inline-block mx-auto" th:src="${face.image_uris.normal}" height="360" />
         </div>
     </div>
 </a>

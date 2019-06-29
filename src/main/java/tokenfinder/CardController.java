@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import tokenfinder.ScryfallDataManager.ImageSize;
+
 @Controller
 public class CardController {
 
@@ -123,13 +125,11 @@ public class CardController {
 			    
 				if(!tg.name.isEmpty()) {
 					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness);
-			    }
-			    
-		    	String root = "https://api.scryfall.com/cards/" + cc.set + "/" + cc.collector_number;
+			    }			   
 		    	
 				//Calculated image links
-		    	cc.calculated_small  = root + "?format=image&version=small";
-		    	cc.calculated_normal = root + "?format=image&version=normal";
+		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small);
+		    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal);
 				
 			    ccResults.add(new ContainsCreateResult(cc, guess, ""));
 			}

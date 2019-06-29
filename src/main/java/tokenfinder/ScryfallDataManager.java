@@ -44,7 +44,28 @@ public class ScryfallDataManager {
         }
 	}
     
+    public enum ImageSize {
+    	small, normal
+    }
+    
     public static String googleformURL() {
     	return "https://forms.gle/vpwhqshxLTTV8eVa9";
+    }
+    
+    public static String getImageApiURL(Card c, ImageSize size) {
+    	String root = "https://api.scryfall.com/cards/" + c.set + "/" + c.collector_number + "?format=image&version=";
+    	
+    	switch(size) {
+	    	case small:
+	    		root += "small";
+	    		break;
+	    		
+	    	case normal:
+			default:
+	    		root += "normal";
+	    		break;
+    	}
+    	
+    	return root;
     }
 }

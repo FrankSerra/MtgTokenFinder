@@ -96,5 +96,12 @@ public class Card {
     		return this.card_faces.get(face).colors;
     	}
     }
+    
+    public void trimCardFace(int face) {
+    	if(face < 1)
+    		return;
+    	
+    	this.card_faces.remove(face);
+    }
 
 }

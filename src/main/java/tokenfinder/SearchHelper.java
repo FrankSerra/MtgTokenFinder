@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import tokenfinder.ScryfallDataManager.ImageSize;
+
 public class SearchHelper {
 	
 	public static boolean oracle_text_contains_create(Card c) {
@@ -87,6 +89,8 @@ public class SearchHelper {
 				}
 				
 				c.display_name = disp;
+				c.trimCardFace(match.card_face);
+				
 				matches.add(c);
 			}
 		}
@@ -96,11 +100,19 @@ public class SearchHelper {
     
     public static List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
     	boolean found = false;
-    	String root = "https://api.scryfall.com/cards/" + token.set + "/" + token.collector_number;
+    	
+    	//Determine which card face is being used and trim the other side of the DFC token
+    	if(token.card_faces != null) {
+    		for(int i=0; i<token.card_faces.size();i++) {
+    			if(!source.oracle_text.contains(token.card_faces.get(i).name)) {
+    				token.trimCardFace(i);
+    			}
+    		}
+    	}
     	
 		//Calculated image links
-		token.calculated_small  = root + "?format=image&version=small";
-		token.calculated_normal = root + "?format=image&version=normal";
+		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, ImageSize.small);
+		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, ImageSize.normal);
     	
 		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
 			TokenResult tr = i.next();
