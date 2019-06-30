@@ -182,8 +182,8 @@ public class SearchHelper {
     	term = term.trim();
 		term = term.replace("\r", "").replace("SB: ", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
-		//Return empty string for common notations of comments
-		if(term.matches("^\\/\\/.*") || term.matches("^#.*"))
+		//Return empty string for common notations of comments, or if the line has no letters in it at all
+		if(term.matches("^\\/\\/.*") || term.matches("^#.*") || !term.matches("[a-zA-z].*"))
 			return "";
 		
 		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
