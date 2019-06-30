@@ -71,7 +71,7 @@ public class SearchHelper {
     }
         
     public static List<Card> findTokensByName(List<Card> cards, String name, String power, String toughness) {
-    	List<Card> matches = new ArrayList<Card>();
+    	ArrayList<Card> matches = new ArrayList<Card>();
     	Set<String> ids = new HashSet<String>();
     	
     	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
@@ -95,7 +95,10 @@ public class SearchHelper {
 				}
 				
 				c.display_name = disp;
-				c.trimCardFace(match.card_face);
+				
+				c.trimCardFace((match.card_face*-1)+1);
+				
+				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
 				
 				matches.add(c);
 			}
@@ -117,8 +120,8 @@ public class SearchHelper {
     	}
     	
 		//Calculated image links
-		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, ImageSize.small);
-		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, ImageSize.normal);
+		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, ImageSize.small, false);
+		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, ImageSize.normal, false);
     	
 		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
 			TokenResult tr = i.next();

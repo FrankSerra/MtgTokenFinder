@@ -52,7 +52,7 @@ public class ScryfallDataManager {
     	return "https://forms.gle/vpwhqshxLTTV8eVa9";
     }
     
-    public static String getImageApiURL(Card c, ImageSize size) {
+    public static String getImageApiURL(Card c, ImageSize size, boolean back) {
     	String root = "https://api.scryfall.com/cards/" + c.set + "/" + c.collector_number + "?format=image&version=";
     	
     	switch(size) {
@@ -65,6 +65,9 @@ public class ScryfallDataManager {
 	    		root += "normal";
 	    		break;
     	}
+    	
+    	if(back)
+    		root += "&face=back";
     	
     	return root;
     }

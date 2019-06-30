@@ -98,7 +98,7 @@ public class Card implements Comparable<Card> {
     }
     
     public void trimCardFace(int face) {
-    	if(face < 1)
+    	if(face > 1)
     		return;
     	
     	this.card_faces.remove(face);
@@ -121,7 +121,7 @@ public class Card implements Comparable<Card> {
 				return power;
 		}
 		
-		return 0;
+		return name;
 	}
 
 }

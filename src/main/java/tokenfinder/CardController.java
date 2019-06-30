@@ -138,8 +138,8 @@ public class CardController {
 			    }			   
 		    	
 				//Calculated image links
-		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small);
-		    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal);
+		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
+		    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
 				
 			    ccResults.add(new ContainsCreateResult(cc, guess, ""));
 			}
