@@ -1,0 +1,467 @@
+[{
+  "object": "card",
+  "id": "a446b9f8-cb22-408a-93ff-bee44a0dccc0",
+  "oracle_id": "a91a6a32-3a82-4da0-8c80-1fe1ddebe915",
+  "multiverse_ids": [
+
+  ],
+  "tcgplayer_id": 123476,
+  "name": "Energy Reserve",
+  "lang": "en",
+  "released_at": "2016-09-30",
+  "uri": "https://api.scryfall.com/cards/a446b9f8-cb22-408a-93ff-bee44a0dccc0",
+  "scryfall_uri": "https://scryfall.com/card/tkld/13/energy-reserve?utm_source=api",
+  "layout": "token",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/en/tkld/13.jpg?1526599315",
+    "normal": "https://img.scryfall.com/cards/normal/en/tkld/13.jpg?1526599315",
+    "large": "https://img.scryfall.com/cards/large/en/tkld/13.jpg?1526599315",
+    "png": "https://img.scryfall.com/cards/png/en/tkld/13.png?1526599315",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/en/tkld/13.jpg?1526599315",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/en/tkld/13.jpg?1526599315"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Card",
+  "oracle_text": "(Place your energy counters in this area.)",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": false,
+  "variation": false,
+  "set": "tkld",
+  "set_name": "Kaladesh Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/8980a939-9003-46ee-bd9a-a6bdefd18e26",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Atkld&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/tkld?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/a446b9f8-cb22-408a-93ff-bee44a0dccc0/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3Aa91a6a32-3a82-4da0-8c80-1fe1ddebe915&unique=prints",
+  "collector_number": "13",
+  "digital": false,
+  "rarity": "common",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "",
+  "border_color": "black",
+  "frame": "2015",
+  "full_art": false,
+  "textless": false,
+  "booster": true,
+  "story_spotlight": false,
+  "promo_types": "#<Set: {\"setpromo\"}>",
+  "prices": {
+    "usd": "0.05",
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=Energy+Reserve&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=Energy+Reserve",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Energy+Reserve"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/product/productsearch?id=123476&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=Energy+Reserve&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=Energy+Reserve&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
+},
+{
+  "object": "card",
+  "id": "1374bfa2-9714-486d-90aa-7a9b8d8ef3a8",
+  "oracle_id": "36403fd7-dad1-4c98-b52b-1150d9d566e5",
+  "multiverse_ids": [
+
+  ],
+  "tcgplayer_id": 168367,
+  "name": "Experience Counter",
+  "lang": "en",
+  "released_at": "2018-06-08",
+  "uri": "https://api.scryfall.com/cards/1374bfa2-9714-486d-90aa-7a9b8d8ef3a8",
+  "scryfall_uri": "https://scryfall.com/card/tcm2/19/experience-counter?utm_source=api",
+  "layout": "normal",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/en/tcm2/19.jpg?1534330803",
+    "normal": "https://img.scryfall.com/cards/normal/en/tcm2/19.jpg?1534330803",
+    "large": "https://img.scryfall.com/cards/large/en/tcm2/19.jpg?1534330803",
+    "png": "https://img.scryfall.com/cards/png/en/tcm2/19.png?1534330803",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/en/tcm2/19.jpg?1534330803",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/en/tcm2/19.jpg?1534330803"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Card",
+  "oracle_text": "(Place your experience counters here.)",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": true,
+  "variation": false,
+  "set": "tcm2",
+  "set_name": "Commander Anthology Volume II Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/fa6a256f-bad4-495d-a2f7-007c0a773307",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Atcm2&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/tcm2?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/1374bfa2-9714-486d-90aa-7a9b8d8ef3a8/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3A36403fd7-dad1-4c98-b52b-1150d9d566e5&unique=prints",
+  "collector_number": "19",
+  "digital": false,
+  "rarity": "common",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "",
+  "border_color": "black",
+  "frame": "2015",
+  "full_art": false,
+  "textless": false,
+  "booster": false,
+  "story_spotlight": false,
+  "prices": {
+    "usd": "0.10",
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=Experience+Counter&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=Experience+Counter",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Experience+Counter"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/product/productsearch?id=168367&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=Experience+Counter&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=Experience+Counter&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
+},
+{
+  "object": "card",
+  "id": "ba64ed3e-93c5-406f-a38d-65cc68472122",
+  "oracle_id": "73d60ab9-1c38-4592-a5b5-ab84788bcc84",
+  "multiverse_ids": [
+
+  ],
+  "arena_id": 67082,
+  "tcgplayer_id": 155565,
+  "name": "City's Blessing",
+  "lang": "en",
+  "released_at": "2018-01-19",
+  "uri": "https://api.scryfall.com/cards/ba64ed3e-93c5-406f-a38d-65cc68472122",
+  "scryfall_uri": "https://scryfall.com/card/trix/6/citys-blessing?utm_source=api",
+  "layout": "normal",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/front/b/a/ba64ed3e-93c5-406f-a38d-65cc68472122.jpg?1561757924",
+    "normal": "https://img.scryfall.com/cards/normal/front/b/a/ba64ed3e-93c5-406f-a38d-65cc68472122.jpg?1561757924",
+    "large": "https://img.scryfall.com/cards/large/front/b/a/ba64ed3e-93c5-406f-a38d-65cc68472122.jpg?1561757924",
+    "png": "https://img.scryfall.com/cards/png/front/b/a/ba64ed3e-93c5-406f-a38d-65cc68472122.png?1561757924",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/front/b/a/ba64ed3e-93c5-406f-a38d-65cc68472122.jpg?1561757924",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/front/b/a/ba64ed3e-93c5-406f-a38d-65cc68472122.jpg?1561757924"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Card",
+  "oracle_text": "",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": false,
+  "variation": false,
+  "set": "trix",
+  "set_name": "Rivals of Ixalan Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/a49703ee-b842-44f1-aff3-20a7c75253f6",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Atrix&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/trix?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/ba64ed3e-93c5-406f-a38d-65cc68472122/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3A73d60ab9-1c38-4592-a5b5-ab84788bcc84&unique=prints",
+  "collector_number": "6",
+  "digital": false,
+  "rarity": "common",
+  "flavor_text": "Once you have ascended to the highest temple of Orazca, the power of the Immortal Sun is yours to wield forever.",
+  "illustration_id": "8c1be4a0-ecd2-42ca-bb5e-712668e6a831",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "Yeong-Hao Han",
+  "border_color": "black",
+  "frame": "2015",
+  "full_art": false,
+  "textless": false,
+  "booster": true,
+  "story_spotlight": false,
+  "prices": {
+    "usd": "0.10",
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=City%27s+Blessing&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=City%27s+Blessing",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=City%27s+Blessing"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/product/productsearch?id=155565&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=City%27s+Blessing&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=City%27s+Blessing&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
+},
+{
+  "object": "card",
+  "id": "470618f6-f67f-44c6-a086-285632508915",
+  "oracle_id": "60acebe2-e1e5-478a-ab88-6a9c1409bca5",
+  "multiverse_ids": [
+
+  ],
+  "tcgplayer_id": 91395,
+  "name": "Poison Counter",
+  "lang": "en",
+  "released_at": "2011-05-13",
+  "uri": "https://api.scryfall.com/cards/470618f6-f67f-44c6-a086-285632508915",
+  "scryfall_uri": "https://scryfall.com/card/tnph/5/poison-counter?utm_source=api",
+  "layout": "normal",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/front/4/7/470618f6-f67f-44c6-a086-285632508915.jpg?1561757039",
+    "normal": "https://img.scryfall.com/cards/normal/front/4/7/470618f6-f67f-44c6-a086-285632508915.jpg?1561757039",
+    "large": "https://img.scryfall.com/cards/large/front/4/7/470618f6-f67f-44c6-a086-285632508915.jpg?1561757039",
+    "png": "https://img.scryfall.com/cards/png/front/4/7/470618f6-f67f-44c6-a086-285632508915.png?1561757039",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/front/4/7/470618f6-f67f-44c6-a086-285632508915.jpg?1561757039",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/front/4/7/470618f6-f67f-44c6-a086-285632508915.jpg?1561757039"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Card",
+  "oracle_text": "(A player with ten or more poison counters loses the game.)",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": true,
+  "variation": false,
+  "set": "tnph",
+  "set_name": "New Phyrexia Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/7b5e3883-6588-412a-b979-7de44d50b3de",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Atnph&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/tnph?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/470618f6-f67f-44c6-a086-285632508915/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3A60acebe2-e1e5-478a-ab88-6a9c1409bca5&unique=prints",
+  "collector_number": "5",
+  "digital": false,
+  "rarity": "common",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "",
+  "border_color": "black",
+  "frame": "2003",
+  "full_art": false,
+  "textless": false,
+  "booster": true,
+  "story_spotlight": false,
+  "promo_types": "#<Set: {\"setpromo\"}>",
+  "prices": {
+    "usd": "0.15",
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=Poison+Counter&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=Poison+Counter",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Poison+Counter"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/product/productsearch?id=91395&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=Poison+Counter&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=Poison+Counter&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
+},
+{
+  "object": "card",
+  "id": "40b79918-22a7-4fff-82a6-8ebfe6e87185",
+  "oracle_id": "7c934091-1bc7-4458-acef-fdac62ec3df1",
+  "multiverse_ids": [
+
+  ],
+  "tcgplayer_id": 121437,
+  "name": "The Monarch",
+  "lang": "en",
+  "released_at": "2016-08-26",
+  "uri": "https://api.scryfall.com/cards/40b79918-22a7-4fff-82a6-8ebfe6e87185",
+  "scryfall_uri": "https://scryfall.com/card/tcn2/1/the-monarch?utm_source=api",
+  "layout": "normal",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/en/tcn2/1.jpg?1517813031",
+    "normal": "https://img.scryfall.com/cards/normal/en/tcn2/1.jpg?1517813031",
+    "large": "https://img.scryfall.com/cards/large/en/tcn2/1.jpg?1517813031",
+    "png": "https://img.scryfall.com/cards/png/en/tcn2/1.png?1517813031",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/en/tcn2/1.jpg?1517813031",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/en/tcn2/1.jpg?1517813031"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Card",
+  "oracle_text": "At the beginning of your end step, draw a card.\nWhenever a creature deals combat damage to you, its controller becomes the monarch.",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": false,
+  "variation": false,
+  "set": "tcn2",
+  "set_name": "Conspiracy: Take the Crown Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/05253e32-2e5b-41e3-8be4-c55cd31fe5fd",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Atcn2&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/tcn2?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/40b79918-22a7-4fff-82a6-8ebfe6e87185/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3A7c934091-1bc7-4458-acef-fdac62ec3df1&unique=prints",
+  "collector_number": "1",
+  "digital": false,
+  "rarity": "common",
+  "illustration_id": "0881c5b8-95ca-4939-bf9c-56b81d2f2158",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "Mike Bierek",
+  "border_color": "black",
+  "frame": "2015",
+  "full_art": false,
+  "textless": false,
+  "booster": true,
+  "story_spotlight": false,
+  "promo_types": "#<Set: {\"setpromo\"}>",
+  "prices": {
+    "usd": "0.10",
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=The+Monarch&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=The+Monarch",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=The+Monarch"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/product/productsearch?id=121437&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=The+Monarch&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=The+Monarch&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
+}]

@@ -28,6 +28,20 @@ public class SearchHelper {
     	return false;
     }
 	
+	public static boolean oracle_text_contains(Card c, String text) {
+    	if(c.oracle_text != null) {
+    		return (StringUtils.containsIgnoreCase(c.oracle_text, text));
+    	}
+    	else if(c.card_faces.size() > 0) {
+    		for (CardFace face : c.card_faces) {
+				if(StringUtils.containsIgnoreCase(face.oracle_text, text))
+					return true;
+			}
+    	}
+    	
+    	return false;
+    }
+	
 	public static Card findCardByName(List<Card> cards, boolean matchExact, String name) {
     	Card ret = null;
     	Card backup = null;
@@ -70,7 +84,7 @@ public class SearchHelper {
     	return null;
     }
         
-    public static List<Card> findTokensByName(List<Card> cards, String name, String power, String toughness) {
+    public static ArrayList<Card> findTokensByName(List<Card> cards, String name, String power, String toughness) {
     	ArrayList<Card> matches = new ArrayList<Card>();
     	Set<String> ids = new HashSet<String>();
     	
@@ -109,8 +123,24 @@ public class SearchHelper {
     	return matches;
     }
     
+    public static Card findTipCard(ArrayList<Card> tipcards, String name) {
+    	try {
+			for(Card c: tipcards) {
+				if(c.name.equalsIgnoreCase(name))
+					return c;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+    	
+    	return null;
+    }
+    
     public static List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
     	boolean found = false;
+    	
+    	if(token == null)
+    		return results;
     	
     	//Determine which card face is being used and trim the other side of the DFC token
     	int trimmed_face = 99;

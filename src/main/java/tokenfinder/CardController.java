@@ -106,12 +106,11 @@ public class CardController {
     	List<Card> containsCreate = new ArrayList<Card>();
     	List<ContainsCreateResult> ccResults = new ArrayList<ContainsCreateResult>();
     	List<String> full_list = new ArrayList<String>();
-    	List<Card> copyToken = null;
-    	List<Card> amassToken = null;
     	
     	try { 		
 	    	List<Card> cards = ScryfallDataManager.loadCards();
 	    	List<Card> tokens = ScryfallDataManager.loadTokens();
+	    	ArrayList<Card> tipcards = ScryfallDataManager.loadTipCards();
 	    	
 	    	//Search terms
 			ArrayList<String> terms = new ArrayList<String>();
@@ -147,30 +146,54 @@ public class CardController {
 					else if(SearchHelper.oracle_text_contains_create(found)) {
 						containsCreate.add(found);
 					}
-				}				
+				}
+				
+				//Check for tip cards
+				if(found != null) {
+					if(SearchHelper.oracle_text_contains(found, "experience counter"))
+						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Experience Counter"), found);
+					
+					if(SearchHelper.oracle_text_contains(found, "the monarch"))
+						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "The Monarch"), found);
+					
+					if(SearchHelper.oracle_text_contains(found, "{E}"))
+						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Energy Reserve"), found);
+					
+					if(SearchHelper.oracle_text_contains(found, "the city's blessing"))
+						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "City's Blessing"), found);
+					
+					if(SearchHelper.oracle_text_contains(found, "infect ") || SearchHelper.oracle_text_contains(found, "infect.") || SearchHelper.oracle_text_contains(found, "poison counter"))
+						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Poison Counter"), found);
+				}
 			}
 			
-			//Process containsCreate for token guesses			
+			//Process containsCreate for token guesses	
+	    	ArrayList<Card> copyToken = null;
+	    	ArrayList<Card> amassToken = null;
+	    	
 			for(Card cc : containsCreate) {
-				List<Card> guess = null;
+				ArrayList<Card> guess = new ArrayList<Card>();
 				TokenGuess tg = SearchHelper.prepareTokenGuess(cc);
 			    
 				if(!tg.name.isEmpty()) {
 					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness);
 			    }
-				else if(cc.oracle_text.contains("that's a copy of") || cc.oracle_text.contains("that are copies of")) {
+				
+				//Check for copy tokens and amass tokens
+				if(cc.oracle_text.contains("that's a copy of") || cc.oracle_text.contains("that are copies of")) {
 					if(copyToken == null)
 						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null);
 					
-					guess = copyToken;
+					guess.addAll(copyToken);
 				}
-				else if(cc.oracle_text.contains("Amass ") || cc.oracle_text.contains("amass ")) {
+				
+				if(cc.oracle_text.contains("Amass ") || cc.oracle_text.contains("amass ")) {
 					if(amassToken == null)
 						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0");
 					
-					guess = amassToken;
+					guess.addAll(amassToken);
 				}
-		    	
+						    	
 				//Calculated image links
 		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
 		    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);

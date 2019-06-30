@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -41,6 +42,23 @@ public class ScryfallDataManager {
 		}
 		catch(Exception e) {
             throw new Exception("Cannot load token information from file.");
+        }
+	}
+    
+    public static ArrayList<Card> loadTipCards() throws Exception {
+		try {
+            InputStream in = CardController.class.getResourceAsStream("/scryfall-tip-cards.json");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            Type collectionType = new TypeToken<ArrayList<Card>>(){}.getType();
+            
+            @SuppressWarnings("unchecked")
+			ArrayList<Card> cards = (ArrayList<Card>) new Gson().fromJson(br, collectionType);
+            
+            return cards;
+		}
+		catch(Exception e) {
+            throw new Exception("Cannot load tip card information from file.");
         }
 	}
     
