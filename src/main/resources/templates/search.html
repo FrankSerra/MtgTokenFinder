@@ -14,7 +14,7 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
                 <h6 class="mt-3">Enter cards separated by newlines:</h6>
-                <form th:action="@{/tokens}" id="deck" method="post">
+                <form th:action="@{/tokens}" id="deck" method="post" autocomplete="off">
                     <div class="form-group">
                         <textarea class="form-control" rows="10" form="deck" name="cardlist" placeholder="Don't worry about leading numbers (e.g., &quot;2&nbsp;Raise&nbsp;the&nbsp;Alarm&quot;, &quot;3x&nbsp;Lingering&nbsp;Souls&quot;), they will be ignored."></textarea>
                     </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="tab-pane fade" id="deckboxurl" role="tabpanel" aria-labelledby="deckboxurl-tab">
                 <h6 class="mt-3">Enter Deckbox.org URL:</h6>
-                <form th:action="@{/deckbox}" id="deckbox" method="post">
+                <form th:action="@{/deckbox}" id="deckbox" method="post" autocomplete="off">
                     <div class="form-group">
                         <input class="form-control" form="deckbox" type="text" name="deckboxurl" />
                     </div>                    
