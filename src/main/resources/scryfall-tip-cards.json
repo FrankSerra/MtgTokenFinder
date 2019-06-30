@@ -464,4 +464,193 @@
     "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=The+Monarch&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
     "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=The+Monarch&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
   }
+},
+{
+  "object": "card",
+  "id": "d6fb189b-20a3-4ba4-86ec-f84513e0281a",
+  "oracle_id": "f4f184ef-f456-47d8-9012-095629a5ea4d",
+  "multiverse_ids": [
+
+  ],
+  "name": "Manifest",
+  "lang": "en",
+  "released_at": "2018-08-09",
+  "uri": "https://api.scryfall.com/cards/d6fb189b-20a3-4ba4-86ec-f84513e0281a",
+  "scryfall_uri": "https://scryfall.com/card/tc18/1/manifest?utm_source=api",
+  "layout": "token",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/en/tc18/1.jpg?1535501221",
+    "normal": "https://img.scryfall.com/cards/normal/en/tc18/1.jpg?1535501221",
+    "large": "https://img.scryfall.com/cards/large/en/tc18/1.jpg?1535501221",
+    "png": "https://img.scryfall.com/cards/png/en/tc18/1.png?1535501221",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/en/tc18/1.jpg?1535501221",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/en/tc18/1.jpg?1535501221"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Creature",
+  "oracle_text": "(You can cover a face-down manifested creature with this reminder card.\nA manifested creature card can be turned face up any time for its mana cost. A face-down card can also be turned face up for its morph cost.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": true,
+  "variation": false,
+  "set": "tc18",
+  "set_name": "Commander 2018 Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/8d858150-d438-49cb-81d6-8fc5b8feccc4",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Atc18&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/tc18?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/d6fb189b-20a3-4ba4-86ec-f84513e0281a/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3Af4f184ef-f456-47d8-9012-095629a5ea4d&unique=prints",
+  "collector_number": "1",
+  "digital": false,
+  "rarity": "common",
+  "illustration_id": "f44446a8-4e3e-4a46-88c9-190c9e11e6d3",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "Raymond Swanland",
+  "border_color": "black",
+  "frame": "2015",
+  "full_art": false,
+  "textless": false,
+  "booster": false,
+  "story_spotlight": false,
+  "prices": {
+    "usd": null,
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=Manifest&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=Manifest",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Manifest"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/productcatalog/product/show?ProductName=Manifest&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=Manifest&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=Manifest&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
+},
+{
+  "object": "card",
+  "id": "cd0b42a0-5e08-406d-82b0-be5f72870c47",
+  "oracle_id": "8f92f8d7-ec89-426f-86dc-fbc259eb5559",
+  "multiverse_ids": [
+
+  ],
+  "tcgplayer_id": 161857,
+  "name": "Morph",
+  "lang": "en",
+  "released_at": "2018-03-16",
+  "uri": "https://api.scryfall.com/cards/cd0b42a0-5e08-406d-82b0-be5f72870c47",
+  "scryfall_uri": "https://scryfall.com/card/ta25/15/morph?utm_source=api",
+  "layout": "token",
+  "highres_image": true,
+  "image_uris": {
+    "small": "https://img.scryfall.com/cards/small/en/ta25/15.jpg?1541283823",
+    "normal": "https://img.scryfall.com/cards/normal/en/ta25/15.jpg?1541283823",
+    "large": "https://img.scryfall.com/cards/large/en/ta25/15.jpg?1541283823",
+    "png": "https://img.scryfall.com/cards/png/en/ta25/15.png?1541283823",
+    "art_crop": "https://img.scryfall.com/cards/art_crop/en/ta25/15.jpg?1541283823",
+    "border_crop": "https://img.scryfall.com/cards/border_crop/en/ta25/15.jpg?1541283823"
+  },
+  "mana_cost": "",
+  "cmc": 0.0,
+  "type_line": "Creature",
+  "oracle_text": "(You can cover a face-down creature with this reminder card.\nA card with morph can be turned face up any time for its morph cost.)",
+  "power": "2",
+  "toughness": "2",
+  "colors": [
+
+  ],
+  "color_identity": [
+
+  ],
+  "legalities": {
+    "standard": "not_legal",
+    "future": "not_legal",
+    "frontier": "not_legal",
+    "modern": "not_legal",
+    "legacy": "not_legal",
+    "pauper": "not_legal",
+    "vintage": "not_legal",
+    "penny": "not_legal",
+    "commander": "not_legal",
+    "duel": "not_legal",
+    "oldschool": "not_legal"
+  },
+  "games": [
+    "paper"
+  ],
+  "reserved": false,
+  "foil": false,
+  "nonfoil": true,
+  "oversized": false,
+  "promo": false,
+  "reprint": true,
+  "variation": false,
+  "set": "ta25",
+  "set_name": "Masters 25 Tokens",
+  "set_type": "token",
+  "set_uri": "https://api.scryfall.com/sets/d7332292-8eae-4d07-b48d-c96effb3994a",
+  "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Ata25&unique=prints",
+  "scryfall_set_uri": "https://scryfall.com/sets/ta25?utm_source=api",
+  "rulings_uri": "https://api.scryfall.com/cards/cd0b42a0-5e08-406d-82b0-be5f72870c47/rulings",
+  "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3A8f92f8d7-ec89-426f-86dc-fbc259eb5559&unique=prints",
+  "collector_number": "15",
+  "digital": false,
+  "rarity": "common",
+  "illustration_id": "3d1493a9-f21a-43f8-a984-b9f54bbcb984",
+  "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+  "artist": "Seb McKinnon",
+  "border_color": "black",
+  "frame": "2015",
+  "full_art": false,
+  "textless": false,
+  "booster": true,
+  "story_spotlight": false,
+  "prices": {
+    "usd": "0.06",
+    "usd_foil": null,
+    "eur": null,
+    "tix": null
+  },
+  "related_uris": {
+    "tcgplayer_decks": "https://decks.tcgplayer.com/magic/deck/search?contains=Morph&page=1&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "edhrec": "http://edhrec.com/route/?cc=Morph",
+    "mtgtop8": "https://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Morph"
+  },
+  "purchase_uris": {
+    "tcgplayer": "https://shop.tcgplayer.com/product/productsearch?id=161857&partner=Scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+    "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall&searchString=Morph&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+    "cardhoarder": "https://www.cardhoarder.com/cards?affiliate_id=scryfall&data%5Bsearch%5D=Morph&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+  }
 }]
