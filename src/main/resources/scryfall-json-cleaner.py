@@ -8,7 +8,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     #Initial set of desirable cards
     clean_cards = [x for x in all_cards if x['border_color'] not in ['silver', 'gold'] \
                                         if x['oversized'] is False if x['digital'] is False if x['layout'] not in ["token", "emblem", "double_faced_token"] \
-                                        if 'paper' in x['games'] if x['lang'] == 'en']
+                                        if 'paper' in x['games'] if x['lang'] == 'en' if x['set_type'] not in ['masterpiece']]
     
     #Search for cards that only exist in promo form like "Nexus of Fate", "Impervious Greatwurm", etc.
     no_promos  = [x for x in clean_cards if x['promo'] is False]
@@ -27,7 +27,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     tokens = [x for x in all_cards if x['layout'] in ["token", "emblem", "double_faced_token"]]
 
     #List of keys to remove
-    remove_keys = ('arena_id',
+    remove_keys = ['arena_id',
                    'artist',
                    'booster',
                    'border_color',
@@ -73,22 +73,22 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'story_spotlight',
                    'tcgplayer_id',
                    'textless',
-                   'type_line',
                    'uri',
                    'variation',
-                   'watermark')
+                   'watermark']
 
-    #Trim search
-    out_cards = clean_cards
-    for obj in out_cards:
+    #Trim tokens
+    for obj in tokens:
         for key in remove_keys:
             try:
                 del obj[key]
             except:
                 continue
-    
-    #Trim tokens
-    for obj in tokens:
+
+    #Trim search
+    out_cards = clean_cards
+    remove_keys.append('type_line')
+    for obj in out_cards: #tokens need a typeline
         for key in remove_keys:
             try:
                 del obj[key]

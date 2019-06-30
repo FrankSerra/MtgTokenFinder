@@ -87,6 +87,8 @@ public class SearchHelper {
 				
 				disp += c.buildColorPhrase(c.getColors(match.card_face));
 				
+				disp += " " + c.getTypes(match.card_face);
+				
 				disp += " " + c.getName(match.card_face);
 				
 				String oracle = c.getOracle(match.card_face);

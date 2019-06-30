@@ -2,6 +2,8 @@ package tokenfinder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Card implements Comparable<Card> {
 	public String oracle_id, id, oracle_text;
@@ -12,7 +14,7 @@ public class Card implements Comparable<Card> {
 	public String scryfall_uri;
 	public String power, toughness;
 	public ArrayList<String> colors;
-	public String set, collector_number;
+	public String set, collector_number, type_line;
 	
 	//These properties are for Thymeleaf and must be set manually
 	public String display_name;
@@ -23,7 +25,7 @@ public class Card implements Comparable<Card> {
 	public String buildColorPhrase(List<String> color_identity) {
     	String disp = "";
     	if(color_identity.size() == 0) {
-			disp += "Colorless ";
+			disp += "Colorless";
 		}
 		else {
 			for(int idx=0; idx<color_identity.size(); idx++) {
@@ -77,6 +79,29 @@ public class Card implements Comparable<Card> {
     	default:
     		return this.card_faces.get(face).name + " (DFC with: " + this.card_faces.get((face*-1)+1).name + ")";
     	}
+    }
+    
+    public String getTypes(int face) {
+    	//won't return the words "token" or "creature"
+    	String types = "";
+    	switch(face) {
+    	case -1:
+    		types = this.type_line;
+    		break;
+    	default:
+    		types = this.card_faces.get(face).type_line;
+    		break;
+    	}
+    	    	
+    	Pattern pattern = Pattern.compile(".*(?= [^\\w])");
+    	Matcher match = pattern.matcher(types);
+    	
+    	if(match.find()) {
+    		types = match.group();
+    		return types.replace("Token", "").replace("Creature", "").trim().replaceAll(" +", " ");
+    	}
+    	
+    	return "";
     }
     
     public String getOracle(int face) {
