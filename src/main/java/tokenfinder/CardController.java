@@ -107,6 +107,7 @@ public class CardController {
     	List<ContainsCreateResult> ccResults = new ArrayList<ContainsCreateResult>();
     	List<String> full_list = new ArrayList<String>();
     	List<Card> copyToken = null;
+    	List<Card> amassToken = null;
     	
     	try { 		
 	    	List<Card> cards = ScryfallDataManager.loadCards();
@@ -162,6 +163,12 @@ public class CardController {
 						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null);
 					
 					guess = copyToken;
+				}
+				else if(cc.oracle_text.contains("Amass ") || cc.oracle_text.contains("amass ")) {
+					if(amassToken == null)
+						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0");
+					
+					guess = amassToken;
 				}
 		    	
 				//Calculated image links
