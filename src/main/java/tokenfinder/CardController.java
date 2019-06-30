@@ -92,6 +92,7 @@ public class CardController {
     		return "unsupported_url";
     	}
     	else if(resp.okay) {
+    		model.addAttribute("errorlist", resp.errors);
     		return tokens(resp.cardlist, "off", model);
     	}
     	else {

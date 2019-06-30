@@ -48,7 +48,7 @@ public class URL_Processor {
 
 		list = list.replace("<br>", "\n");
     	
-    	return new UrlProcessResponse(true, null, list);
+    	return new UrlProcessResponse(true, new String[] {"The TappedOut scraper cannot import the deck's commander, since it is an image. It will not appear below."}, list);
 	}
 	
 	public static UrlProcessResponse fromMtgVault(String mtgvault) {
