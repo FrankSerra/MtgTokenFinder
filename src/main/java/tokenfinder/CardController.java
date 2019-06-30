@@ -1,7 +1,7 @@
 package tokenfinder;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,6 +27,7 @@ public class CardController {
     
     @GetMapping("/search")
     public String search(Model model) {
+    	model.addAttribute("sites", URL_Processor.SupportedSites);
         return "search";
     }
     
@@ -58,19 +59,45 @@ public class CardController {
     }
     
     @PostMapping("/fromurl")
-    public String deckbox(@RequestParam(name="deckboxurl", required=true, defaultValue="") String deckboxurl, Model model) {
+    public String fromurl(@RequestParam(name="deckboxurl", required=true, defaultValue="") String deckboxurl, Model model) {
+    	UrlProcessResponse resp=null;
     	try {
-			URL parm = new URL(deckboxurl);
-			switch(parm.getHost()) {
+			URI parm = new URI(deckboxurl);
+			
+			String host = parm.getHost().toLowerCase();
+			if(host.startsWith("www."))
+				host = host.substring(4);
+			
+			switch(host) {
 			case "deckbox.org":
-				return tokens(URL_Processor.fromDeckBox(deckboxurl), "off", model);
+				resp = URL_Processor.fromDeckBox(deckboxurl);
+				break;
+			case "tappedout.net":
+				resp = URL_Processor.fromTappedOut(deckboxurl);
+				break;
+			case "mtgvault.com":
+				resp = URL_Processor.fromMtgVault(deckboxurl);
+				break;
+				
+			case "mtggoldfish.com":
+				resp = URL_Processor.fromMtgGoldfish(deckboxurl);
+				break;
 			}
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
+		} catch (URISyntaxException e1) {
+			model.addAttribute("errorlist", new String[] {"The URL entered was invalid."});
 			return "error";
 		}
     	
-    	return "unsupported_url";
+    	if(resp == null) {
+    		return "unsupported_url";
+    	}
+    	else if(resp.okay) {
+    		return tokens(resp.cardlist, "off", model);
+    	}
+    	else {
+    		model.addAttribute("errorlist", resp.errors);
+    		return "error";
+    	}
     }
     
     public SearchResult tokenResults(String cardlist, boolean matchExact) {

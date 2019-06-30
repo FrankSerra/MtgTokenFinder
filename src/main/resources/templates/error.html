@@ -9,6 +9,11 @@
         <h3>Sorry, an error occurred.</h3>
         
         If you can <a th:href="${googleform}">tell us</a> what you were doing when it happened, we can try to fix it.
+
+        <div class="mt-2" th:if="${errorlist != null}">
+            <h4>More info:</h4>
+            <p th:each="line: ${errorlist}" th:text="${line}"></p>
+        </div>
     </main>
     <footer th:insert="fragments/footer.html :: footer"></footer>
 </body>

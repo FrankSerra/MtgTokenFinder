@@ -30,14 +30,14 @@
                 <h6 class="mt-3">Enter URL:</h6>
                 <form th:action="@{/fromurl}" id="deckbox" method="post" autocomplete="off">
                     <div class="form-group">
-                        <input class="form-control" form="deckbox" type="text" name="deckboxurl" />
+                        <input class="form-control form-control-sm" form="deckbox" type="text" name="deckboxurl" />
                     </div>                    
                     <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
                 </form>
-                <p>
+                <p class="mt-4">
                     The following websites are supported for URL importing:
                     <ul>
-                        <li>Deckbox.org</li>
+                        <li th:each="site: ${sites}" th:text="${site}"></li>
                     </ul>
                 </p>
             </div>
