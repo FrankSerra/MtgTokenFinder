@@ -72,15 +72,21 @@ public class CardController {
 			case "deckbox.org":
 				resp = URL_Processor.fromDeckBox(deckboxurl);
 				break;
+				
 			case "tappedout.net":
 				resp = URL_Processor.fromTappedOut(deckboxurl);
 				break;
+				
 			case "mtgvault.com":
 				resp = URL_Processor.fromMtgVault(deckboxurl);
 				break;
 				
 			case "mtggoldfish.com":
 				resp = URL_Processor.fromMtgGoldfish(deckboxurl);
+				break;
+				
+			case "mtgtop8.com":
+				resp = URL_Processor.fromMtgTopEight(deckboxurl);
 				break;
 			}
 		} catch (URISyntaxException e1) {

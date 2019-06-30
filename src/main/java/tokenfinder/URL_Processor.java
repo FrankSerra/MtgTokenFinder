@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Deckbox.org", "MTGGoldfish.com", "MTGVault.com", "TappedOut.net"};
+	public static final String[] SupportedSites = new String[] {"Deckbox.org", "MTG Goldfish.com", "MTG Top8.com", "MTG Vault.com", "TappedOut.net"};
 	
 	/*
 	 * Unsupported sites and why
@@ -79,6 +79,24 @@ public class URL_Processor {
     	
 		String list = "";
 		for(Element e : doc.select("div#tab-paper table.deck-view-deck-table td.deck-col-card > a")) {			
+			list += e.html() + "\n";
+		}
+
+		list = list.replace("<br>", "\n");
+    	
+    	return new UrlProcessResponse(true, null, list);
+	}
+	
+	public static UrlProcessResponse fromMtgTopEight(String mtgtop8) {
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(mtgtop8).get();
+		} catch (IOException e) {
+			return new UrlProcessResponse(false, new String[] {"Error retrieving MTG Top 8 URL.", e.getMessage()}, "");
+		}
+    	
+		String list = "";
+		for(Element e : doc.select("span.L14")) {			
 			list += e.html() + "\n";
 		}
 
