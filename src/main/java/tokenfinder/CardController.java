@@ -179,6 +179,8 @@ public class CardController {
 					if(SearchHelper.oracle_text_contains(found, "manifest th") || SearchHelper.oracle_text_contains(found, "manifest one"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Manifest"), found);
 					
+					if(SearchHelper.oracle_text_contains(found, "megamorph ") || SearchHelper.oracle_text_contains(found, "morph "))
+						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Morph"), found);
 				}
 			}
 			
