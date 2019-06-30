@@ -196,15 +196,16 @@ public class CardController {
 					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness, false);
 			    }
 				
-				//Check for copy tokens and amass tokens
-				if(cc.oracle_text.contains("that's a copy of") || cc.oracle_text.contains("that are copies of")) {
+				//Check for copy tokens
+				if(SearchHelper.oracle_text_contains(cc, "that's a copy of") || SearchHelper.oracle_text_contains(cc, "that are copies of")) {
 					if(copyToken == null)
 						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null, true);
 					
 					guess.addAll(copyToken);
 				}
 				
-				if(cc.oracle_text.contains("Amass ") || cc.oracle_text.contains("amass ")) {
+				//Check for amass tokens
+				if(SearchHelper.oracle_text_contains(cc, "amass ")) {
 					if(amassToken == null)
 						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0", true);
 					
@@ -216,7 +217,43 @@ public class CardController {
 					if(!hasArmy)
 						guess.addAll(amassToken);
 				}
-						    	
+				
+				//Check for emblems
+				if(SearchHelper.oracle_text_contains(cc, "emblem ")) {
+					//Emblems need to search for each individual card face
+					
+					//If single-face card
+					if(cc.card_faces == null) {
+						boolean hasEmblem = false;
+						for(Card gc: guess) {
+							if(gc.name.equals(cc.name + " Emblem"))
+								hasEmblem = true;
+						}
+						if(!hasEmblem) {
+							List<Card> g = SearchHelper.findTokensByName(tokens, cc.name+" Emblem", null, null, true);
+							if(g != null) {
+								SearchHelper.addTokenAndSources(results, g.get(0), cc);
+							}
+						}
+					}
+					//If card is double-faced
+					else {
+						for(CardFace cf: cc.card_faces) {
+							boolean hasEmblem = false;
+							for(Card gc: guess) {
+								if(gc.name.equals(cf.name + " Emblem"))
+									hasEmblem = true;
+							}
+							if(!hasEmblem) {
+								List<Card> g = SearchHelper.findTokensByName(tokens, cc.name+" Emblem", null, null, true);
+								if(g != null) {
+									SearchHelper.addTokenAndSources(results, g.get(0), cc);
+								}
+							}
+						}
+					}
+				}
+				
 				//Calculated image links
 		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
 		    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
