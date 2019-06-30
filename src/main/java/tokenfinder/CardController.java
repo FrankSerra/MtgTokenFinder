@@ -45,8 +45,8 @@ public class CardController {
     @PostMapping("/tokens")
     public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, @RequestParam(name="matchExact", required=true, defaultValue="") String matchExact, Model model) {
     	boolean _match = matchExact.equals("on");
-    	
     	SearchResult sr = tokenResults(cardlist, _match);
+
     	Collections.sort(sr.tokenResults);
     	Collections.sort(sr.containsCreate);
     	Collections.sort(sr.full_list);
@@ -77,7 +77,8 @@ public class CardController {
     	String list = cards.html();
     	list = list.replace("<br>", "\n");
     	
-		return tokens(list, "on", model);
+    	return tokens(list, "off", model);
+
     }
     
     public SearchResult tokenResults(String cardlist, boolean matchExact) {
@@ -101,7 +102,6 @@ public class CardController {
 				
 				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard") || StringUtils.containsIgnoreCase(term, "maybeboard"))
 					continue;
-				
 				Card found = SearchHelper.findCardByName(cards, matchExact, term);
 				if(found == null) {
 					errors.add(term);
@@ -125,7 +125,7 @@ public class CardController {
 					else if(SearchHelper.oracle_text_contains_create(found)) {
 						containsCreate.add(found);
 					}
-				}
+				}				
 			}
 			
 			//Process containsCreate for token guesses			

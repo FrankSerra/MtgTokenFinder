@@ -111,17 +111,22 @@ public class SearchHelper {
     	boolean found = false;
     	
     	//Determine which card face is being used and trim the other side of the DFC token
+    	int trimmed_face = 99;
     	if(token.card_faces != null) {
     		for(int i=0; i<token.card_faces.size();i++) {
     			if(!source.oracle_text.contains(token.card_faces.get(i).name)) {
+    				trimmed_face = i;
     				token.trimCardFace(i);
     			}
     		}
     	}
     	
 		//Calculated image links
-		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, ImageSize.small, false);
-		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, ImageSize.normal, false);
+		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, ImageSize.small, trimmed_face==1);
+		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, ImageSize.normal, trimmed_face==1);
+		
+		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, ImageSize.small, trimmed_face==1);
+		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, ImageSize.normal, trimmed_face==1);
     	
 		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
 			TokenResult tr = i.next();
@@ -141,6 +146,9 @@ public class SearchHelper {
     public static String prepareSearchTerm(String term) {
     	term = term.trim();
 		term = term.replace("\r", "").replaceAll("^[0-9]+\\w* ", "").trim();
+		
+		if(term == "Teyo, the Shieldmage")
+			System.out.print("X");
 		
 		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
 		Matcher symbolCut = symbolCutPattern.matcher(term);
