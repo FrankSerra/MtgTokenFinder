@@ -147,10 +147,11 @@ public class SearchHelper {
     
     public static String prepareSearchTerm(String term) {
     	term = term.trim();
-		term = term.replace("\r", "").replaceAll("^[0-9]+\\w* ", "").trim();
+		term = term.replace("\r", "").replace("SB: ", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
-		if(term == "Teyo, the Shieldmage")
-			System.out.print("X");
+		//Return empty string for common notations of comments
+		if(term.matches("^\\/\\/.*") || term.matches("^#.*"))
+			return "";
 		
 		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
 		Matcher symbolCut = symbolCutPattern.matcher(term);
