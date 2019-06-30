@@ -108,7 +108,7 @@ public class CardController {
     	}
     }
     
-    public SearchResult tokenResults(String cardlist, boolean matchExact) {
+	public SearchResult tokenResults(String cardlist, boolean matchExact) {
     	List<String> errors = new ArrayList<String>();
     	List<TokenResult> results = new ArrayList<TokenResult>();
     	List<Card> containsCreate = new ArrayList<Card>();
@@ -184,22 +184,28 @@ public class CardController {
 				TokenGuess tg = SearchHelper.prepareTokenGuess(cc);
 			    
 				if(!tg.name.isEmpty()) {
-					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness);
+					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness, false);
 			    }
 				
 				//Check for copy tokens and amass tokens
 				if(cc.oracle_text.contains("that's a copy of") || cc.oracle_text.contains("that are copies of")) {
 					if(copyToken == null)
-						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null);
+						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null, true);
 					
 					guess.addAll(copyToken);
 				}
 				
 				if(cc.oracle_text.contains("Amass ") || cc.oracle_text.contains("amass ")) {
 					if(amassToken == null)
-						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0");
+						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0", true);
 					
-					guess.addAll(amassToken);
+					boolean hasArmy = false;
+					for(Card gc: guess) {
+						if(gc.name.equals("Zombie Army"))
+							hasArmy = true;
+					}
+					if(!hasArmy)
+						guess.addAll(amassToken);
 				}
 						    	
 				//Calculated image links

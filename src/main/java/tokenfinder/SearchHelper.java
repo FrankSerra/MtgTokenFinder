@@ -84,7 +84,7 @@ public class SearchHelper {
     	return null;
     }
         
-    public static ArrayList<Card> findTokensByName(List<Card> cards, String name, String power, String toughness) {
+    public static ArrayList<Card> findTokensByName(List<Card> cards, String name, String power, String toughness, boolean firstOnly) {
     	ArrayList<Card> matches = new ArrayList<Card>();
     	Set<String> ids = new HashSet<String>();
     	
@@ -117,6 +117,9 @@ public class SearchHelper {
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
 				
 				matches.add(c);
+				
+				if(firstOnly)
+					break;
 			}
 		}
 
