@@ -1,6 +1,7 @@
 package tokenfinder;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,9 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +20,7 @@ import tokenfinder.ScryfallDataManager.ImageSize;
 @Controller
 public class CardController {
 
-    @GetMapping({"/", "/tokens", "/deckbox"})
+    @GetMapping({"/", "/tokens", "/fromurl"})
     public String cards(Model model) {
         return "redirect:/search";
     }
@@ -59,26 +57,20 @@ public class CardController {
     	return "tokens";
     }
     
-    @PostMapping("/deckbox")
+    @PostMapping("/fromurl")
     public String deckbox(@RequestParam(name="deckboxurl", required=true, defaultValue="") String deckboxurl, Model model) {
-    	if(!deckboxurl.endsWith("/export"))
-    		deckboxurl = deckboxurl + "/export";
-    	
-    	Document doc = null;
-		try {
-			doc = Jsoup.connect(deckboxurl).get();
-		} catch (IOException e) {
-			model.addAttribute("error", "Unable to connect to Deckbox.org - try again later.");
+    	try {
+			URL parm = new URL(deckboxurl);
+			switch(parm.getHost()) {
+			case "deckbox.org":
+				return tokens(URL_Processor.fromDeckBox(deckboxurl), "off", model);
+			}
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
 			return "error";
 		}
     	
-		Element cards = doc.select("body").first();
-		doc.select("p").remove();
-    	String list = cards.html();
-    	list = list.replace("<br>", "\n");
-    	
-    	return tokens(list, "off", model);
-
+    	return "unsupported_url";
     }
     
     public SearchResult tokenResults(String cardlist, boolean matchExact) {
@@ -87,6 +79,7 @@ public class CardController {
     	List<Card> containsCreate = new ArrayList<Card>();
     	List<ContainsCreateResult> ccResults = new ArrayList<ContainsCreateResult>();
     	List<String> full_list = new ArrayList<String>();
+    	List<Card> copyToken = null;
     	
     	try { 		
 	    	List<Card> cards = ScryfallDataManager.loadCards();
@@ -102,11 +95,12 @@ public class CardController {
 				
 				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard") || StringUtils.containsIgnoreCase(term, "maybeboard"))
 					continue;
+				
 				Card found = SearchHelper.findCardByName(cards, matchExact, term);
 				if(found == null) {
 					errors.add(term);
 				}
-				else {
+				else {					
 					full_list.add(term);
 					if(found.all_parts != null) {			
 						boolean goteem = false;
@@ -137,7 +131,10 @@ public class CardController {
 					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness);
 			    }
 				else if(cc.oracle_text.contains("that's a copy of") || cc.oracle_text.contains("that are copies of")) {
-					guess = SearchHelper.findTokensByName(tokens, "Copy", null, null);
+					if(copyToken == null)
+						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null);
+					
+					guess = copyToken;
 				}
 		    	
 				//Calculated image links
@@ -149,8 +146,8 @@ public class CardController {
 			
 			errors.removeIf(p -> p.isEmpty());
     	}
-    	catch(Exception e) {
-    		errors.add(e.getMessage());
+    	catch(Exception e) {  		
+    		errors.add("ERROR: " + e.getMessage());
     	}
     	
     	if(errors.size() == 0)

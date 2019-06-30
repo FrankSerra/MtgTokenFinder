@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header.html :: headerfiles(title='Unsupported URL')"></head>
+<body>
+    <div th:insert="fragments/header.html :: scripts"></div>
+    <nav th:insert="fragments/header.html :: navbar"></nav>
+
+    <main role="main" class="container">
+        <h3>Sorry, that site is not yet supported for importing decklists.</h3>        
+    </main>
+    <footer th:insert="fragments/footer.html :: footer"></footer>
+</body>
+</html>

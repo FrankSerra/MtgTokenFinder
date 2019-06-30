@@ -8,7 +8,7 @@
     <main role="main" class="container searchForm">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"><a class="nav-link active" id="text-tab" data-toggle="tab" href="#text" role="tab" aria-controls="text" aria-selected="true">Text</a></li>
-            <li class="nav-item"><a class="nav-link" id="deckboxurl-tab" data-toggle="tab" href="#deckboxurl" role="tab" aria-controls="deckboxurl" aria-selected="true">Deckbox.org</a></li>
+            <li class="nav-item"><a class="nav-link" id="deckboxurl-tab" data-toggle="tab" href="#deckboxurl" role="tab" aria-controls="deckboxurl" aria-selected="true">From URL</a></li>
         </ul>
 
         <div class="tab-content">
@@ -27,13 +27,19 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="deckboxurl" role="tabpanel" aria-labelledby="deckboxurl-tab">
-                <h6 class="mt-3">Enter Deckbox.org URL:</h6>
-                <form th:action="@{/deckbox}" id="deckbox" method="post" autocomplete="off">
+                <h6 class="mt-3">Enter URL:</h6>
+                <form th:action="@{/fromurl}" id="deckbox" method="post" autocomplete="off">
                     <div class="form-group">
                         <input class="form-control" form="deckbox" type="text" name="deckboxurl" />
                     </div>                    
                     <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
                 </form>
+                <p>
+                    The following websites are supported for URL importing:
+                    <ul>
+                        <li>Deckbox.org</li>
+                    </ul>
+                </p>
             </div>
         </div>
     </main>
