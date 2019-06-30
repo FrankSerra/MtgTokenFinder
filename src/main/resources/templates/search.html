@@ -40,6 +40,12 @@
                         <li th:each="site: ${sites}" th:text="${site}"></li>
                     </ul>
                 </p>
+                <p class="mt-4">
+                    The following websites cannot be supported:
+                    <ul>
+                        <li class="w-75 mb-2" th:each="site: ${exclusions}"><span th:text="${site.site}"></span><br /><small th:text="${site.reason}"></small></li>
+                    </ul>
+                </p>
             </div>
         </div>
     </main>

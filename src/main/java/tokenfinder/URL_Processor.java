@@ -7,13 +7,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Deckbox.org", "MTG Goldfish.com", "MTG Top8.com", "MTG Vault.com", "TappedOut.net"};
-	
-	/*
-	 * Unsupported sites and why
-	 * Archidekt - the site only uses images, there are no card names to scrape without logging in and editing the deck.
-	*/
-	
+	public static final String[] SupportedSites = new String[] {"Deckbox.org", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
+	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] {
+													 new SiteExclusion("Archidekt", "The site uses images to show decks, so there are no card names to scrape."),
+													 new SiteExclusion("Deckstats", "The site dynamically loads the deck content with JavaScript, so card names can't be scraped.")
+													 };
+		
 	public static UrlProcessResponse fromDeckBox(String deckboxurl) {	
 		if(!deckboxurl.endsWith("/export"))
     		deckboxurl = deckboxurl + "/export";

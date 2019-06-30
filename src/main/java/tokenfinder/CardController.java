@@ -28,6 +28,7 @@ public class CardController {
     @GetMapping("/search")
     public String search(Model model) {
     	model.addAttribute("sites", URL_Processor.SupportedSites);
+    	model.addAttribute("exclusions", URL_Processor.SiteExclusions);
         return "search";
     }
     
