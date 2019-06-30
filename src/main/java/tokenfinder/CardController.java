@@ -135,7 +135,10 @@ public class CardController {
 			    
 				if(!tg.name.isEmpty()) {
 					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness);
-			    }			   
+			    }
+				else if(cc.oracle_text.contains("that's a copy of") || cc.oracle_text.contains("that are copies of")) {
+					guess = SearchHelper.findTokensByName(tokens, "Copy", null, null);
+				}
 		    	
 				//Calculated image links
 		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
