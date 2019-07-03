@@ -1,6 +1,5 @@
 package tokenfinder;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,37 +58,14 @@ public class CardController {
     	return "tokens";
     }
     
-    @PostMapping("/fromurl")
+	@PostMapping("/fromurl")
     public String fromurl(@RequestParam(name="deckboxurl", required=true, defaultValue="") String deckboxurl, Model model) {
     	UrlProcessResponse resp=null;
     	try {
-			URI parm = new URI(deckboxurl);
-			
-			String host = parm.getHost().toLowerCase();
-			if(host.startsWith("www."))
-				host = host.substring(4);
-			
-			switch(host) {
-			case "deckbox.org":
-				resp = URL_Processor.fromDeckBox(deckboxurl);
-				break;
-				
-			case "tappedout.net":
-				resp = URL_Processor.fromTappedOut(deckboxurl);
-				break;
-				
-			case "mtgvault.com":
-				resp = URL_Processor.fromMtgVault(deckboxurl);
-				break;
-				
-			case "mtggoldfish.com":
-				resp = URL_Processor.fromMtgGoldfish(deckboxurl);
-				break;
-				
-			case "mtgtop8.com":
-				resp = URL_Processor.fromMtgTopEight(deckboxurl);
-				break;
-			}
+    		if(deckboxurl.isEmpty())
+    			throw new URISyntaxException("", "");
+    		
+    		resp = URL_Processor.ProcessURL(deckboxurl);			
 		} catch (URISyntaxException e1) {
 			model.addAttribute("errorlist", new String[] {"The URL entered was invalid."});
 			return "error";

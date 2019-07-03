@@ -1,6 +1,12 @@
 package tokenfinder;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,11 +14,43 @@ import org.jsoup.nodes.Element;
 
 public class URL_Processor {
 	public static final String[] SupportedSites = new String[] {"Deckbox.org", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
+	
 	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] {
-													 new SiteExclusion("Archidekt", "The site uses images to show decks, so there are no card names to scrape."),
-													 new SiteExclusion("Deckstats", "The site dynamically loads the deck content with JavaScript, so card names can't be scraped.")
-													 };
+				 new SiteExclusion("Archidekt", "The site uses images to show deck content, so there are no card names to scrape."),
+				 new SiteExclusion("Deckstats", "The site dynamically loads the deck content with JavaScript, so card names can't be scraped."),
+				 new SiteExclusion("Moxfield",  "The site dynamically loads the deck content with JavaScript, so card names can't be scraped.")
+				 };
+	
+	public static UrlProcessResponse ProcessURL(String deckboxurl) throws URISyntaxException {
+		Map<String, Method> processorMap = new HashMap<String, Method>();
 		
+		try {
+			processorMap.put("deckbox.org", URL_Processor.class.getMethod("fromDeckBox", String.class));
+			processorMap.put("tappedout.net", URL_Processor.class.getMethod("fromTappedOut", String.class));
+			processorMap.put("mtgvault.com", URL_Processor.class.getMethod("fromMtgVault", String.class));
+			processorMap.put("mtggoldfish.com", URL_Processor.class.getMethod("fromMtgGoldfish", String.class));
+			processorMap.put("mtgtop8.com", URL_Processor.class.getMethod("fromMtgTopEight", String.class));
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		
+		URI parm = new URI(deckboxurl);
+		
+		String host = parm.getHost().toLowerCase();
+		if(host.startsWith("www."))
+			host = host.substring(4);
+		
+		if(processorMap.containsKey(host))
+			try {
+				return (UrlProcessResponse) processorMap.get(host).invoke(null, deckboxurl);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+				
+		return null;
+	}
+	
+	//Individual processors
 	public static UrlProcessResponse fromDeckBox(String deckboxurl) {	
 		if(!deckboxurl.endsWith("/export"))
     		deckboxurl = deckboxurl + "/export";
@@ -21,7 +59,7 @@ public class URL_Processor {
 		try {
 			doc = Jsoup.connect(deckboxurl).get();
 		} catch (IOException e) {
-			return new UrlProcessResponse(false, new String[] {"Error retrieving URL."}, "");
+			return new UrlProcessResponse(false, new String[] {"Error retrieving Deckbox URL."}, "");
 		}
     	
 		Element cards = doc.select("body").first();
@@ -103,4 +141,5 @@ public class URL_Processor {
     	
     	return new UrlProcessResponse(true, null, list);
 	}
+	
 }
