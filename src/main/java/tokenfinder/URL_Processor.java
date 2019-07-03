@@ -14,17 +14,18 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Deckbox.org", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
+	public static final String[] SupportedSites = new String[] {"Deckbox.org", "Deckstats", "Moxfield", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
 	
 	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] {
 				 new SiteExclusion("Archidekt", "The site uses images to show deck content, so there are no card names to scrape."),
-				 new SiteExclusion("Deckstats", "The site dynamically loads the deck content with JavaScript, so card names can't be scraped.")
 				 };
 	
 	public static UrlProcessResponse ProcessURL(String deckboxurl) throws URISyntaxException {
@@ -32,11 +33,13 @@ public class URL_Processor {
 		
 		try {
 			processorMap.put("deckbox.org", URL_Processor.class.getMethod("fromDeckBox", String.class));
-			processorMap.put("tappedout.net", URL_Processor.class.getMethod("fromTappedOut", String.class));
-			processorMap.put("mtgvault.com", URL_Processor.class.getMethod("fromMtgVault", String.class));
+			processorMap.put("deckstats.net", URL_Processor.class.getMethod("fromDeckstats", String.class));
+			processorMap.put("moxfield.com", URL_Processor.class.getMethod("fromMoxfield", String.class));
 			processorMap.put("mtggoldfish.com", URL_Processor.class.getMethod("fromMtgGoldfish", String.class));
 			processorMap.put("mtgtop8.com", URL_Processor.class.getMethod("fromMtgTopEight", String.class));
-			processorMap.put("moxfield.com", URL_Processor.class.getMethod("fromMoxfield", String.class));
+			processorMap.put("mtgvault.com", URL_Processor.class.getMethod("fromMtgVault", String.class));
+			processorMap.put("tappedout.net", URL_Processor.class.getMethod("fromTappedOut", String.class));
+			
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
@@ -177,5 +180,41 @@ public class URL_Processor {
     	
     	return new UrlProcessResponse(file != null, null, file);
 	}
-	
+
+	public static UrlProcessResponse fromDeckstats(String deckstats) {
+		String file = null;
+		String list = "";
+		try {
+			URI parser = new URI(deckstats);
+			String path = parser.toString();
+			
+			if(path == null || path.isEmpty())
+				throw new URISyntaxException("", "");
+			
+			path =  path.substring(path.lastIndexOf("?")+1);
+			
+		    InputStream inputStream = new URL(path + "/?export_txt=1").openStream();
+		 
+		    StringBuilder textBuilder = new StringBuilder();
+		    try (Reader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
+		        int c = 0;
+		        while ((c = reader.read()) != -1) {
+		            textBuilder.append((char) c);
+		        }
+		        
+		        file = textBuilder.toString();
+		        
+		        Pattern removeCategory = Pattern.compile("[0-9]+ .*(\\r\\n|\\r|\\n)");
+		        Matcher catMatches = removeCategory.matcher(file);
+		        while (catMatches.find()) {
+		        	list += catMatches.group();
+		        }
+		    }
+		        
+		} catch (IOException | URISyntaxException e) {
+			return new UrlProcessResponse(false, new String[] {"Error retrieving Deckstats deck.", e.getMessage()}, "");
+		}
+    	
+    	return new UrlProcessResponse(list != "", null, list);
+	}
 }
