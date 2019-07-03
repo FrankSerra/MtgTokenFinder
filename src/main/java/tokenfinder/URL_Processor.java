@@ -1,10 +1,17 @@
 package tokenfinder;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +24,7 @@ public class URL_Processor {
 	
 	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] {
 				 new SiteExclusion("Archidekt", "The site uses images to show deck content, so there are no card names to scrape."),
-				 new SiteExclusion("Deckstats", "The site dynamically loads the deck content with JavaScript, so card names can't be scraped."),
-				 new SiteExclusion("Moxfield",  "The site dynamically loads the deck content with JavaScript, so card names can't be scraped.")
+				 new SiteExclusion("Deckstats", "The site dynamically loads the deck content with JavaScript, so card names can't be scraped.")
 				 };
 	
 	public static UrlProcessResponse ProcessURL(String deckboxurl) throws URISyntaxException {
@@ -30,6 +36,7 @@ public class URL_Processor {
 			processorMap.put("mtgvault.com", URL_Processor.class.getMethod("fromMtgVault", String.class));
 			processorMap.put("mtggoldfish.com", URL_Processor.class.getMethod("fromMtgGoldfish", String.class));
 			processorMap.put("mtgtop8.com", URL_Processor.class.getMethod("fromMtgTopEight", String.class));
+			processorMap.put("moxfield.com", URL_Processor.class.getMethod("fromMoxfield", String.class));
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
@@ -140,6 +147,35 @@ public class URL_Processor {
 		list = list.replace("<br>", "\n");
     	
     	return new UrlProcessResponse(true, null, list);
+	}
+	
+	public static UrlProcessResponse fromMoxfield(String moxfield) {
+		String file = null;
+		try {
+			URI parser = new URI(moxfield);
+			String path = parser.getPath();
+			if(path == null || path.isEmpty())
+				throw new URISyntaxException("", "");
+			
+			path =  path.substring(path.lastIndexOf("/")+1);
+			
+		    InputStream inputStream = new URL("https://api.moxfield.com/v1/decks/all/" + path + "/download").openStream();
+		 
+		    StringBuilder textBuilder = new StringBuilder();
+		    try (Reader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
+		        int c = 0;
+		        while ((c = reader.read()) != -1) {
+		            textBuilder.append((char) c);
+		        }
+		        
+		        file = textBuilder.toString();
+		    }
+		        
+		} catch (IOException | URISyntaxException e) {
+			return new UrlProcessResponse(false, new String[] {"Error retrieving Moxfield deck.", e.getMessage()}, "");
+		}
+    	
+    	return new UrlProcessResponse(file != null, null, file);
 	}
 	
 }
