@@ -1,14 +1,22 @@
-<a th:fragment="card_image(source)" th:href="${source.scryfall_uri}" target="_blank">
-    <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
-        <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
-        <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>
-        <div class="d-none d-md-inline-block mx-auto"><img th:src="${source.calculated_normal}" height="360" /></div>
-    </div>
-    <div class="d-inline-block" th:unless="${#lists.isEmpty(source.card_faces)}">
-        <div class="dfc" th:each="face: ${source.card_faces}">
-            <img class="d-inline-block d-sm-none mx-auto" th:src="${face.image_uris.small}" width="120" />
-            <img class="d-none d-sm-inline-block d-md-none mx-auto" th:src="${face.image_uris.small}" />
-            <img class="d-none d-md-inline-block mx-auto" th:src="${face.image_uris.normal}" height="360" />
+<div class="btg-group dropdown" th:fragment="card_image(source)">
+    <a href="#" data-toggle="dropdown">
+        <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
+            <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
+            <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>
+            <div class="d-none d-md-inline-block mx-auto"><img th:src="${source.calculated_normal}" height="360" /></div>
         </div>
+        <div class="d-inline-block" th:unless="${#lists.isEmpty(source.card_faces)}">
+            <div class="dfc" th:each="face: ${source.card_faces}">
+                <img class="d-inline-block d-sm-none mx-auto" th:src="${face.image_uris.small}" width="120" />
+                <img class="d-none d-sm-inline-block d-md-none mx-auto" th:src="${face.image_uris.small}" />
+                <img class="d-none d-md-inline-block mx-auto" th:src="${face.image_uris.normal}" height="360" />
+            </div>
+        </div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" role="menu">
+        <h5 class="dropdown-header">View on:</h5>
+        <div class="dropdown-divider"></div>
+        <a role="menuitem" class="dropdown-item" th:href="${source.scryfall_uri}" target="_blank">Scryfall</a>
+        <a role="menuitem" class="dropdown-item" th:href="${'https://shop.tcgplayer.com/product/productsearch?id=' + source.tcgplayer_id}" target="_blank">TCGPlayer</a>
     </div>
-</a>
+</div>

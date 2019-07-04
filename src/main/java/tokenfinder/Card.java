@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Card implements Comparable<Card> {
-	public String oracle_id, id, oracle_text;
+	public String oracle_id, id, oracle_text, tcgplayer_id;
 	public String name;
 	public Image_URI image_uris;
 	public ArrayList<Related_Card> all_parts;
@@ -15,7 +15,6 @@ public class Card implements Comparable<Card> {
 	public String power, toughness;
 	public ArrayList<String> colors;
 	public String set, collector_number, type_line;
-	public PurchaseURIs purchase_uris;
 	
 	//These properties are for Thymeleaf and must be set manually
 	public String display_name;
