@@ -21,17 +21,22 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Deckbox.org", "Deckstats", "Moxfield", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
+	public static final String[] SupportedSites = new String[] {"Archidekt", "Deckbox.org", "Deckstats", "Moxfield", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
 	
 	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] {
-				 new SiteExclusion("Archidekt", "The site uses images to show deck content, so there are no card names to scrape."),
+				 //new SiteExclusion("Archidekt", "The site uses images to show deck content, so there are no card names to scrape."),
 				 };
 	
 	public static UrlProcessResponse ProcessURL(String deckboxurl) throws URISyntaxException {
 		Map<String, Method> processorMap = new HashMap<String, Method>();
 		
 		try {
+			processorMap.put("archidekt.com", URL_Processor.class.getMethod("fromArchidekt", String.class));
 			processorMap.put("deckbox.org", URL_Processor.class.getMethod("fromDeckBox", String.class));
 			processorMap.put("deckstats.net", URL_Processor.class.getMethod("fromDeckstats", String.class));
 			processorMap.put("moxfield.com", URL_Processor.class.getMethod("fromMoxfield", String.class));
@@ -216,5 +221,36 @@ public class URL_Processor {
 		}
     	
     	return new UrlProcessResponse(list != "", null, list);
+	}
+	
+	public static UrlProcessResponse fromArchidekt(String archidekturl) {	    	
+    	String raw = null;
+    	String list = "";
+		try {
+			URI parser = new URI(archidekturl);
+			String path = parser.getPath();
+			
+			if(path == null || path.isEmpty())
+				throw new URISyntaxException("", "");
+			
+			path =  path.substring(path.lastIndexOf("/")+1);
+			
+			raw = Jsoup.connect("https://archidekt.com/api/decks/" + path + "/small/")
+					.followRedirects(true)
+					.ignoreContentType(true)
+					.execute()
+					.body();
+			
+		} catch (IOException | URISyntaxException e) {
+			return new UrlProcessResponse(false, new String[] {"Error retrieving Archidekt deck."}, "");
+		}
+    	
+		JsonElement root = new JsonParser().parse(raw);
+		JsonArray cards = root.getAsJsonObject().get("cards").getAsJsonArray();
+		for(JsonElement o: cards) {
+			list += o.getAsJsonObject().get("card").getAsJsonObject().get("oracleCard").getAsJsonObject().get("name").getAsString() + "\n";
+		}
+		
+    	return new UrlProcessResponse(true, null, list);
 	}
 }
