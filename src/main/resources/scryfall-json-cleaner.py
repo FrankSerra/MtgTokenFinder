@@ -71,7 +71,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'set_type',
                    'set_uri', 
                    'story_spotlight',
-                   'tcgplayer_id',
                    'textless',
                    'uri',
                    'variation',
