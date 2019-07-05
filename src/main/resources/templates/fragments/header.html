@@ -1,9 +1,13 @@
 <head th:fragment="headerfiles" th:with="title=${title} ?: 'TokenFinder'">
     <title th:text="${title}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
+    <meta name="theme-color" content="#007bff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Find the tokens you need for your Magic deck!" />    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link href="style.css" rel="stylesheet"/>
+    <link href="styles/style.css" rel="stylesheet"/>
+    <link href="manifest.json" rel="manifest"/>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 </head>
 
 <div th:fragment="scripts">

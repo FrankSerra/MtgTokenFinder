@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:insert="fragments/header.html :: headerfiles"></head>
 <body>
     <div th:insert="fragments/header.html :: scripts"></div>
@@ -13,26 +13,26 @@
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="text" role="tabpanel" aria-labelledby="text-tab">
-                <h6 class="mt-3">Enter cards separated by newlines:</h6>
+                <h6 class="mt-3" id="SearchInstructions">Enter cards separated by newlines:</h6>
                 <form th:action="@{/tokens}" id="deck" method="post" autocomplete="off">
                     <div class="form-group">
-                        <textarea class="form-control" rows="10" form="deck" name="cardlist" placeholder="Don't worry about leading numbers (e.g., &quot;2&nbsp;Raise&nbsp;the&nbsp;Alarm&quot;, &quot;3x&nbsp;Lingering&nbsp;Souls&quot;), they will be ignored."></textarea>
+                        <textarea class="form-control" rows="10" form="deck" name="cardlist" aria-labelledby="SearchInstructions" placeholder="Don't worry about leading numbers (e.g., &quot;2&nbsp;Raise&nbsp;the&nbsp;Alarm&quot;, &quot;3x&nbsp;Lingering&nbsp;Souls&quot;), they will be ignored."></textarea>
                     </div>
                     <div class="form-check">                       
                         <input type="checkbox" id="matchExact" name="matchExact">
                         <label for="matchExact">Match exact names only</label>
                     </div>
                     
-                    <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
+                    <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
                 </form>
             </div>
             <div class="tab-pane fade" id="deckboxurl" role="tabpanel" aria-labelledby="deckboxurl-tab">
-                <h6 class="mt-3">Enter URL:</h6>
+                <h6 class="mt-3" id="URLInstructions">Enter URL:</h6>
                 <form th:action="@{/fromurl}" id="deckbox" method="post" autocomplete="off">
                     <div class="form-group">
-                        <input class="form-control form-control-sm" form="deckbox" type="text" name="deckboxurl" />
+                        <input class="form-control form-control-sm" form="deckbox" type="text" name="deckboxurl" aria-labelledby="URLInstructions" />
                     </div>                    
-                    <button type="submit" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
+                    <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
                 </form>
                 <p class="mt-4">
                     The following websites are supported for URL importing:
