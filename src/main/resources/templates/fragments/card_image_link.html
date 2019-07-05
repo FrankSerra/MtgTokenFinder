@@ -1,5 +1,5 @@
 <div class="btg-group dropdown" th:fragment="card_image(source)">
-    <a href="#" data-toggle="dropdown">
+    <a href="#" data-toggle="dropdown" data-offset="20%" class="card-dropdown">
         <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
             <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
             <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </a>
-    <div class="dropdown-menu dropdown-menu-right" role="menu">
+    <div class="dropdown-menu" role="menu">
         <h5 class="dropdown-header">View on:</h5>
         <div class="dropdown-divider"></div>
         <a role="menuitem" class="dropdown-item" th:href="${source.scryfall_uri}" target="_blank">Scryfall</a>
