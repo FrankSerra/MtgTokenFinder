@@ -8,9 +8,9 @@
             </div>
             <div class="card-body collapse show" id="searchList">
                 <h5 class="text-center">This is a cleaned version of the decklist you submitted.</h5>
-                <div class="row" th:each="result: ${full_list}">
-                    <p class="text-left mb-2" th:text="${result}"></p>
-                </div>
+                <blockquote class="blockquote" >
+                    <p class="text-left mb-2" th:each="result: ${full_list}" th:text="${result}"></p>
+                </blockquote>
             </div>
         </div>
     </div>
