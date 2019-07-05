@@ -1,5 +1,5 @@
 <div class="btg-group dropup" th:fragment="card_image(source)">
-    <a href="#" class="card-dropdown" data-toggle="modal" th:data-target="${'#modal-'+source.oracle_id}">
+    <a href="#" class="card-dropdown" data-toggle="modal" th:data-target="${'#modal-'+source.oracle_id}" title="Click for more options.">
         <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
             <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
             <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>
