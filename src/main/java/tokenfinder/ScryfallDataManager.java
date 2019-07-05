@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken;
 public class ScryfallDataManager {
 	public static List<Card> loadCards() throws Exception {
 		try {
-            InputStream in = CardController.class.getResourceAsStream("/scryfall-clean.json");
+            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-clean.json");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             Type collectionType = new TypeToken<List<Card>>(){}.getType();
@@ -30,7 +30,7 @@ public class ScryfallDataManager {
     
     public static List<Card> loadTokens() throws Exception {
 		try {
-            InputStream in = CardController.class.getResourceAsStream("/scryfall-tokens.json");
+            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-tokens.json");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             Type collectionType = new TypeToken<List<Card>>(){}.getType();
@@ -47,7 +47,7 @@ public class ScryfallDataManager {
     
     public static ArrayList<Card> loadTipCards() throws Exception {
 		try {
-            InputStream in = CardController.class.getResourceAsStream("/scryfall-tip-cards.json");
+            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-tip-cards.json");
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             Type collectionType = new TypeToken<ArrayList<Card>>(){}.getType();
