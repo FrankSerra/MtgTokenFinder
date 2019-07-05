@@ -18,7 +18,7 @@
                         <ul class="list-group list-group-flush sourcerow">
                             <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.card})"></a></li>
                             <li class="list-group-item" th:if="${result.guesses == null || #lists.size(result.guesses) < 1}">No suggestions found.</li>
-                            <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank" class="hover-popover" data-toggle="popover" th:title="${source.name}" data-html="true" th:data-content="${'<img src=''' + source.calculated_small + ''' />'}"><span th:text="${source.display_name}"></span></a><span class="font-weight-light d-block w-75 mx-auto" th:unless="${source.display_oracle == null}" th:text="${source.display_oracle}"></span></li>
+                            <li class="list-group-item" th:each="source: ${result.guesses}"><a th:href="${source.scryfall_uri}" target="_blank" rel="noreferrer" class="hover-popover" data-toggle="popover" th:title="${source.name}" data-html="true" th:data-content="${'<img src=''' + source.calculated_small + ''' />'}"><span th:text="${source.display_name}"></span></a><span class="font-weight-light d-block w-75 mx-auto" th:unless="${source.display_oracle == null}" th:text="${source.display_oracle}"></span></li>
                         </ul>
                     </div>
                 </div>

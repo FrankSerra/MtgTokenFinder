@@ -1,4 +1,4 @@
-<a th:fragment="card_image(source)" th:href="${source.scryfall_uri}" target="_blank">
+<a th:fragment="card_image(source)" th:href="${source.scryfall_uri}" target="_blank" rel="noreferrer">
     <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
         <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
         <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>

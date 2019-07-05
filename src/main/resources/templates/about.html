@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:insert="fragments/header.html :: headerfiles(title='About')"></head>
 <body>
     <div th:insert="fragments/header.html :: scripts"></div>
@@ -8,11 +8,11 @@
     <main role="main" class="container" th:with="title='TokenFinder'">
         <div class="container">
             <p>
-                <span th:text="${title}"></span> is built using <a target+"_blank" href="https://spring.io/">Spring</a>, <a target+"_blank" href="https://spring.io/projects/spring-boot">Spring Boot</a>, 
-                <a target+"_blank" href="https://www.thymeleaf.org/">Thymeleaf 3</a> and <a target+"_blank" href="https://getbootstrap.com/">Bootstrap 4</a>.
+                <span th:text="${title}"></span> is built using <a target="_blank" rel="noreferrer" href="https://spring.io/">Spring</a>, <a target="_blank" rel="noreferrer" href="https://spring.io/projects/spring-boot">Spring Boot</a>, 
+                <a target="_blank" rel="noreferrer" href="https://www.thymeleaf.org/">Thymeleaf 3</a> and <a target="_blank" href="https://getbootstrap.com/">Bootstrap 4</a>.
             </p>
             <p>
-                <span th:text="${title}"></span> uses <a target="_blank" href="https://scryfall.com/docs/api/bulk-data">Scryfall Bulk Data</a> to analyze card-token relationships. It does not use live data, and may not have data for newly released cards.
+                <span th:text="${title}"></span> uses <a target="_blank" rel="noreferrer" href="https://scryfall.com/docs/api/bulk-data">Scryfall Bulk Data</a> to analyze card-token relationships. It does not use live data, and may not have data for newly released cards.
             </p>
             <p>
                 Data is current as of: <strong>2019-06-27 10:16 UTC</strong>
