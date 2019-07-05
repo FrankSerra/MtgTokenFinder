@@ -229,7 +229,7 @@ public class SearchHelper {
 	    		tokenClause = cc.oracle_text.substring(namedNmatch.start(), namedNmatch.end());
 	    	}	 
 	    	
-	    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b )+(of |the )*(\\b[A-Z].*\\b)*");
+	    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b)+( of | the )*(\\b[A-Z].*\\b)*");
 	        Matcher clauseMatcher = clausePattern.matcher(tokenClause);
 	        
 	        if(clauseMatcher.find()) { 
