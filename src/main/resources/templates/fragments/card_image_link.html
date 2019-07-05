@@ -1,5 +1,5 @@
-<div class="btg-group dropdown" th:fragment="card_image(source)">
-    <a href="#" data-toggle="dropdown" data-offset="20%" class="card-dropdown">
+<div class="btg-group dropup" th:fragment="card_image(source)">
+    <a href="#" class="card-dropdown" data-toggle="modal" th:data-target="${'#modal-'+source.oracle_id}">
         <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
             <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
             <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>
@@ -14,10 +14,22 @@
 
         </div>
     </a>
-    <div class="dropdown-menu" role="menu">
-        <h5 class="dropdown-header">View on:</h5>
-        <div class="dropdown-divider"></div>
-        <a role="menuitem" rel="noreferrer" class="dropdown-item" th:href="${source.scryfall_uri}" target="_blank">Scryfall</a>
-        <a role="menuitem" rel="noreferrer" class="dropdown-item" th:href="${'https://shop.tcgplayer.com/product/productsearch?id=' + source.tcgplayer_id}" target="_blank">TCGPlayer</a>
+    <div class="modal fade" role="dialog" tabindex="-1" th:id="${'modal-'+source.oracle_id}">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="${'View '+source.name+' on:'}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group">
+                        <a role="menuitem" rel="noreferrer" class="list-group-item btn btn-outline-primary" th:href="${source.scryfall_uri}" target="_blank">Scryfall</a>
+                        <a role="menuitem" rel="noreferrer" class="list-group-item btn btn-outline-primary" th:href="${'https://shop.tcgplayer.com/product/productsearch?id=' + source.tcgplayer_id}" target="_blank">TCGPlayer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
