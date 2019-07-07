@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -98,13 +99,23 @@ public class CardController {
 	    	
 	    	//Search terms
 			ArrayList<String> terms = new ArrayList<String>();
-			terms.addAll(Arrays.asList(cardlist.split("\\n")));
+			terms.addAll(Arrays.asList(cardlist.split("\\s*\\r?\\n\\s*")));
+			
+			//Clear obvious list cuts
 			terms.removeIf(p -> p.isEmpty());
+			terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "sideboard"));
+			terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "maybeboard"));
+			
+			//Trash duplicates
+			HashSet<String> uniqueTerms = new HashSet<String> (terms);
+			terms.clear();
+			terms.addAll(uniqueTerms);
+			Collections.sort(terms);
 			
 			for (String term: terms) {
 				term = SearchHelper.prepareSearchTerm(term);
 				
-				if(term.isEmpty() || StringUtils.containsIgnoreCase(term, "sideboard") || StringUtils.containsIgnoreCase(term, "maybeboard"))
+				if(term.isEmpty())
 					continue;
 				
 				Card found = SearchHelper.findCardByName(cards, matchExact, term);
