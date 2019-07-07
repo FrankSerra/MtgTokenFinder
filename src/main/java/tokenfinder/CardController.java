@@ -60,13 +60,13 @@ public class CardController {
     }
     
 	@PostMapping("/fromurl")
-    public String fromurl(@RequestParam(name="deckboxurl", required=true, defaultValue="") String deckboxurl, Model model) {
+    public String fromurl(@RequestParam(name="deckurl", required=true, defaultValue="") String deckurl, Model model) {
     	UrlProcessResponse resp=null;
     	try {
-    		if(deckboxurl.isEmpty())
+    		if(deckurl.isEmpty())
     			throw new URISyntaxException("", "");
     		
-    		resp = URL_Processor.ProcessURL(deckboxurl);			
+    		resp = URL_Processor.ProcessURL(deckurl);			
 		} catch (URISyntaxException e1) {
 			model.addAttribute("errorlist", new String[] {"The URL entered was invalid."});
 			return "error";
