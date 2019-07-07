@@ -26,11 +26,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Archidekt", "Deckbox.org", "Deckstats", "Moxfield", "MTG Goldfish", "MTG Top 8", "MTG Vault", "TappedOut"};
+	public static final String[] SupportedSites = new String[] {"Archidekt", "Deckbox.org", "Deckstats", "Moxfield", 
+																"MTG Goldfish", "MTG Top 8", "MTG Vault", "StarCityGames",
+																"TappedOut"};
 	
-	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] {
-				 //new SiteExclusion("Archidekt", "The site uses images to show deck content, so there are no card names to scrape."),
-				 };
+	public static final SiteExclusion[] SiteExclusions = new SiteExclusion[] { };
 	
 	public static UrlProcessResponse ProcessURL(String deckboxurl) throws URISyntaxException {
 		Map<String, Method> processorMap = new HashMap<String, Method>();
@@ -43,6 +43,7 @@ public class URL_Processor {
 			processorMap.put("mtggoldfish.com", URL_Processor.class.getMethod("fromMtgGoldfish", String.class));
 			processorMap.put("mtgtop8.com", URL_Processor.class.getMethod("fromMtgTopEight", String.class));
 			processorMap.put("mtgvault.com", URL_Processor.class.getMethod("fromMtgVault", String.class));
+			processorMap.put("starcitygames.com", URL_Processor.class.getMethod("fromSCG", String.class));
 			processorMap.put("tappedout.net", URL_Processor.class.getMethod("fromTappedOut", String.class));
 			
 		} catch (NoSuchMethodException | SecurityException e) {
@@ -251,6 +252,22 @@ public class URL_Processor {
 			list += o.getAsJsonObject().get("card").getAsJsonObject().get("oracleCard").getAsJsonObject().get("name").getAsString() + "\n";
 		}
 		
+    	return new UrlProcessResponse(true, null, list);
+	}
+	
+	public static UrlProcessResponse fromSCG(String scg) {
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(scg).get();
+		} catch (IOException e) {
+			return new UrlProcessResponse(false, new String[] {"Error retrieving Star City Games URL.", e.getMessage()}, "");
+		}
+    	
+		String list = "";
+		for(Element e : doc.select("div.deck_card_wrapper li > a")) {			
+			list += e.html() + "\n";
+		}
+    	
     	return new UrlProcessResponse(true, null, list);
 	}
 }
