@@ -1,0 +1,4 @@
+<div class="list-group" th:fragment="refer_links(source)">
+    <a role="menuitem" rel="noreferrer" class="list-group-item btn btn-outline-primary" th:href="${source.scryfall_uri}" target="_blank">Scryfall</a>
+    <a role="menuitem" rel="noreferrer" class="list-group-item btn btn-outline-primary" th:href="${'https://shop.tcgplayer.com/product/productsearch?id=' + source.tcgplayer_id}" target="_blank">TCGPlayer</a>
+</div>
