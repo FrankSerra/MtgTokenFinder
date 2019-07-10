@@ -112,8 +112,6 @@ public class SearchHelper {
 				
 				c.display_name = disp;
 				
-				c.trimCardFace((match.card_face*-1)+1);
-				
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
 				
 				matches.add(c);
