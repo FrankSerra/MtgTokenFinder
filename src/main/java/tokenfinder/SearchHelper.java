@@ -196,13 +196,15 @@ public class SearchHelper {
 		return term;
     }
     
-    public static TokenGuess prepareTokenGuess(Card cc) {
-    	String 		tokenName = "";
-    	Pattern 	pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
-        Matcher 	matcher = pattern.matcher(cc.oracle_text);
-        String 		power = null, toughness = null;
+    public static List<TokenGuess> prepareTokenGuess(Card cc) {
+    	List<TokenGuess> 	all_guesses = new ArrayList<TokenGuess>();
+    	TokenGuess			currentGuess;
+    	String 				tokenName = "";
+    	Pattern 			pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
+        Matcher 			matcher = pattern.matcher(cc.oracle_text);
+        String 				power = null, toughness = null;
         
-	    if(matcher.find()) {
+	    while(matcher.find()) {
 	    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());  
 	    	
 	    	//If it's a creature token, get the P/T declaration
@@ -235,7 +237,12 @@ public class SearchHelper {
 	        }
 	    }
 	    
-	    return new TokenGuess(tokenName, power, toughness);
+	    currentGuess = new TokenGuess(tokenName, power, toughness);
+	    if(!all_guesses.contains(currentGuess)) {
+	    	all_guesses.add(currentGuess);
+	    }
+	    
+	    return all_guesses;
     }
 	   
 }
