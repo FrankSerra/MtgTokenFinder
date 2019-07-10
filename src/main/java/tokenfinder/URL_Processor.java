@@ -26,8 +26,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Archidekt", "CubeTutor", "Deckbox.org", "Deckstats", 
-																"Moxfield", "MTG Goldfish", 
+	public static final String[] SupportedSites = new String[] {"Archidekt", "CubeTutor", "Deckbox.org", 
+																"Deckstats", "Moxfield", "MTG Goldfish", 
 																"MTG Top 8", "MTG Vault", "StarCityGames", 
 																"TappedOut"};
 	
