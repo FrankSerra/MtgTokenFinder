@@ -240,11 +240,9 @@ public class CardController {
 					//Calculated image links
 			    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
 			    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
-					
-			    	
-			    	//Perform confidence matching
 				}
 				
+		    	//Perform confidence matching
 				boolean confidant = false;
 				for(Card tokenCheck : guess) {
 					if(SearchHelper.cardContainsTokenPhrase(cc, tokenCheck)) {
