@@ -42,6 +42,22 @@ public class SearchHelper {
     	return false;
     }
 	
+	public static boolean oracle_text_contains_regex(Card c, String text) {
+		//Pattern search = Pattern.compile(text, Pattern.CASE_INSENSITIVE);
+		if(c.oracle_text != null) {
+    		return c.oracle_text.replace("\r", "").replace("\n", "").matches("(?i)"+text);
+			//return search.matcher(c.oracle_text.replace("\r", "").replace("\n", "")).find();
+    	}
+    	else if(c.card_faces.size() > 0) {
+    		for (CardFace face : c.card_faces) {
+				if(face.oracle_text.replace("\r", "").replace("\n", "").matches(text))
+					return true;
+			}
+    	}
+    	
+    	return false;
+    }
+	
 	public static Card findCardByName(List<Card> cards, boolean matchExact, String name) {
     	Card ret = null;
     	Card backup = null;
@@ -243,6 +259,60 @@ public class SearchHelper {
 	    }
 	    
 	    return all_guesses;
+    }
+    
+    public static String letterToWord(String s) {
+    	switch(s) {
+		case "W":
+		case "w":
+			return "White";
+		case "U":
+		case "u":
+			return "Blue";
+		case "B":
+		case "b":
+			return "Black";
+		case "R":
+		case "r":
+			return "Red";
+		case "G":
+		case "g":
+			return "Green";
+		default:
+			return "";
+		}
+    }
+    
+    public static boolean cardContainsTokenPhrase(Card card, Card token) {
+    	//Check for Treasure tokens manually because Smothering Tithe is the hardest edge case I've ever encountered
+    	//It is not possible to construct a regex statement that satisfies Smothering Tithe while also satisfying normal creature text
+		if(token.name.equals("Treasure")) {
+			return SearchHelper.oracle_text_contains(card, " Treasure token");
+		}
+		
+    	//Oracle phrasing is P/T -> colors -> name -> types -> "with XYZ"
+    	String disp = ".*";
+		
+		if(token.power != null) {
+			disp += token.getPower(-1) + "\\/" + token.getToughness(-1);
+		}
+		
+		disp += " " + token.buildOracleColorPhrase(token.getColors(-1));
+		
+		disp += " " + token.getName(-1);
+		
+		disp += " " + token.getTypes(-1).toLowerCase();
+		
+		disp += " tokens?";
+		
+		String oracle = token.getOracle(-1);
+		if(oracle != null && !oracle.isEmpty()) {
+			disp += " with \"?" + oracle.replace("{", "\\{").replace("}", "\\}") + "\"?";
+		}
+		disp += ".*";
+		
+		System.out.print(disp);
+		return SearchHelper.oracle_text_contains_regex(card, disp);
     }
 	   
 }

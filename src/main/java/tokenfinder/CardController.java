@@ -241,8 +241,21 @@ public class CardController {
 			    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
 			    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
 					
-				    ccResults.add(new ContainsCreateResult(cc, guess, ""));
+			    	
+			    	//Perform confidence matching
 				}
+				
+				boolean confidant = false;
+				for(Card tokenCheck : guess) {
+					if(SearchHelper.cardContainsTokenPhrase(cc, tokenCheck)) {
+						confidant = true;
+						SearchHelper.addTokenAndSources(results, tokenCheck, cc);
+						break;
+					}
+				}
+				
+				if(!confidant)
+					ccResults.add(new ContainsCreateResult(cc, guess, ""));
 			    
 			}
 			
@@ -250,6 +263,7 @@ public class CardController {
     	}
     	catch(Exception e) {  		
     		errors.add("ERROR: " + e.getMessage());
+    		e.printStackTrace();
     	}
     	
     	if(errors.size() == 0)
