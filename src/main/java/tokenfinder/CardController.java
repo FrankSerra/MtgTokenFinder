@@ -160,7 +160,7 @@ public class CardController {
 					if(SearchHelper.oracle_text_contains(found, "infect ") || SearchHelper.oracle_text_contains(found, "infect.") || SearchHelper.oracle_text_contains(found, "poison counter"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Poison Counter"), found);					
 					
-					if(SearchHelper.oracle_text_contains(found, "manifest th") || SearchHelper.oracle_text_contains(found, "manifest one"))
+					if(SearchHelper.oracle_text_contains(found, "manifest th") || SearchHelper.oracle_text_contains(found, "manifest one") || SearchHelper.oracle_text_contains(found, "manifests "))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Manifest"), found);
 					
 					if(SearchHelper.oracle_text_contains(found, "megamorph ") || SearchHelper.oracle_text_contains(found, "morph "))
