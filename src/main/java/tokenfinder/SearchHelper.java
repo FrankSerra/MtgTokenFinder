@@ -43,14 +43,12 @@ public class SearchHelper {
     }
 	
 	public static boolean oracle_text_contains_regex(Card c, String text) {
-		//Pattern search = Pattern.compile(text, Pattern.CASE_INSENSITIVE);
 		if(c.oracle_text != null) {
-    		return c.oracle_text.replace("\r", "").replace("\n", "").matches("(?i)"+text);
-			//return search.matcher(c.oracle_text.replace("\r", "").replace("\n", "")).find();
+    		return c.oracle_text.replace("\r", "").replace("\n", "").toLowerCase().matches(text.toLowerCase());
     	}
     	else if(c.card_faces.size() > 0) {
     		for (CardFace face : c.card_faces) {
-				if(face.oracle_text.replace("\r", "").replace("\n", "").matches(text))
+				if(face.oracle_text.replace("\r", "").replace("\n", "").toLowerCase().matches(text.toLowerCase()))
 					return true;
 			}
     	}
