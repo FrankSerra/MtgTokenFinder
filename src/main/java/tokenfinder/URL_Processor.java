@@ -25,6 +25,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import ThymeleafEntities.SiteExclusion;
+
 public class URL_Processor {
 	public static final String[] SupportedSites = new String[] {"Archidekt", "CubeTutor", "Deckbox.org", 
 																"Deckstats", "Moxfield", "MTG Goldfish", 

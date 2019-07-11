@@ -1,4 +1,4 @@
-package tokenfinder;
+package ThymeleafEntities;
 
 public class TokenGuess {
 	public String name, power, toughness;

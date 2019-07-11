@@ -1,4 +1,4 @@
-package tokenfinder;
+package ScryfallData;
 
 import java.util.ArrayList;
 

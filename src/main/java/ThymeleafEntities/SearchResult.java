@@ -1,4 +1,4 @@
-package tokenfinder;
+package ThymeleafEntities;
 
 import java.util.List;
 

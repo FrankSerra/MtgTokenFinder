@@ -1,10 +1,12 @@
-package tokenfinder;
+package ScryfallData;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import HelperObjects.SearchHelper;
 
 public class Card implements Comparable<Card> {
 	public String oracle_id, id, oracle_text, tcgplayer_id;
@@ -22,6 +24,7 @@ public class Card implements Comparable<Card> {
 	public String display_oracle;
 	public String calculated_small;
 	public String calculated_normal;
+	public int 	  matching_face;
 	
 	public String buildColorPhrase(List<String> color_identity) {
     	String disp = "";
@@ -97,7 +100,7 @@ public class Card implements Comparable<Card> {
     }
     
     public String getTypes(int face) {
-    	//won't return the words "token" or "creature"
+    	//won't return the word "token"
     	String types = "";
     	switch(face) {
     	case -1:
@@ -117,6 +120,21 @@ public class Card implements Comparable<Card> {
     	}
     	
     	return "";
+    }
+    
+    public String getFullTypeline(int face) {
+    	//won't return the word "token"
+    	String types = "";
+    	switch(face) {
+    	case -1:
+    		types = this.type_line;
+    		break;
+    	default:
+    		types = this.card_faces.get(face).type_line;
+    		break;
+    	}
+    	
+    	return types;
     }
     
     public String getOracle(int face) {
@@ -148,11 +166,11 @@ public class Card implements Comparable<Card> {
 	public int compareTo(Card o) {
 		int name = this.name.compareTo(o.name);
 		if(name == 0) {
-			int power = this.power.compareTo(o.power);
+			int power = this.power == null ? 0 : this.power.compareTo(o.power);
 			if(power == 0) {
-				int tough = this.toughness.compareTo(o.toughness);
+				int tough = this.toughness == null ? 0 : this.toughness.compareTo(o.toughness);
 				if(tough == 0) {
-					int oracle = this.oracle_text.compareTo(o.oracle_text);
+					int oracle = this.oracle_text == null ? 0 : this.oracle_text.compareTo(o.oracle_text);
 					return oracle;
 				}
 				else return tough;

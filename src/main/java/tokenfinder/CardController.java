@@ -15,7 +15,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import tokenfinder.ScryfallDataManager.ImageSize;
+import HelperObjects.OracleTextHelper;
+import HelperObjects.SearchHelper;
+import ScryfallData.Card;
+import ScryfallData.CardFace;
+import ScryfallData.Related_Card;
+import ScryfallData.ScryfallDataManager;
+import ScryfallData.ScryfallDataManager.ImageSize;
+import ThymeleafEntities.ContainsCreateResult;
+import ThymeleafEntities.SearchResult;
+import ThymeleafEntities.TokenGuess;
+import ThymeleafEntities.TokenResult;
 
 @Controller
 public class CardController {
@@ -48,6 +58,10 @@ public class CardController {
     	SearchResult sr = tokenResults(cardlist, _match);
 
     	Collections.sort(sr.tokenResults);
+    	for(TokenResult tr: sr.tokenResults) {
+    		Collections.sort(tr.sources);
+    	}
+    	
     	Collections.sort(sr.containsCreate);
     	Collections.sort(sr.full_list);
     	
@@ -131,39 +145,46 @@ public class CardController {
 							Card token = SearchHelper.findToken(tokens, rc.id);
 							if(token != null) {
 								goteem = true;
-								results = SearchHelper.addTokenAndSources(results, token, found);								
+								results = SearchHelper.addTokenAndSources(results, token, found);	
+								if(OracleTextHelper.oracle_text_contains_create_multiple(found))
+									containsCreate.add(found);
 							}
 						}
-						if(!goteem && SearchHelper.oracle_text_contains_create(found)) {
+						if(!goteem && OracleTextHelper.oracle_text_contains_create(found)) {
 							containsCreate.add(found);
 						}
 					}
-					else if(SearchHelper.oracle_text_contains_create(found)) {
+					else if(OracleTextHelper.oracle_text_contains_create(found)) {
 						containsCreate.add(found);
 					}
 				}
 				
 				//Check for tip cards
 				if(found != null) {
-					if(SearchHelper.oracle_text_contains(found, "experience counter"))
+					if(OracleTextHelper.oracle_text_contains(found, "experience counter"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Experience Counter"), found);
 					
-					if(SearchHelper.oracle_text_contains(found, "the monarch"))
+					if(OracleTextHelper.oracle_text_contains(found, "the monarch"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "The Monarch"), found);
 					
-					if(SearchHelper.oracle_text_contains(found, "{E}"))
+					if(OracleTextHelper.oracle_text_contains(found, "{E}"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Energy Reserve"), found);
 					
-					if(SearchHelper.oracle_text_contains(found, "the city's blessing"))
+					if(OracleTextHelper.oracle_text_contains(found, "the city's blessing"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "City's Blessing"), found);
 					
-					if(SearchHelper.oracle_text_contains(found, "infect ") || SearchHelper.oracle_text_contains(found, "infect.") || SearchHelper.oracle_text_contains(found, "poison counter"))
+					if(OracleTextHelper.oracle_text_contains(found, "infect ") || 
+					   OracleTextHelper.oracle_text_contains(found, "infect.") || 
+					   OracleTextHelper.oracle_text_contains(found, "poison counter"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Poison Counter"), found);					
 					
-					if(SearchHelper.oracle_text_contains(found, "manifest th") || SearchHelper.oracle_text_contains(found, "manifest one") || SearchHelper.oracle_text_contains(found, "manifests "))
+					if(OracleTextHelper.oracle_text_contains(found, "manifest th") || 
+					   OracleTextHelper.oracle_text_contains(found, "manifest one") || 
+					   OracleTextHelper.oracle_text_contains(found, "manifests "))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Manifest"), found);
 					
-					if(SearchHelper.oracle_text_contains(found, "megamorph ") || SearchHelper.oracle_text_contains(found, "morph "))
+					if(OracleTextHelper.oracle_text_contains(found, "megamorph ") || 
+					   OracleTextHelper.oracle_text_contains_regex_multiline(found, "^Morph "))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Morph"), found);
 				}
 			}
@@ -173,36 +194,32 @@ public class CardController {
 	    	ArrayList<Card> amassToken = null;
 	    	
 			for(Card cc : containsCreate) {
+				//Check for copy tokens
+				if(OracleTextHelper.oracle_text_contains(cc, "that's a copy of") || OracleTextHelper.oracle_text_contains(cc, "that are copies of")) {
+					if(copyToken == null)
+						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null, true);
+					
+					if(copyToken != null && copyToken.size() > 0)
+						results = SearchHelper.addTokenAndSources(results, copyToken.get(0), cc);	
+				}
+				
+				//Check for amass tokens
+				if(OracleTextHelper.oracle_text_contains(cc, "amass ")) {
+					if(amassToken == null)
+						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0", true);
+					
+					if(amassToken != null && amassToken.size() > 0)
+						results = SearchHelper.addTokenAndSources(results, amassToken.get(0), cc);
+				}				
+				
 				ArrayList<Card> guess = new ArrayList<Card>();
 				for(TokenGuess tg : SearchHelper.prepareTokenGuess(cc)) {
 					if(!tg.name.isEmpty()) {
 						guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness, false);
 				    }
 					
-					//Check for copy tokens
-					if(SearchHelper.oracle_text_contains(cc, "that's a copy of") || SearchHelper.oracle_text_contains(cc, "that are copies of")) {
-						if(copyToken == null)
-							copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null, true);
-						
-						guess.addAll(copyToken);
-					}
-					
-					//Check for amass tokens
-					if(SearchHelper.oracle_text_contains(cc, "amass ")) {
-						if(amassToken == null)
-							amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0", true);
-						
-						boolean hasArmy = false;
-						for(Card gc: guess) {
-							if(gc.name.equals("Zombie Army"))
-								hasArmy = true;
-						}
-						if(!hasArmy)
-							guess.addAll(amassToken);
-					}
-					
 					//Check for emblems
-					if(SearchHelper.oracle_text_contains(cc, "emblem ")) {
+					if(OracleTextHelper.oracle_text_contains(cc, "emblem ")) {
 						//Emblems need to search for each individual card face
 						
 						//If single-face card
@@ -240,21 +257,38 @@ public class CardController {
 					//Calculated image links
 			    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
 			    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
-				}
-				
-		    	//Perform confidence matching
-				boolean confidant = false;
-				for(Card tokenCheck : guess) {
-					if(SearchHelper.cardContainsTokenPhrase(cc, tokenCheck)) {
-						confidant = true;
-						SearchHelper.addTokenAndSources(results, tokenCheck, cc);
-						break;
+			    	
+			    	//Perform confidence matching
+					boolean confidant = false;
+					for(Card tokenCheck : guess) {
+						if(SearchHelper.cardContainsTokenPhrase(cc, tokenCheck)) {
+							confidant = true;
+							SearchHelper.addTokenAndSources(results, tokenCheck, cc);
+							break;
+						}
 					}
+
+					if(!confidant)
+						ccResults.add(new ContainsCreateResult(cc, guess, ""));
+				}			    
+			}
+			
+			//For each contains create object with no guesses attached:
+			//Count number of times the word "create" appears (X)
+			//Count number of times the card appears in the token sources list (Y)
+			//If Y >= X, cut it from the list because all of the unknown tokens were confidence-matched
+			Iterator<ContainsCreateResult> it = ccResults.iterator();
+			while(it.hasNext()) {
+				ContainsCreateResult ccr = it.next();
+				int create_appears = OracleTextHelper.oracle_text_contains_create_count(ccr.card);
+				int source_count = 0;
+				for(TokenResult tr: results) {
+					if(tr.sources.contains(ccr.card))
+						source_count++;
 				}
 				
-				if(!confidant)
-					ccResults.add(new ContainsCreateResult(cc, guess, ""));
-			    
+				if(source_count >= create_appears)
+					it.remove();
 			}
 			
 			errors.removeIf(p -> p.isEmpty());

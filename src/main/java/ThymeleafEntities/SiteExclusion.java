@@ -1,4 +1,4 @@
-package tokenfinder;
+package ThymeleafEntities;
 
 public class SiteExclusion {
 	public String site, reason;

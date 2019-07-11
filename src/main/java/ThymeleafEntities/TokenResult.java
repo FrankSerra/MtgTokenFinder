@@ -1,8 +1,10 @@
-package tokenfinder;
+package ThymeleafEntities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import ScryfallData.Card;
 
 public class TokenResult implements Serializable, Comparable<TokenResult> {
 	private static final long serialVersionUID = 1L;

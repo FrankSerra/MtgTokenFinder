@@ -1,4 +1,4 @@
-package tokenfinder;
+package ScryfallData;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -9,6 +9,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import tokenfinder.CardController;
 
 public class ScryfallDataManager {
 	public static List<Card> loadCards() throws Exception {

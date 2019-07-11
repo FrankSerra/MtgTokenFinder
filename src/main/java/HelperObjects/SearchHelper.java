@@ -1,4 +1,4 @@
-package tokenfinder;
+package HelperObjects;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,51 +10,13 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import tokenfinder.ScryfallDataManager.ImageSize;
+import ScryfallData.Card;
+import ScryfallData.ScryfallDataManager;
+import ScryfallData.ScryfallDataManager.ImageSize;
+import ThymeleafEntities.TokenGuess;
+import ThymeleafEntities.TokenResult;
 
 public class SearchHelper {
-	
-	public static boolean oracle_text_contains_create(Card c) {
-    	if(c.oracle_text != null) {
-    		return (StringUtils.containsIgnoreCase(c.oracle_text, " create") || c.oracle_text.startsWith("Create"));
-    	}
-    	else if(c.card_faces.size() > 0) {
-    		for (CardFace face : c.card_faces) {
-				if(StringUtils.containsIgnoreCase(face.oracle_text, " create") || face.oracle_text.startsWith("Create"))
-					return true;
-			}
-    	}
-    	
-    	return false;
-    }
-	
-	public static boolean oracle_text_contains(Card c, String text) {
-    	if(c.oracle_text != null) {
-    		return (StringUtils.containsIgnoreCase(c.oracle_text, text));
-    	}
-    	else if(c.card_faces.size() > 0) {
-    		for (CardFace face : c.card_faces) {
-				if(StringUtils.containsIgnoreCase(face.oracle_text, text))
-					return true;
-			}
-    	}
-    	
-    	return false;
-    }
-	
-	public static boolean oracle_text_contains_regex(Card c, String text) {
-		if(c.oracle_text != null) {
-    		return c.oracle_text.replace("\r", "").replace("\n", "").toLowerCase().matches(text.toLowerCase());
-    	}
-    	else if(c.card_faces.size() > 0) {
-    		for (CardFace face : c.card_faces) {
-				if(face.oracle_text.replace("\r", "").replace("\n", "").toLowerCase().matches(text.toLowerCase()))
-					return true;
-			}
-    	}
-    	
-    	return false;
-    }
 	
 	public static Card findCardByName(List<Card> cards, boolean matchExact, String name) {
     	Card ret = null;
@@ -109,7 +71,7 @@ public class SearchHelper {
 			if(match.match == true && ids.add(c.oracle_id)) {
 				String disp = "";
 				
-				if(power != null) {
+				if(c.getPower(match.card_face) != null) {
 					disp += c.getPower(match.card_face) + "/" + c.getToughness(match.card_face) + " ";
 				}
 				
@@ -128,6 +90,7 @@ public class SearchHelper {
 				
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
 				
+				c.matching_face = match.card_face;
 				matches.add(c);
 				
 				if(firstOnly)
@@ -161,7 +124,7 @@ public class SearchHelper {
     	int trimmed_face = 99;
     	if(token.card_faces != null) {
     		for(int i=0; i<token.card_faces.size();i++) {
-    			if(!source.oracle_text.contains(token.card_faces.get(i).name)) {
+    			if(!source.oracle_text.toLowerCase().contains(token.card_faces.get(i).name.toLowerCase())) {
     				trimmed_face = i;
     				token.trimCardFace(i);
     			}
@@ -179,7 +142,8 @@ public class SearchHelper {
 			TokenResult tr = i.next();
 			if(tr.token.oracle_id.equals(token.oracle_id)) {
 				found = true;
-				tr.sources.add(source);
+				if(!tr.sources.contains(source))
+					tr.sources.add(source);
 			}
     	}
     	
@@ -211,49 +175,61 @@ public class SearchHelper {
     }
     
     public static List<TokenGuess> prepareTokenGuess(Card cc) {
+    	String 				search_text = cc.oracle_text;
     	List<TokenGuess> 	all_guesses = new ArrayList<TokenGuess>();
     	TokenGuess			currentGuess;
     	String 				tokenName = "";
-    	Pattern 			pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
-        Matcher 			matcher = pattern.matcher(cc.oracle_text);
         String 				power = null, toughness = null;
         
-	    while(matcher.find()) {
-	    	String tokenClause = cc.oracle_text.substring(matcher.start(), matcher.end());  
+        //Need to explicitly pull "tokens named" first, otherwise they won't be processed right
+    	Pattern patternNamed = Pattern.compile("(?<=(C|c)reates? )(.*)(?= tokens? named )");
+        Matcher matcherNamed = patternNamed.matcher(search_text);
+	    while(matcherNamed.find()) {
+	    	String tokenClause = matcherNamed.group();
+	    	search_text = search_text.substring(0, matcherNamed.start()) + search_text.substring(matcherNamed.end());
 	    	
 	    	//If it's a creature token, get the P/T declaration
-	    	Pattern ptOnly = Pattern.compile("[0-9xX\\*]+/[0-9xX\\*]+");
-	    	Matcher ptOnlyMatcher = ptOnly.matcher(tokenClause);
-	    	
-	    	Pattern pt = Pattern.compile("(?<=[0-9xX\\*]/[0-9xX\\*])(.*)");
-	    	Matcher ptMatcher = pt.matcher(tokenClause);
-	    	if(ptMatcher.find()) {
-	    		ptOnlyMatcher.find();
-	    		String stats = tokenClause.substring(ptOnlyMatcher.start(), ptOnlyMatcher.end());
-	    		tokenClause = tokenClause.substring(ptMatcher.start(), ptMatcher.end());
-	    		
-	    		power = stats.substring(0, stats.indexOf("/"));
-	    		toughness = stats.substring(stats.indexOf("/")+1, stats.length());
-	    	}
+	    	String[] powtough = RegexHelper.extractPowerToughness(tokenClause);
+	    	power       = powtough[0];
+	    	toughness   = powtough[1];
+	    	tokenClause = powtough[2];
 	    	
 	    	//Check if this uses the "token named N" oracle text pattern
 	    	Pattern namedN = Pattern.compile("(?<=token named ).*");
 	    	Matcher namedNmatch = namedN.matcher(cc.oracle_text);
 	    	if(namedNmatch.find()) {
-	    		tokenClause = cc.oracle_text.substring(namedNmatch.start(), namedNmatch.end());
+	    		tokenClause = namedNmatch.group();
 	    	}	 
 	    	
-	    	Pattern clausePattern = Pattern.compile("(\\b[A-Z].*?\\b)+( of | the )*(\\b[A-Z].*\\b)*");
-	        Matcher clauseMatcher = clausePattern.matcher(tokenClause);
-	        
-	        if(clauseMatcher.find()) { 
-	        	tokenName = tokenClause.substring(clauseMatcher.start(), clauseMatcher.end()).trim();
+	    	//Determine final search name
+	    	tokenName = RegexHelper.extractName(tokenClause);
+	        if(tokenName != null) {
+		        currentGuess = new TokenGuess(tokenName, power, toughness);
+			    if(!all_guesses.contains(currentGuess)) {
+			    	all_guesses.add(currentGuess);
+			    }
 	        }
 	    }
 	    
-	    currentGuess = new TokenGuess(tokenName, power, toughness);
-	    if(!all_guesses.contains(currentGuess)) {
-	    	all_guesses.add(currentGuess);
+        //Match normal tokens
+    	Pattern pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
+        Matcher matcher = pattern.matcher(search_text);
+	    while(matcher.find()) {
+	    	String tokenClause = matcher.group();  
+	    	
+	    	//If it's a creature token, get the P/T declaration
+	    	String[] powtough = RegexHelper.extractPowerToughness(tokenClause);
+	    	power       = powtough[0];
+	    	toughness   = powtough[1];
+	    	tokenClause = powtough[2];
+	    	
+	    	tokenName = RegexHelper.extractName(tokenClause);
+	        if(tokenName != null) {
+		        currentGuess = new TokenGuess(tokenName, power, toughness);
+			    if(!all_guesses.contains(currentGuess)) {
+			    	all_guesses.add(currentGuess);
+			    }
+	        }
 	    }
 	    
 	    return all_guesses;
@@ -282,35 +258,56 @@ public class SearchHelper {
     }
     
     public static boolean cardContainsTokenPhrase(Card card, Card token) {
+    	int face = token.matching_face;
+    	
     	//Check for Treasure tokens manually because Smothering Tithe is the hardest edge case I've ever encountered
     	//It is not possible to construct a regex statement that satisfies Smothering Tithe while also satisfying normal creature text
 		if(token.name.equals("Treasure")) {
-			return SearchHelper.oracle_text_contains(card, " Treasure token");
+			return OracleTextHelper.oracle_text_contains(card, " Treasure token");
 		}
 		
-    	//Oracle phrasing is P/T -> colors -> name -> types -> "with XYZ"
-    	String disp = ".*";
+    	//Oracle phrasing is one of: 
+		//P/T -> colors -> name -> types -> "with XYZ"
+		//P/T -> colors -> types -> "named " name
+		String name = token.getName(face);
+		String typeline = token.getFullTypeline(face);
 		
+		String disp = ".*";
 		if(token.power != null) {
-			disp += token.getPower(-1) + "\\/" + token.getToughness(-1);
+			disp += token.getPower(face).replace("*", "\\*") + "\\/" + token.getToughness(face).replace("*", "\\*");
+		}
+		disp += " " + token.buildOracleColorPhrase(token.getColors(face));			
+		
+		//If the token name is not fully contained in the token typeline, that means it's a "named N" format. 
+		//If it is, use the standard format.
+		if(typeline.toLowerCase().contains(name.toLowerCase())) {
+			disp += " " + token.getName(face);
+			
+			disp += " " + token.getTypes(face).toLowerCase();
+			
+			disp += " tokens?";
+			
+			String oracle = token.getOracle(face);
+			if(oracle != null && !oracle.isEmpty()) {
+				disp += " with \"?" + oracle.replace("{", "\\{").replace("}", "\\}").replace("*", "\\*") + "\"?";
+			}
+			else {
+				//If a token is vanilla, it has to match the negative lookahead of "with", meaning the card doesn't say that the token has any text.
+				disp += ".(?!with )";
+			}
+			disp += ".*";
+
+		}
+		else {
+			//If a token has a fancy name, we don't have to get weird, we just need the token's proper name in the card text
+			disp += ".* " + token.getTypes(face).toLowerCase();
+			disp += " tokens?";
+			disp += ".* named " + token.getName(face) + ".*";
 		}
 		
-		disp += " " + token.buildOracleColorPhrase(token.getColors(-1));
-		
-		disp += " " + token.getName(-1);
-		
-		disp += " " + token.getTypes(-1).toLowerCase();
-		
-		disp += " tokens?";
-		
-		String oracle = token.getOracle(-1);
-		if(oracle != null && !oracle.isEmpty()) {
-			disp += " with \"?" + oracle.replace("{", "\\{").replace("}", "\\}") + "\"?";
-		}
-		disp += ".*";
-		
-		System.out.print(disp);
-		return SearchHelper.oracle_text_contains_regex(card, disp);
+		System.out.println(disp);
+
+		return OracleTextHelper.oracle_text_contains_regex(card, disp);
     }
 	   
 }

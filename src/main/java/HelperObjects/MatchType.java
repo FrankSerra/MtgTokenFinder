@@ -1,8 +1,11 @@
-package tokenfinder;
+package HelperObjects;
+
+import ScryfallData.Card;
+import ScryfallData.CardFace;
 
 public class MatchType {
-	int card_face;
-	boolean match;
+	public int card_face;
+	public boolean match;
 	
 	public MatchType(boolean _match, int _face) {
 		this.match = _match;
