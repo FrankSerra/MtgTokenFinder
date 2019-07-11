@@ -12,7 +12,9 @@
                         <ul class="list-group list-group-flush sourcerow">
                             <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.token})"></a></li>
                             <li class="list-group-item" th:each="source: ${result.sources}">
-                                <a th:href="${source.scryfall_uri}" target="_blank" rel="noreferrer" class="hover-popover" data-toggle="popover" th:title="${source.name}" data-html="true" th:data-content="${'<img src=''' + source.calculated_small + ''' />'}" ><span th:text="${source.name}"></span></a>
+                                <a th:href="${source.scryfall_uri}" target="_blank" rel="noreferrer" class="hover-popover" data-toggle="popover" th:title="${source.name}" data-html="true" th:data-content="${'<img width=''146'' height=''204'' src=''' + source.calculated_small + ''' />'}" >
+                                    <span th:text="${source.name}"></span>
+                                </a>
                             </li>
                         </ul>
                     </div>

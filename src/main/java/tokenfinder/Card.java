@@ -1,6 +1,7 @@
 package tokenfinder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,26 +33,40 @@ public class Card implements Comparable<Card> {
 				if(idx > 0)
 					disp += "-";
 				
-				switch(color_identity.get(idx)) {
-				case "W":
-					disp += "White";
-					break;
-				case "U":
-					disp += "Blue";
-					break;
-				case "B":
-					disp += "Black";
-					break;
-				case "R":
-					disp += "Red";
-					break;
-				case "G":
-					disp += "Green";
-					break;
-				}
+				disp += SearchHelper.letterToWord(color_identity.get(idx));
+				
 			}
 		}
     	return disp;
+    }
+	
+	public String buildOracleColorPhrase(List<String> color_identity) {
+		//Unfortunately, the words are always in WUBRG order, so we need to do manual checks
+    	if(color_identity == null || color_identity.size() == 0) {
+			return "colorless";
+		}
+		
+    	final String ORDER= "WUBRG";
+
+    	color_identity.sort(new Comparator<String>() {
+    	    @Override
+    	    public int compare(String o1, String o2) {
+    	       return ORDER.indexOf(o1.toUpperCase()) -  ORDER.indexOf(o2.toUpperCase()) ;
+    	    }
+    	});
+    	
+    	if(color_identity.size() == 1) {
+			return SearchHelper.letterToWord(color_identity.get(0)).toLowerCase();
+		}
+		else if(color_identity.size() == 2) {
+			return SearchHelper.letterToWord(color_identity.get(0)).toLowerCase() + " and " + SearchHelper.letterToWord(color_identity.get(1)).toLowerCase();
+		}
+		else if(color_identity.size() == 3) {
+			return SearchHelper.letterToWord(color_identity.get(0)).toLowerCase() + ", " + SearchHelper.letterToWord(color_identity.get(1)).toLowerCase() + ", and " + SearchHelper.letterToWord(color_identity.get(2)).toLowerCase();
+		}
+		else {
+			return this.buildColorPhrase(color_identity).toLowerCase();
+		}
     }
     
     public String getPower(int face) {
@@ -98,7 +113,7 @@ public class Card implements Comparable<Card> {
     	
     	if(match.find()) {
     		types = match.group();
-    		return types.replace("Token", "").replace("Creature", "").trim().replaceAll(" +", " ");
+    		return types.replace("Token", "").trim().replaceAll(" +", " ");
     	}
     	
     	return "";

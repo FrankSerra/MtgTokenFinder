@@ -131,7 +131,7 @@ public class CardController {
 							Card token = SearchHelper.findToken(tokens, rc.id);
 							if(token != null) {
 								goteem = true;
-								results = SearchHelper.addTokenAndSources(results, token, found);
+								results = SearchHelper.addTokenAndSources(results, token, found);								
 							}
 						}
 						if(!goteem && SearchHelper.oracle_text_contains_create(found)) {
@@ -160,7 +160,7 @@ public class CardController {
 					if(SearchHelper.oracle_text_contains(found, "infect ") || SearchHelper.oracle_text_contains(found, "infect.") || SearchHelper.oracle_text_contains(found, "poison counter"))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Poison Counter"), found);					
 					
-					if(SearchHelper.oracle_text_contains(found, "manifest th") || SearchHelper.oracle_text_contains(found, "manifest one"))
+					if(SearchHelper.oracle_text_contains(found, "manifest th") || SearchHelper.oracle_text_contains(found, "manifest one") || SearchHelper.oracle_text_contains(found, "manifests "))
 						results = SearchHelper.addTokenAndSources(results, SearchHelper.findTipCard(tipcards, "Manifest"), found);
 					
 					if(SearchHelper.oracle_text_contains(found, "megamorph ") || SearchHelper.oracle_text_contains(found, "morph "))
@@ -174,58 +174,42 @@ public class CardController {
 	    	
 			for(Card cc : containsCreate) {
 				ArrayList<Card> guess = new ArrayList<Card>();
-				TokenGuess tg = SearchHelper.prepareTokenGuess(cc);
-			    
-				if(!tg.name.isEmpty()) {
-					guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness, false);
-			    }
-				
-				//Check for copy tokens
-				if(SearchHelper.oracle_text_contains(cc, "that's a copy of") || SearchHelper.oracle_text_contains(cc, "that are copies of")) {
-					if(copyToken == null)
-						copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null, true);
+				for(TokenGuess tg : SearchHelper.prepareTokenGuess(cc)) {
+					if(!tg.name.isEmpty()) {
+						guess = SearchHelper.findTokensByName(tokens, tg.name, tg.power, tg.toughness, false);
+				    }
 					
-					guess.addAll(copyToken);
-				}
-				
-				//Check for amass tokens
-				if(SearchHelper.oracle_text_contains(cc, "amass ")) {
-					if(amassToken == null)
-						amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0", true);
-					
-					boolean hasArmy = false;
-					for(Card gc: guess) {
-						if(gc.name.equals("Zombie Army"))
-							hasArmy = true;
+					//Check for copy tokens
+					if(SearchHelper.oracle_text_contains(cc, "that's a copy of") || SearchHelper.oracle_text_contains(cc, "that are copies of")) {
+						if(copyToken == null)
+							copyToken = SearchHelper.findTokensByName(tokens, "Copy", null, null, true);
+						
+						guess.addAll(copyToken);
 					}
-					if(!hasArmy)
-						guess.addAll(amassToken);
-				}
-				
-				//Check for emblems
-				if(SearchHelper.oracle_text_contains(cc, "emblem ")) {
-					//Emblems need to search for each individual card face
 					
-					//If single-face card
-					if(cc.card_faces == null) {
-						boolean hasEmblem = false;
+					//Check for amass tokens
+					if(SearchHelper.oracle_text_contains(cc, "amass ")) {
+						if(amassToken == null)
+							amassToken = SearchHelper.findTokensByName(tokens, "Zombie Army", "0", "0", true);
+						
+						boolean hasArmy = false;
 						for(Card gc: guess) {
-							if(gc.name.equals(cc.name + " Emblem"))
-								hasEmblem = true;
+							if(gc.name.equals("Zombie Army"))
+								hasArmy = true;
 						}
-						if(!hasEmblem) {
-							List<Card> g = SearchHelper.findTokensByName(tokens, cc.name+" Emblem", null, null, true);
-							if(g != null) {
-								SearchHelper.addTokenAndSources(results, g.get(0), cc);
-							}
-						}
+						if(!hasArmy)
+							guess.addAll(amassToken);
 					}
-					//If card is double-faced
-					else {
-						for(CardFace cf: cc.card_faces) {
+					
+					//Check for emblems
+					if(SearchHelper.oracle_text_contains(cc, "emblem ")) {
+						//Emblems need to search for each individual card face
+						
+						//If single-face card
+						if(cc.card_faces == null) {
 							boolean hasEmblem = false;
 							for(Card gc: guess) {
-								if(gc.name.equals(cf.name + " Emblem"))
+								if(gc.name.equals(cc.name + " Emblem"))
 									hasEmblem = true;
 							}
 							if(!hasEmblem) {
@@ -235,20 +219,49 @@ public class CardController {
 								}
 							}
 						}
+						//If card is double-faced
+						else {
+							for(CardFace cf: cc.card_faces) {
+								boolean hasEmblem = false;
+								for(Card gc: guess) {
+									if(gc.name.equals(cf.name + " Emblem"))
+										hasEmblem = true;
+								}
+								if(!hasEmblem) {
+									List<Card> g = SearchHelper.findTokensByName(tokens, cc.name+" Emblem", null, null, true);
+									if(g != null) {
+										SearchHelper.addTokenAndSources(results, g.get(0), cc);
+									}
+								}
+							}
+						}
+					}
+					
+					//Calculated image links
+			    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
+			    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
+				}
+				
+		    	//Perform confidence matching
+				boolean confidant = false;
+				for(Card tokenCheck : guess) {
+					if(SearchHelper.cardContainsTokenPhrase(cc, tokenCheck)) {
+						confidant = true;
+						SearchHelper.addTokenAndSources(results, tokenCheck, cc);
+						break;
 					}
 				}
 				
-				//Calculated image links
-		    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
-		    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
-				
-			    ccResults.add(new ContainsCreateResult(cc, guess, ""));
+				if(!confidant)
+					ccResults.add(new ContainsCreateResult(cc, guess, ""));
+			    
 			}
 			
 			errors.removeIf(p -> p.isEmpty());
     	}
     	catch(Exception e) {  		
     		errors.add("ERROR: " + e.getMessage());
+    		e.printStackTrace();
     	}
     	
     	if(errors.size() == 0)

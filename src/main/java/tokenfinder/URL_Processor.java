@@ -26,8 +26,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class URL_Processor {
-	public static final String[] SupportedSites = new String[] {"Archidekt", "Deckbox.org", "Deckstats", 
-																"Moxfield", "MTG Goldfish", 
+	public static final String[] SupportedSites = new String[] {"Archidekt", "CubeTutor", "Deckbox.org", 
+																"Deckstats", "Moxfield", "MTG Goldfish", 
 																"MTG Top 8", "MTG Vault", "StarCityGames", 
 																"TappedOut"};
 	
@@ -38,6 +38,7 @@ public class URL_Processor {
 		
 		try {
 			processorMap.put("archidekt.com", URL_Processor.class.getMethod("fromArchidekt", String.class));
+			processorMap.put("cubetutor.com", URL_Processor.class.getMethod("fromCubeTutor", String.class));
 			processorMap.put("deckbox.org", URL_Processor.class.getMethod("fromDeckBox", String.class));
 			processorMap.put("deckstats.net", URL_Processor.class.getMethod("fromDeckstats", String.class));
 			processorMap.put("moxfield.com", URL_Processor.class.getMethod("fromMoxfield", String.class));
@@ -266,6 +267,22 @@ public class URL_Processor {
     	
 		String list = "";
 		for(Element e : doc.select("div.deck_card_wrapper li > a")) {			
+			list += e.html() + "\n";
+		}
+    	
+    	return new UrlProcessResponse(true, null, list);
+	}
+	
+	public static UrlProcessResponse fromCubeTutor(String scg) {
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(scg).get();
+		} catch (IOException e) {
+			return new UrlProcessResponse(false, new String[] {"Error retrieving CubeTutor URL. If you aren't using a /viewcube/ URL, please use it.", e.getMessage()}, "");
+		}
+    	
+		String list = "";
+		for(Element e : doc.select("a.cardPreview")) {			
 			list += e.html() + "\n";
 		}
     	
