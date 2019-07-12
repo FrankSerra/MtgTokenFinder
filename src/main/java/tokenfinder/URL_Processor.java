@@ -284,9 +284,12 @@ public class URL_Processor {
 		}
     	
 		String list = "";
-		for(Element e : doc.select("a.cardPreview")) {			
+		for(Element e : doc.select("div#listContainer div.viewCubeColumn a")) {			
 			list += e.html() + "\n";
 		}
+		
+		if(list == "")
+			return new UrlProcessResponse(false, new String[] {"No cards found from CubeTutor link. If you aren't using the /viewcube/ List URL, please use it."}, "");
     	
     	return new UrlProcessResponse(true, null, list);
 	}

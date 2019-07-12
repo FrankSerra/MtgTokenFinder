@@ -26,6 +26,9 @@ public class SearchHelper {
     	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
     		Card c = i.next();
 
+    		//Code to ignore accents - right now, it hurts performance way too much
+    		//StringUtils.stripAccents(c.name).equalsIgnoreCase(StringUtils.stripAccents(name))
+    		
     		if(c.name.equalsIgnoreCase(name)) {
     			if(ret == null)
     				ret = c;
@@ -315,8 +318,6 @@ public class SearchHelper {
 			disp += " tokens?";
 			disp += ".* named " + token.getName(face) + ".*";
 		}
-		
-		System.out.println(disp);
 
 		return OracleTextHelper.oracle_text_contains_regex(card, disp);
     }
