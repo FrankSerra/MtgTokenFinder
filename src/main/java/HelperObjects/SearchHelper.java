@@ -160,19 +160,29 @@ public class SearchHelper {
 		term = term.replace("\r", "").replace("SB: ", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
 		//Return empty string for common notations of comments, or if the line has no letters in it at all
-		if(term.matches("^\\/\\/.*") || term.matches("^#.*") || !term.matches("[a-zA-Z].*"))
+		if(term.matches("^\\/\\/.*") || term.matches("^#.*") || !term.matches(".*[a-zA-Z].*"))
 			return "";
+		
+		Matcher captureBetweenParens = Pattern.compile("(?<=(\\)|\\]))[\\w,'\" -_:!\\?&]+").matcher(term);
+		if(captureBetweenParens.find()) {
+			term = captureBetweenParens.group();
+		}
+		
+		captureBetweenParens = Pattern.compile(".*(?=(\\(|\\[))").matcher(term);
+		if(captureBetweenParens.find()) {
+			term = captureBetweenParens.group();
+		}
 		
 		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
 		Matcher symbolCut = symbolCutPattern.matcher(term);
 		
 		if(symbolCut.find()) {
-			term = term.substring(0, symbolCut.start()).trim();
+			term = term.substring(0, symbolCut.start());
 		}
 		
 		term = term.replace(" / ", " // ");
 		
-		return term;
+		return term.trim();
     }
     
     public static List<TokenGuess> prepareTokenGuess(Card cc) {
