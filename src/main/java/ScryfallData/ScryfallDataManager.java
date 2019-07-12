@@ -29,6 +29,23 @@ public class ScryfallDataManager {
             throw new Exception("Cannot load card information from file.");
         }
 	}
+	
+	public static List<Card> loadSilverCards() throws Exception {
+		try {
+            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-silver.json");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+            Type collectionType = new TypeToken<List<Card>>(){}.getType();
+            
+            @SuppressWarnings("unchecked")
+			List<Card> cards = (List<Card>) new Gson().fromJson(br, collectionType);
+            
+            return cards;
+		}
+		catch(Exception e) {
+            throw new Exception("Cannot load silver card information from file.");
+        }
+	}
     
     public static List<Card> loadTokens() throws Exception {
 		try {

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import ScryfallData.Card;
@@ -24,14 +25,14 @@ public class SearchHelper {
     	
     	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
     		Card c = i.next();
-    		
+
     		if(c.name.equalsIgnoreCase(name)) {
     			if(ret == null)
     				ret = c;
     			else if(c.all_parts != null) {
 					ret = c;
     			}
-    		}    		
+    		}
     		else if(!matchExact && StringUtils.containsIgnoreCase(c.name, name)) {
     			if(backup == null)
     				backup = c;
@@ -155,7 +156,7 @@ public class SearchHelper {
     }
     
     public static String prepareSearchTerm(String term) {
-    	term = term.trim();
+    	term = StringEscapeUtils.unescapeHtml4(term).trim();
 		term = term.replace("\r", "").replace("SB: ", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
 		//Return empty string for common notations of comments, or if the line has no letters in it at all

@@ -6,6 +6,8 @@
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
     <main role="main" class="container">
+        <div th:insert="fragments/info_alerts.html :: info_alerts(${infonotes})"></div>
+
         <div th:insert="fragments/error_alerts.html :: error_alerts('The following cards were not found:', ${errors})"></div>
 
         <div th:insert="fragments/error_alerts.html :: error_alerts('Deck import message:', ${errorlist})"></div>

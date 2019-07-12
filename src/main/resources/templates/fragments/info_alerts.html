@@ -1,0 +1,10 @@
+<div th:fragment="info_alerts(cardlist)">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert" th:if="${cardlist != null}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <ul class="list-group">
+            <li class="list-group" th:each="error: ${cardlist}" th:text="${error}"></li>
+        </ul>
+    </div>
+</div>

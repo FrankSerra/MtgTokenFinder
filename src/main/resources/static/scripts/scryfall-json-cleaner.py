@@ -6,7 +6,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     all_cards = json.load(fin)
 
     #Initial set of desirable cards
-    clean_cards = [x for x in all_cards if x['border_color'] not in ['silver', 'gold'] \
+    clean_cards = [x for x in all_cards if x['border_color'] not in ['gold'] \
                                         if x['oversized'] is False if x['digital'] is False if x['layout'] not in ["token", "emblem", "double_faced_token"] \
                                         if 'paper' in x['games'] if x['lang'] == 'en' if x['set_type'] not in ['masterpiece']]
     
@@ -30,7 +30,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     remove_keys = ['arena_id',
                    'artist',
                    'booster',
-                   'border_color',
                    'card_back_id',
                    'cmc',
                    'color_identity',
@@ -107,9 +106,13 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
             except:
                 continue
     
-    #Write search
+    #Write black-bordered cards
     with open("scryfall-clean.json", mode='w') as fout:
-        json.dump(out_cards, fout)
+        json.dump([x for x in out_cards if x['border_color'] not in ['silver']], fout)
+
+    #Write silver-bordered cards
+    with open("scryfall-silver.json", mode='w') as fout:
+        json.dump([x for x in out_cards if x['border_color'] in ['silver']], fout)
 
     #Write tokens
     with open("scryfall-tokens.json", mode='w') as fout:

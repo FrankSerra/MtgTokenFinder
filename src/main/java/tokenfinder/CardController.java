@@ -53,10 +53,15 @@ public class CardController {
     }
     
     @PostMapping("/tokens")
-    public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, @RequestParam(name="matchExact", required=true, defaultValue="") String matchExact, Model model) {
-    	boolean _match = matchExact.equals("on");
-    	SearchResult sr = tokenResults(cardlist, _match);
+    public String tokens(@RequestParam(name="cardlist", required=true, defaultValue="") String cardlist, @RequestParam(name="matchExact", required=true, defaultValue="") String matchExact, @RequestParam(name="includeSilver", required=true, defaultValue="") String includeSilver, Model model) {
+    	boolean _match  = matchExact.equals("on");
+    	boolean	_silver = includeSilver.equals("on");
+    	SearchResult sr = tokenResults(cardlist, _match, _silver);
 
+    	if(_silver) {
+    		model.addAttribute("infonotes", new String[] { "Some un-cards make use of Unicode symbols that each deck site handles differently. Results might not be found for every card." } );
+    	}
+    	
     	Collections.sort(sr.tokenResults);
     	for(TokenResult tr: sr.tokenResults) {
     		Collections.sort(tr.sources);
@@ -74,7 +79,7 @@ public class CardController {
     }
     
 	@PostMapping("/fromurl")
-    public String fromurl(@RequestParam(name="deckurl", required=true, defaultValue="") String deckurl, Model model) {
+    public String fromurl(@RequestParam(name="deckurl", required=true, defaultValue="") String deckurl, @RequestParam(name="includeSilver", required=true, defaultValue="") String includeSilver, Model model) {
     	UrlProcessResponse resp=null;
     	try {
     		if(deckurl.isEmpty())
@@ -91,7 +96,7 @@ public class CardController {
     	}
     	else if(resp.okay) {
     		model.addAttribute("errorlist", resp.errors);
-    		return tokens(resp.cardlist, "off", model);
+    		return tokens(resp.cardlist, "off", includeSilver, model);
     	}
     	else {
     		model.addAttribute("errorlist", resp.errors);
@@ -99,7 +104,7 @@ public class CardController {
     	}
     }
     
-	public SearchResult tokenResults(String cardlist, boolean matchExact) {
+	public SearchResult tokenResults(String cardlist, boolean matchExact, boolean includeSilver) {
     	List<String> errors = new ArrayList<String>();
     	List<TokenResult> results = new ArrayList<TokenResult>();
     	List<Card> containsCreate = new ArrayList<Card>();
@@ -108,6 +113,9 @@ public class CardController {
     	
     	try { 		
 	    	List<Card> cards = ScryfallDataManager.loadCards();
+	    	if(includeSilver)
+	    		cards.addAll(ScryfallDataManager.loadSilverCards());
+	    	
 	    	List<Card> tokens = ScryfallDataManager.loadTokens();
 	    	ArrayList<Card> tipcards = ScryfallDataManager.loadTipCards();
 	    	
