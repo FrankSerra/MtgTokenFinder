@@ -59,7 +59,7 @@ public class CardController {
     	SearchResult sr = tokenResults(cardlist, _match, _silver);
 
     	if(_silver) {
-    		model.addAttribute("infonotes", new String[] { "Some un-cards make use of Unicode symbols that each deck site handles differently. Results might not be found for every card." } );
+    		model.addAttribute("infonotes", new String[] { "Silver-bordered cards make use of Unicode symbols that each deck site handles differently. Results might not be found for every card." } );
     	}
     	
     	Collections.sort(sr.tokenResults);
@@ -140,7 +140,11 @@ public class CardController {
 				if(term.isEmpty())
 					continue;
 				
-				Card found = SearchHelper.findCardByName(cards, matchExact, term);
+				Card found = SearchHelper.findCardByName(cards, matchExact, term, false);
+				if(found == null) {
+					found = SearchHelper.findCardByName(cards, matchExact, term, true);
+				}
+				
 				if(found == null) {
 					errors.add(term);
 				}

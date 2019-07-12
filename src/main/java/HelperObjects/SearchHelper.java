@@ -19,7 +19,7 @@ import ThymeleafEntities.TokenResult;
 
 public class SearchHelper {
 	
-	public static Card findCardByName(List<Card> cards, boolean matchExact, String name) {
+	public static Card findCardByName(List<Card> cards, boolean matchExact, String name, boolean stripAccents) {
     	Card ret = null;
     	Card backup = null;
     	
@@ -35,6 +35,9 @@ public class SearchHelper {
     			else if(c.all_parts != null) {
 					ret = c;
     			}
+    		}
+    		else if(stripAccents && StringUtils.stripAccents(c.name).equalsIgnoreCase(StringUtils.stripAccents(name))) {
+    			ret = c;
     		}
     		else if(!matchExact && StringUtils.containsIgnoreCase(c.name, name)) {
     			if(backup == null)
