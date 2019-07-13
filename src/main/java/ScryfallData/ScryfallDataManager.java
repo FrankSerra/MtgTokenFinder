@@ -10,80 +10,60 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import HelperObjects.ImageSize;
 import tokenfinder.CardController;
 
 public class ScryfallDataManager {
-	public static List<Card> loadCards() throws Exception {
+	public ArrayList<Card> cards, silverCards, tokens, tipcards;
+	
+	public ScryfallDataManager(boolean includeSilver) {
 		try {
-            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-clean.json");
+			
+			this.cards = loadCards();
+			if(includeSilver)
+				this.cards.addAll(loadSilverCards());
+			
+			this.tokens = loadTokens();
+			this.tipcards = loadTipCards();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static ArrayList<Card> loadResource(String file, String exceptionMsg) throws Exception {
+		try {
+            InputStream in = CardController.class.getResourceAsStream(file);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
             Type collectionType = new TypeToken<List<Card>>(){}.getType();
             
-            @SuppressWarnings("unchecked")
-			List<Card> cards = (List<Card>) new Gson().fromJson(br, collectionType);
+            Gson gson = new Gson();
+            Object response = gson.fromJson(br, collectionType);
+            ArrayList<Card> cards = (ArrayList<Card>) response;
             
             return cards;
 		}
 		catch(Exception e) {
-            throw new Exception("Cannot load card information from file.");
+            throw new Exception(exceptionMsg);
         }
 	}
 	
-	public static List<Card> loadSilverCards() throws Exception {
-		try {
-            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-silver.json");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-            Type collectionType = new TypeToken<List<Card>>(){}.getType();
-            
-            @SuppressWarnings("unchecked")
-			List<Card> cards = (List<Card>) new Gson().fromJson(br, collectionType);
-            
-            return cards;
-		}
-		catch(Exception e) {
-            throw new Exception("Cannot load silver card information from file.");
-        }
+	private static ArrayList<Card> loadCards() throws Exception {
+		return loadResource("/static/data/scryfall-clean.json", "Cannot load card information from file.");
+	}
+	
+	private static ArrayList<Card> loadSilverCards() throws Exception {
+		return loadResource("/static/data/scryfall-silver.json", "Cannot load silver card information from file.");
 	}
     
-    public static List<Card> loadTokens() throws Exception {
-		try {
-            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-tokens.json");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-            Type collectionType = new TypeToken<List<Card>>(){}.getType();
-            
-            @SuppressWarnings("unchecked")
-			List<Card> cards = (List<Card>) new Gson().fromJson(br, collectionType);
-            
-            return cards;
-		}
-		catch(Exception e) {
-            throw new Exception("Cannot load token information from file.");
-        }
+	private static ArrayList<Card> loadTokens() throws Exception {
+		return loadResource("/static/data/scryfall-tokens.json", "Cannot load token information from file.");
 	}
     
-    public static ArrayList<Card> loadTipCards() throws Exception {
-		try {
-            InputStream in = CardController.class.getResourceAsStream("/static/data/scryfall-tip-cards.json");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-            Type collectionType = new TypeToken<ArrayList<Card>>(){}.getType();
-            
-            @SuppressWarnings("unchecked")
-			ArrayList<Card> cards = (ArrayList<Card>) new Gson().fromJson(br, collectionType);
-            
-            return cards;
-		}
-		catch(Exception e) {
-            throw new Exception("Cannot load tip card information from file.");
-        }
+	private static ArrayList<Card> loadTipCards() throws Exception {
+		return loadResource("/static/data/scryfall-tip-cards.json", "Cannot load tip card information from file.");
 	}
-    
-    public enum ImageSize {
-    	small, normal
-    }
     
     public static String googleformURL() {
     	return "https://forms.gle/vpwhqshxLTTV8eVa9";

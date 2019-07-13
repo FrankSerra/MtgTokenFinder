@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import ScryfallData.Card;
 import ScryfallData.ScryfallDataManager;
-import ScryfallData.ScryfallDataManager.ImageSize;
 import ThymeleafEntities.TokenGuess;
 import ThymeleafEntities.TokenResult;
 
@@ -92,7 +91,7 @@ public class SearchHelper {
 				
 				c.display_name = disp;
 				
-				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
+				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
 				
 				c.matching_face = match.card_face;
 				matches.add(c);
@@ -136,11 +135,11 @@ public class SearchHelper {
     	}
     	
 		//Calculated image links
-		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, ImageSize.small, trimmed_face==1);
-		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, ImageSize.normal, trimmed_face==1);
+		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.small, trimmed_face==1);
+		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.normal, trimmed_face==1);
 		
-		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, ImageSize.small, trimmed_face==1);
-		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, ImageSize.normal, trimmed_face==1);
+		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.small, trimmed_face==1);
+		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.normal, trimmed_face==1);
     	
 		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
 			TokenResult tr = i.next();
