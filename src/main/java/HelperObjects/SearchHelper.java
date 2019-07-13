@@ -303,7 +303,15 @@ public class SearchHelper {
 			
 			String oracle = token.getOracle(face);
 			if(oracle != null && !oracle.isEmpty()) {
-				disp += " with \"?" + oracle.replace("{", "\\{").replace("}", "\\}").replace("*", "\\*") + "\"?";
+				oracle = oracle.replace("{", "\\{").replace("}", "\\}").replace("*", "\\*");
+				
+				//If token has reminder text, don't match against it
+				int idx = oracle.indexOf("(");
+				if(idx >= 0) {
+					oracle = oracle.substring(0, idx);
+				}
+				
+				disp += " with \"?" + oracle.trim() + "\"?";
 			}
 			else {
 				//If a token is vanilla, it has to match the negative lookahead of "with", meaning the card doesn't say that the token has any text.
