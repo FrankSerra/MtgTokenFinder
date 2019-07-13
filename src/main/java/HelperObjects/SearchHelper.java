@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ScryfallData.Card;
 import ScryfallData.ScryfallDataManager;
+import ThymeleafEntities.SearchResult;
 import ThymeleafEntities.TokenGuess;
 import ThymeleafEntities.TokenResult;
 
@@ -117,11 +118,8 @@ public class SearchHelper {
     	return null;
     }
     
-    public static List<TokenResult> addTokenAndSources(List<TokenResult> results, Card token, Card source) {
+    public static void addTokenAndSources(SearchResult searchResult, Card token, Card source) {
     	boolean found = false;
-    	
-    	if(token == null)
-    		return results;
     	
     	//Determine which card face is being used and trim the other side of the DFC token
     	int trimmed_face = 99;
@@ -141,8 +139,7 @@ public class SearchHelper {
 		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.small, trimmed_face==1);
 		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.normal, trimmed_face==1);
     	
-		for (Iterator<TokenResult> i = results.iterator(); i.hasNext();) {
-			TokenResult tr = i.next();
+		for (TokenResult tr: searchResult.tokenResults) {
 			if(tr.token.oracle_id.equals(token.oracle_id)) {
 				found = true;
 				if(!tr.sources.contains(source))
@@ -151,10 +148,8 @@ public class SearchHelper {
     	}
     	
     	if(found == false) {
-    		results.add(new TokenResult(token, source, ""));
+    		searchResult.tokenResults.add(new TokenResult(token, source, ""));
     	}
-    	
-    	return results;
     }
     
     public static String prepareSearchTerm(String term) {
