@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -79,6 +81,24 @@ public class Search {
 	private static void processForManuallyCheckedTokens(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
 		//Check for copy tokens
 		if(OracleTextHelper.oracle_text_contains(cc, "that's a copy of") || OracleTextHelper.oracle_text_contains(cc, "that are copies of")) {
+
+			//Strip the copy text so it won't show up later
+			Pattern pattern = Pattern.compile("(C|c)reate.*cop(y|ies)");
+			if(cc.oracle_text != null) {
+				Matcher m = pattern.matcher(cc.oracle_text);
+				while(m.find()) {
+					cc.oracle_text = cc.oracle_text.substring(0, m.start()) + cc.oracle_text.substring(m.end());
+				}
+			}
+			else {
+				for(CardFace cf: cc.card_faces) {
+					Matcher m = pattern.matcher(cf.oracle_text);
+					while(m.find()) {
+						cf.oracle_text = cf.oracle_text.substring(0, m.start()) + cf.oracle_text.substring(m.end());
+					}
+				}
+			}
+			
 			if(copyToken == null)
 				copyToken = SearchHelper.findTokensByName(sdm.tokens, "Copy", null, null, true);
 			
