@@ -32,7 +32,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'booster',
                    'card_back_id',
                    'cmc',
-                   'collector_number',
                    'color_identity',
                    'color_indicator',
                    'digital',
