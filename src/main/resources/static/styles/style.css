@@ -50,3 +50,7 @@ img.dfc {
 div.dfc {
     display: inline-block !important;
 }
+
+.text-no-select {
+	user-select: none;
+}

@@ -7,9 +7,9 @@
                 </button>
             </div>
             <div class="card-body collapse show" id="searchList">
-                <h5 class="text-center">This is a cleaned version of the decklist you submitted.</h5>
+                <h5 class="text-center text-no-select">This is a cleaned version of the decklist you submitted.</h5>
                 <blockquote class="blockquote" >
-                    <p class="text-left mb-2" th:each="result: ${full_list}" th:text="${result}"></p>
+                    <span th:each="result: ${full_list}"><span class="text-left mb-2" th:text="${result}"></span><br /></span>
                 </blockquote>
             </div>
         </div>
