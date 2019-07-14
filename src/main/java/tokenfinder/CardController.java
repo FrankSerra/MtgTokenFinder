@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ScryfallData.ScryfallDataManager;
 import ScryfallData.Search;
 import ThymeleafEntities.SearchResult;
+import ThymeleafEntities.TokenPrintingsResult;
 import ThymeleafEntities.TokenResult;
 
 @Controller
@@ -98,9 +99,14 @@ public class CardController {
 			cardface = Integer.parseInt(face);
 		}
 		catch(Exception e) {
-			cardface = 0;
+			cardface = -1;
 		}
-		model.addAttribute("results", Search.tokenPrintings(oracleid, cardface));
+		
+		TokenPrintingsResult tpr = Search.tokenPrintings(oracleid, cardface);
+		
+		model.addAttribute("results", tpr.tokens);
+		model.addAttribute("cardname", tpr.cardname);
+		
 		return "printings";
 	}
 }

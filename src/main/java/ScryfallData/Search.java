@@ -17,6 +17,7 @@ import HelperObjects.SearchHelper;
 import ThymeleafEntities.ContainsCreateResult;
 import ThymeleafEntities.SearchResult;
 import ThymeleafEntities.TokenGuess;
+import ThymeleafEntities.TokenPrintingsResult;
 import ThymeleafEntities.TokenResult;
 
 public class Search {
@@ -198,8 +199,9 @@ public class Search {
 		}
 	}
 	
-	public static ArrayList<Card> tokenPrintings(String oracleid, int face) {
+	public static TokenPrintingsResult tokenPrintings(String oracleid, int face) {
 		ScryfallDataManager sdm = new ScryfallDataManager(true);
+		ArrayList<Card>		results = null;
 		Card 				firstResult = null;
 		
 		//find first result for oracleid
@@ -212,15 +214,15 @@ public class Search {
 		
 		if(firstResult != null) {
 			if(firstResult.card_faces == null) {
-				return SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, -1);
+				results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, -1);
 			}
 			else
 			{
-				return SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
+				results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
 			}
 		}
 		
-		return null;
+		return new TokenPrintingsResult(firstResult.getNameOnly(face), results);
 	}
 	
 	public static SearchResult tokenResults(String cardlist, boolean matchExact, boolean includeSilver) {

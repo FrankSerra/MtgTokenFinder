@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:insert="fragments/header.html :: headerfiles(title='All Token Printings')"></head>
+<head th:insert="fragments/header.html :: headerfiles(title='All Printings: ' + ${cardname})"></head>
 <body>
     <div th:insert="fragments/header.html :: scripts"></div>
     <nav th:insert="fragments/header.html :: navbar"></nav>

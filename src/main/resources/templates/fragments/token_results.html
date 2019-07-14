@@ -10,7 +10,10 @@
                 <div class="row justify-content-center">
                     <div class="col w-50" th:each="result: ${results}">
                         <ul class="list-group list-group-flush sourcerow">
-                            <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result.token})"></a></li>
+                            <li class="list-group-item">
+                                <a th:insert="fragments/card_image_link.html :: card_image(${result.token})"></a>
+                                <a target="_blank" th:href="@{/viewprintings(oracleid=${result.token.oracle_id})}">(view all printings)</a>
+                            </li>
                             <li class="list-group-item" th:each="source: ${result.sources}">
                                 <a th:href="${source.scryfall_uri}" target="_blank" rel="noreferrer" class="hover-popover" data-toggle="popover" th:title="${source.name}" data-html="true" th:data-content="${'<img width=''146'' height=''204'' src=''' + source.calculated_small + ''' />'}" >
                                     <span th:text="${source.name}"></span>
