@@ -119,7 +119,14 @@ public class Search {
 	
 	private static void processTokenGuesses(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
 		ArrayList<Card> guess = new ArrayList<Card>();
+		boolean			foundGuesses = false;
+		
+		//Calculated image links
+    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
+    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
+		
 		for(TokenGuess tg : SearchHelper.prepareTokenGuess(cc)) {
+			foundGuesses = true;
 			if(!tg.name.isEmpty()) {
 				guess = SearchHelper.findTokensByName(sdm.tokens, tg.name, tg.power, tg.toughness, false);
 		    }
@@ -159,11 +166,7 @@ public class Search {
 					}
 				}
 			}
-			
-			//Calculated image links
-	    	cc.calculated_small  = ScryfallDataManager.getImageApiURL(cc, ImageSize.small, false);
-	    	cc.calculated_normal = ScryfallDataManager.getImageApiURL(cc, ImageSize.normal, false);
-	    	
+
 	    	//Perform confidence matching
 			boolean confidant = false;
 			for(Card tokenCheck : guess) {
@@ -176,6 +179,10 @@ public class Search {
 
 			if(!confidant)
 				searchResult.containsCreate.add(new ContainsCreateResult(cc, guess, ""));
+		}
+		
+		if(!foundGuesses) {
+			searchResult.containsCreate.add(new ContainsCreateResult(cc, guess, ""));
 		}
 	}
 	
