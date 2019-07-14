@@ -214,14 +214,12 @@ public class Search {
 		
 		if(firstResult != null) {
 			if(firstResult.card_faces == null) {
-				results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, -1);
+				face = -1;
 			}
-			else
-			{
-				results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
-			}
+			
+			results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
 		}
-		
+				
 		return new TokenPrintingsResult(firstResult.getNameOnly(face), results);
 	}
 	

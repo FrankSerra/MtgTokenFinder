@@ -147,22 +147,22 @@ public class SearchHelper {
     	boolean found = false;
     	
     	//Determine which card face is being used and trim the other side of the DFC token
-    	int trimmed_face = 99;
+    	int matched_face = 99;
     	if(token.card_faces != null) {
     		for(int i=0; i<token.card_faces.size();i++) {
-    			if(!source.oracle_text.toLowerCase().contains(token.card_faces.get(i).name.toLowerCase())) {
-    				trimmed_face = i;
-    				token.trimCardFace(i);
+    			if(source.oracle_text.toLowerCase().contains(token.card_faces.get(i).name.toLowerCase())) {
+    				matched_face = i;
+    				break;
     			}
     		}
     	}
     	
 		//Calculated image links
-		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.small, trimmed_face==1);
-		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.normal, trimmed_face==1);
+		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.small, matched_face==1);
+		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.normal, matched_face==1);
 		
-		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.small, trimmed_face==1);
-		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.normal, trimmed_face==1);
+		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.small, matched_face==1);
+		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.normal, matched_face==1);
     	
 		for (TokenResult tr: searchResult.tokenResults) {
 			if(tr.token.oracle_id.equals(token.oracle_id)) {

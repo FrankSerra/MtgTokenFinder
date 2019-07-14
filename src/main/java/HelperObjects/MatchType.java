@@ -1,5 +1,6 @@
 package HelperObjects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ScryfallData.Card;
@@ -40,11 +41,15 @@ public class MatchType {
 	}
 	
 	public static MatchType doesTokenPrintingMatch(Card c, String name, String power, String toughness, List<String> colors, String oracle_text) {
+		if(colors == null) {
+			colors = new ArrayList<String>();
+		}
+		
 		if(c.name.equals(name)) {
 			if(power == null || (c.power != null && c.power.equals(power))) {
 				if(toughness == null || (c.toughness != null && c.toughness.equals(toughness))) {
-					if(c.colors.equals(colors)) {
-						if(oracle_text.equals(c.oracle_text)) {
+					if(oracle_text.equals(c.oracle_text)) {
+						if(colors.equals(c.colors)) {
 							return new MatchType(true, -1);
 						}
 					}
@@ -58,8 +63,8 @@ public class MatchType {
 				if(cf.name.equals(name)) {
 					if(power == null || (cf.power != null && cf.power.equals(power))) {
 						if(toughness == null || (cf.toughness != null && cf.toughness.equals(toughness))) { 	
-							if(cf.colors.equals(colors)) {
-								if(oracle_text.equals(cf.oracle_text)) {
+							if(oracle_text.equals(cf.oracle_text)) {
+								if(colors.equals(cf.colors)) {
 									return new MatchType(true, face);
 								}
 							}
