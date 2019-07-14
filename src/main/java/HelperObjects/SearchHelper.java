@@ -105,6 +105,31 @@ public class SearchHelper {
     	return matches;
     }
     
+    public static ArrayList<Card> findTokenPrintingsByName(List<Card> cards, Card firstResult, int face) {
+    	ArrayList<Card> matches = new ArrayList<Card>();
+    	
+    	//Set search parameters
+    	String name 	 = firstResult.getNameOnly(face);
+    	String power 	 = firstResult.getPower(face);
+    	String toughness = firstResult.getToughness(face);
+    	String oracle    = firstResult.getOracle(face);
+    	
+    	List<String> colors = firstResult.getColors(face);
+
+    	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
+    		Card c = i.next();
+    		
+    		MatchType match = MatchType.doesTokenPrintingMatch(c, name, power, toughness, colors, oracle);
+			if(match.match == true) {
+				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
+				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
+				matches.add(c);
+			}
+		}
+    	
+    	return matches;
+    }
+    
     public static Card findTipCard(ArrayList<Card> tipcards, String name) {
     	try {
 			for(Card c: tipcards) {

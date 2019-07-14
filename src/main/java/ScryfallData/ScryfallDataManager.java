@@ -14,7 +14,7 @@ import HelperObjects.ImageSize;
 import tokenfinder.CardController;
 
 public class ScryfallDataManager {
-	public ArrayList<Card> cards, silverCards, tokens, tipcards;
+	public ArrayList<Card> cards, tokens, tipcards;
 	
 	public ScryfallDataManager(boolean includeSilver) {
 		try {

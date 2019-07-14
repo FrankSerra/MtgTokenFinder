@@ -198,6 +198,31 @@ public class Search {
 		}
 	}
 	
+	public static ArrayList<Card> tokenPrintings(String oracleid, int face) {
+		ScryfallDataManager sdm = new ScryfallDataManager(true);
+		Card 				firstResult = null;
+		
+		//find first result for oracleid
+		for(Card t: sdm.tokens) {
+			if(t.oracle_id.equals(oracleid)) {
+				firstResult = t;
+				break;
+			}
+		}
+		
+		if(firstResult != null) {
+			if(firstResult.card_faces == null) {
+				return SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, -1);
+			}
+			else
+			{
+				return SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
+			}
+		}
+		
+		return null;
+	}
+	
 	public static SearchResult tokenResults(String cardlist, boolean matchExact, boolean includeSilver) {
 		ScryfallDataManager sdm = new ScryfallDataManager(includeSilver);
 		SearchResult searchResult = new SearchResult();

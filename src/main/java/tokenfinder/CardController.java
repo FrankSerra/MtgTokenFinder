@@ -90,4 +90,17 @@ public class CardController {
     		return "error";
     	}
     }
+	
+	@GetMapping("/viewprintings")
+	public String printings(@RequestParam(name="oracleid", required=true, defaultValue="") String oracleid, @RequestParam(name="face", required=false, defaultValue="") String face, Model model) {
+		int cardface;
+		try {
+			cardface = Integer.parseInt(face);
+		}
+		catch(Exception e) {
+			cardface = 0;
+		}
+		model.addAttribute("results", Search.tokenPrintings(oracleid, cardface));
+		return "printings";
+	}
 }

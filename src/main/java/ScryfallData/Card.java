@@ -99,6 +99,15 @@ public class Card implements Comparable<Card> {
     	}
     }
     
+    public String getNameOnly(int face) {
+    	switch(face) {
+    	case -1:
+    		return this.name;
+    	default:
+    		return this.card_faces.get(face).name;
+    	}
+    }
+    
     public String getTypes(int face) {
     	//won't return the word "token"
     	String types = "";

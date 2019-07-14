@@ -1,19 +1,12 @@
 <div class="btg-group" th:fragment="card_image(source)">
-    <a href="#" class="card-dropdown" data-toggle="modal" th:data-target="${'#modal-'+source.oracle_id}" title="Click for more options.">
-        <div class="d-inline-block" th:if="${#lists.isEmpty(source.card_faces)}">
+    <a href="#" class="card-dropdown" data-toggle="modal" th:data-target="${'#modal-'+source.id}" title="Click for more options.">
+        <div class="d-inline-block">
             <div class="d-inline-block d-sm-none mx-auto"><img th:src="${source.calculated_small}" width="120" /></div>
             <div class="d-none d-sm-inline-block d-md-none mx-auto"><img th:src="${source.calculated_small}" /></div>
             <div class="d-none d-md-inline-block mx-auto"><img th:src="${source.calculated_normal}" height="360" /></div>
         </div>
-        <div class="d-inline-block" th:unless="${#lists.isEmpty(source.card_faces)}">
-            <div class="dfc" th:each="face: ${source.card_faces}">
-                <img class="d-inline-block d-sm-none mx-auto" th:src="${face.image_uris.small}" width="120" />
-                <img class="d-none d-sm-inline-block d-md-none mx-auto" th:src="${face.image_uris.small}" />
-                <img class="d-none d-md-inline-block mx-auto" th:src="${face.image_uris.normal}" height="360" />
-            </div>
-        </div>
     </a>
-    <div class="modal fade" role="dialog" tabindex="-1" th:id="${'modal-'+source.oracle_id}">
+    <div class="modal fade" role="dialog" tabindex="-1" th:id="${'modal-'+source.id}">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
