@@ -5,10 +5,13 @@ print("Reading list...")
 with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
     all_cards = json.load(fin)
 
+    #only paper cards in English
+    all_cards = [x for x in all_cards if 'paper' in x['games'] if x['lang'] == 'en' if x['digital'] is False]
+
     #Initial set of desirable cards
     clean_cards = [x for x in all_cards if x['border_color'] not in ['gold'] \
-                                        if x['oversized'] is False if x['digital'] is False if x['layout'] not in ["token", "emblem", "double_faced_token"] \
-                                        if 'paper' in x['games'] if x['lang'] == 'en' if x['set_type'] not in ['masterpiece', 'memorabilia']]
+                                        if x['oversized'] is False if x['layout'] not in ["token", "emblem", "double_faced_token"] \
+                                        if x['set_type'] not in ['masterpiece', 'memorabilia']]
     
     #Search for cards that only exist in promo form like "Nexus of Fate", "Impervious Greatwurm", etc.
     no_promos  = [x for x in clean_cards if x['promo'] is False]
