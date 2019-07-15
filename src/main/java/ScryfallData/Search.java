@@ -23,6 +23,7 @@ import ThymeleafEntities.TokenResult;
 public class Search {
 	private static ArrayList<Card> copyToken = null;
 	private static ArrayList<Card> amassToken = null;
+	private static ArrayList<Card> treasureToken = null;
 	
 	private static ArrayList<String> search_string_to_list(String cardlist) {
     	//Search terms
@@ -115,6 +116,15 @@ public class Search {
 			if(amassToken != null && amassToken.size() > 0)
 				SearchHelper.addTokenAndSources(searchResult, amassToken.get(0), cc);
 		}		
+		
+		//Check for Treasure tokens because Smothering Tithe is the bane of my existence
+		if(OracleTextHelper.oracle_text_contains(cc, " Treasure token")) {
+			if(treasureToken == null)
+				treasureToken = SearchHelper.findTokensByName(sdm.tokens, "Treasure", null, null, true);
+			
+			if(treasureToken != null && treasureToken.size() > 0)
+				SearchHelper.addTokenAndSources(searchResult, treasureToken.get(0), cc);
+		}
 	}
 	
 	private static void processTokenGuesses(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
