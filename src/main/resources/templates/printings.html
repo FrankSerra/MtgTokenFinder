@@ -18,6 +18,7 @@
                     <div class="col w-50" th:each="result: ${results}">
                         <ul class="list-group list-group-flush sourcerow">
                             <li class="list-group-item"><a th:insert="fragments/card_image_link.html :: card_image(${result})"></a></li>
+                            <li class="list-group-item"><span th:text="${#strings.substring(#strings.toUpperCase(result.set), 1, #strings.length(result.set)) + ((result.card_faces!=null) ? ' (DFC)' : '')}"></span></li>
                         </ul>
                     </div>
                 </div>

@@ -227,7 +227,7 @@ public class Search {
 			results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
 		}
 				
-		return new TokenPrintingsResult(firstResult.getNameOnly(face), results);
+		return new TokenPrintingsResult(firstResult.getTokenSummaryTitle(face), results);
 	}
 	
 	public static SearchResult tokenResults(String cardlist, boolean matchExact, boolean includeSilver) {

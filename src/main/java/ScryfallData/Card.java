@@ -26,6 +26,21 @@ public class Card implements Comparable<Card> {
 	public String calculated_normal;
 	public int 	  matching_face;
 	
+	public String getTokenSummaryTitle(int face) {
+		String ret = "";
+		String power = this.getPower(face);
+		String toughness = this.getToughness(face);
+		
+		if(power != null) {
+			ret += power + "/" + toughness + " ";
+		}
+		
+		ret += this.buildColorPhrase(this.getColors(face)) + " ";
+		ret += this.getNameOnly(face);
+		
+		return ret;
+	}
+	
 	public String buildColorPhrase(List<String> color_identity) {
     	String disp = "";
     	if(color_identity.size() == 0) {
