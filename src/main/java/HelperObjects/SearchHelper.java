@@ -127,7 +127,20 @@ public class SearchHelper {
 				if(c.set.substring(0,1).equals("t")) {
 					c.set = c.set.substring(1);
 				}
-				c.set = c.set.toUpperCase() + (c.card_faces == null ? "" : " (DFC)");
+				
+				c.set = c.set.toUpperCase();
+				
+				String mods = "";
+				if(c.foil) {
+					mods += "FOIL ";
+				}
+				if(c.card_faces != null) {
+					mods += "DFC ";
+				}
+				if(!mods.isEmpty()) {
+					c.set += " (" + mods.trim() + ")";
+				}
+				
 				matches.add(c);
 			}
 		}

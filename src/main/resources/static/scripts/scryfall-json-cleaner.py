@@ -40,7 +40,6 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                    'digital',
                    'edhrec_rank',
                    'flavor_text',
-                   'foil',
                    'frame',
                    'frame_effect',
                    'full_art',
@@ -90,7 +89,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
 
     #Trim search
     out_cards = clean_cards
-    remove_keys.extend(['type_line', 'colors']) #tokens need a typeline and colors, so we only remove it from the actual cards
+    remove_keys.extend(['type_line', 'colors', 'foil']) #tokens need typeline, foil and colors, so we only remove it from the actual cards
     for obj in out_cards: 
         for key in remove_keys:
             try:

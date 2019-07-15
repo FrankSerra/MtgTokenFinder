@@ -18,6 +18,7 @@ public class Card implements Comparable<Card> {
 	public String power, toughness;
 	public ArrayList<String> colors;
 	public String set, collector_number, type_line;
+	public boolean foil;
 	
 	//These properties are for Thymeleaf and must be set manually
 	public String display_name;
