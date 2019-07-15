@@ -109,4 +109,9 @@ public class CardController {
 		
 		return "printings";
 	}
+	
+	@PostMapping("/tokensbyname")
+    public String tokensbyname(@RequestParam(name="tokenlist", required=true, defaultValue="") String tokenlist, @RequestParam(name="includeSilver", required=true, defaultValue="") String includeSilver, Model model) {
+    	return "about";
+    }
 }
