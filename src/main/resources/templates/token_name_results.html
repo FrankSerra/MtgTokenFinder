@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:insert="fragments/header.html :: headerfiles(title='Token Results')"></head>
+<body>
+    <div th:insert="fragments/header.html :: scripts"></div>
+    <nav th:insert="fragments/header.html :: navbar"></nav>
+
+    <main role="main" class="container">
+    <div class="accordion" id="accordionTokens">
+        <div class="card">
+            <div class="card-header">
+                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#foundTokens" aria-expanded="true" aria-controls="foundTokens">
+                    Token Results
+                </button>
+            </div>
+            <div class="card-body collapse show" id="foundTokens">
+                <div class="row justify-content-center">
+                    <div class="col w-50" th:each="result: ${results}">
+                        <ul class="list-group list-group-flush sourcerow">
+                            <li class="list-group-item">
+                                <a th:insert="fragments/card_image_link.html :: card_image(${result})"></a>
+                                <a target="_blank" th:href="@{/viewprintings(oracleid=${result.oracle_id}, face=${result.matching_face == null ? -1 : result.matching_face})}">(view all printings)</a>
+                            </li>
+                            <li class="list-group-item">
+                                <span th:text="${result.display_name}"></span>
+                                <br />
+                                <span class="font-weight-light d-block w-75 mx-auto" th:unless="${result.display_oracle == null}" th:text="${result.display_oracle}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>         
+    </main>
+
+    <footer th:insert="fragments/footer.html :: footer"></footer>
+</body>
+</html>
