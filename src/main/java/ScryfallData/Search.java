@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import HelperObjects.ImageSize;
+import HelperObjects.MatchType;
 import HelperObjects.OracleTextHelper;
+import HelperObjects.RegexHelper;
 import HelperObjects.SearchHelper;
 import ThymeleafEntities.ContainsCreateResult;
 import ThymeleafEntities.SearchResult;
@@ -244,6 +246,40 @@ public class Search {
 		}
 				
 		return new TokenPrintingsResult(firstResult.getTokenSummaryTitle(face), results);
+	}
+
+	public static ArrayList<Card> tokenNameSearchResults(String tokenlist) {
+		ScryfallDataManager sdm = new ScryfallDataManager(false);
+		ArrayList<Card> results = new ArrayList<Card>();
+		
+		String[] terms = tokenlist.split("\n");
+		
+		for(String t: terms) {
+			String[] term = RegexHelper.extractPowerToughness(t);
+			ArrayList<Card> guesses = SearchHelper.findTokensByName(sdm.tokens, term[2].trim(), term[0], term[1], false, true);			
+			
+			Iterator<Card> it = guesses.iterator();
+			while(it.hasNext()) {
+				Card c = it.next();
+				boolean add = true;
+				
+				for(Card tok: results) {
+					if(MatchType.doesTokenPrintingMatch(tok, c, c.matching_face).match) {
+						add = false;
+					}
+				}
+				
+				if(add) {
+					int paren = c.display_name.indexOf("(");
+					if(paren > -1) {
+						c.display_name = c.display_name.substring(0, paren-1);
+					}
+					results.add(c);
+				}
+			}
+		}
+		
+		return results;
 	}
 	
 	public static SearchResult tokenResults(String cardlist, boolean matchExact, boolean includeSilver) {

@@ -60,14 +60,9 @@
                 <h6 class="mt-3" id="TokenByNameInstructions">Enter token names separated by newlines:</h6>
                 <form th:action="@{/tokensbyname}" id="tokenbynameform" method="post" autocomplete="off">
                     <div class="form-group">
-                        <textarea class="form-control" rows="10" form="tokenbynameform" name="tokenlist" aria-labelledby="TokenByNameInstructions" placeholder="Enter tokens either by name ('Thopter'), or with power/toughness ('1/1 Thopter'). Searching by color is not yet supported." >
-                        </textarea>
+                        <textarea class="form-control" rows="10" form="tokenbynameform" name="tokenlist" aria-labelledby="TokenByNameInstructions" placeholder="Enter tokens either by name ('Thopter'), or with power/toughness ('3/3 Angel'). Searching by color is not yet supported." ></textarea>
                     </div>
-                    <div class="form-check">                       
-                        <input type="checkbox" id="includeSilver" name="includeSilver">
-                        <label for="includeSilver">Include silver-bordered cards</label>
-                    </div>
-                    
+
                     <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">Show Tokens</button>
                 </form>
             </div>

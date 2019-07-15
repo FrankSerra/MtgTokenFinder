@@ -111,7 +111,8 @@ public class CardController {
 	}
 	
 	@PostMapping("/tokensbyname")
-    public String tokensbyname(@RequestParam(name="tokenlist", required=true, defaultValue="") String tokenlist, @RequestParam(name="includeSilver", required=true, defaultValue="") String includeSilver, Model model) {
-    	return "about";
+    public String tokensbyname(@RequestParam(name="tokenlist", required=true, defaultValue="") String tokenlist, Model model) {
+		model.addAttribute("results", Search.tokenNameSearchResults(tokenlist));
+    	return "token_name_results";
     }
 }

@@ -65,13 +65,17 @@ public class SearchHelper {
     }
         
     public static ArrayList<Card> findTokensByName(List<Card> cards, String name, String power, String toughness, boolean firstOnly) {
+    	return findTokensByName(cards, name, power, toughness, firstOnly, false);
+    }
+   
+    public static ArrayList<Card> findTokensByName(List<Card> cards, String name, String power, String toughness, boolean firstOnly, boolean ignoreCase) {
     	ArrayList<Card> matches = new ArrayList<Card>();
     	Set<String> ids = new HashSet<String>();
     	
     	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
     		Card c = i.next();
     		
-    		MatchType match = MatchType.doesTokenMatch(c, name, power, toughness);
+    		MatchType match = MatchType.doesTokenMatch(c, name, power, toughness, ignoreCase);
 			if(match.match == true && ids.add(c.oracle_id)) {
 				String disp = "";
 				
@@ -93,6 +97,7 @@ public class SearchHelper {
 				c.display_name = disp;
 				
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
+				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
 				
 				c.matching_face = match.card_face;
 				matches.add(c);
@@ -108,18 +113,10 @@ public class SearchHelper {
     public static ArrayList<Card> findTokenPrintingsByName(List<Card> cards, Card firstResult, int face) {
     	ArrayList<Card> matches = new ArrayList<Card>();
     	
-    	//Set search parameters
-    	String name 	 = firstResult.getNameOnly(face);
-    	String power 	 = firstResult.getPower(face);
-    	String toughness = firstResult.getToughness(face);
-    	String oracle    = firstResult.getOracle(face);
-    	
-    	List<String> colors = firstResult.getColors(face);
-
-    	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
+	   	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
     		Card c = i.next();
     		
-    		MatchType match = MatchType.doesTokenPrintingMatch(c, name, power, toughness, colors, oracle);
+    		MatchType match = MatchType.doesTokenPrintingMatch(c, firstResult, face);
 			if(match.match == true) {
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
 				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
