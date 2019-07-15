@@ -137,6 +137,7 @@ public class SearchHelper {
 				if(c.card_faces != null) {
 					mods += "DFC ";
 				}
+				
 				if(!mods.isEmpty()) {
 					c.set += " (" + mods.trim() + ")";
 				}
