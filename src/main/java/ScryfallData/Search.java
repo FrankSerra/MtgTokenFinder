@@ -40,7 +40,13 @@ public class Search {
 		terms.addAll(uniqueTerms);
 		
 		//Prepare search terms
-		terms.forEach(p -> p = SearchHelper.prepareSearchTerm(p));
+		String[] termsArray = terms.toArray(new String[0]);
+		for(int i=0; i<termsArray.length; i++) {
+			termsArray[i] = SearchHelper.prepareSearchTerm(termsArray[i]);
+		}
+		
+		terms = new ArrayList<String>();
+		terms.addAll(Arrays.asList(termsArray));
 		
 		//Clear empties, then sort
 		terms.removeIf(p -> p.isEmpty());
