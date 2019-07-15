@@ -26,12 +26,38 @@ public class Card implements Comparable<Card> {
 	public String calculated_normal;
 	public int 	  matching_face;
 	
+	//Color sorting
+	private static final String ORDER= "WUBRG";
+	private static final Comparator<String> WUBRG = new Comparator<String>() {
+	    @Override
+	    public int compare(String o1, String o2) {
+	       return ORDER.indexOf(o1.toUpperCase()) -  ORDER.indexOf(o2.toUpperCase()) ;
+	    }
+	};
+	
+	//Getter methods
+	public String getTokenSummaryTitle(int face) {
+		String ret = "";
+		String power = this.getPower(face);
+		String toughness = this.getToughness(face);
+		
+		if(power != null) {
+			ret += power + "/" + toughness + " ";
+		}
+		
+		ret += this.buildColorPhrase(this.getColors(face)) + " ";
+		ret += this.getNameOnly(face);
+		
+		return ret;
+	}
+	
 	public String buildColorPhrase(List<String> color_identity) {
     	String disp = "";
     	if(color_identity.size() == 0) {
 			disp += "Colorless";
 		}
 		else {
+			color_identity.sort(WUBRG);
 			for(int idx=0; idx<color_identity.size(); idx++) {
 				if(idx > 0)
 					disp += "-";
@@ -48,15 +74,8 @@ public class Card implements Comparable<Card> {
     	if(color_identity == null || color_identity.size() == 0) {
 			return "colorless";
 		}
-		
-    	final String ORDER= "WUBRG";
 
-    	color_identity.sort(new Comparator<String>() {
-    	    @Override
-    	    public int compare(String o1, String o2) {
-    	       return ORDER.indexOf(o1.toUpperCase()) -  ORDER.indexOf(o2.toUpperCase()) ;
-    	    }
-    	});
+    	color_identity.sort(WUBRG);
     	
     	if(color_identity.size() == 1) {
 			return SearchHelper.letterToWord(color_identity.get(0)).toLowerCase();
