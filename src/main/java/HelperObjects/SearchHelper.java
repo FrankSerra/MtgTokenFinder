@@ -123,6 +123,11 @@ public class SearchHelper {
 			if(match.match == true) {
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
 				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
+				
+				if(c.set.substring(0,1).equals("t")) {
+					c.set = c.set.substring(1);
+				}
+				c.set = c.set.toUpperCase() + (c.card_faces == null ? "" : " (DFC)");
 				matches.add(c);
 			}
 		}
