@@ -2,6 +2,8 @@ package HelperObjects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ScryfallData.Card;
 import ScryfallData.CardFace;
@@ -9,17 +11,35 @@ import ScryfallData.CardFace;
 public class MatchType {
 	public int card_face;
 	public boolean match;
+	private static final String conversionSymbols = "Xx*";
+	private static final String conversionSymbolsRegex = "Xx\\*";
+	private static final String conversionReplacement = "&";
 	
 	public MatchType(boolean _match, int _face) {
 		this.match = _match;
 		this.card_face = _face;
 	}
 	
-	private static String getConversion(String s) {
+	public static String getConversion(String s) {
 		//Make X/X and */* interchangeable - temporarily change both to "&"
-		if(s != null && "Xx*".contains(s))
-			s = "&";
+		if(s != null && conversionSymbols.contains(s))
+			s = conversionReplacement;
 		return s;
+	}
+	
+	public static String getOracleTextConversion(String s, boolean already_regex) {
+		Matcher match;
+		String replaced;
+		if(already_regex) {
+			match = Pattern.compile("[" + conversionSymbolsRegex + "]\\\\/[" + conversionSymbolsRegex + "]").matcher(s);
+		}
+		else {
+			match = Pattern.compile("[" + conversionSymbolsRegex + "]\\/[" + conversionSymbolsRegex + "]").matcher(s);
+		}
+		
+		replaced = match.replaceAll(conversionReplacement + "/" + conversionReplacement);
+		
+		return replaced;
 	}
 	
 	public static MatchType doesTokenMatch(Card c, String name, String power, String toughness) {

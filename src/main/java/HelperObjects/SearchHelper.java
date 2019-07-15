@@ -307,7 +307,7 @@ public class SearchHelper {
 		
 		String disp = ".*";
 		if(token.power != null) {
-			disp += token.getPower(face).replace("*", "\\*") + "\\/" + token.getToughness(face).replace("*", "\\*");
+			disp += token.getPower(face) + "\\/" + token.getToughness(face);
 		}
 		disp += " " + token.buildOracleColorPhrase(token.getColors(face));			
 		
@@ -346,7 +346,7 @@ public class SearchHelper {
 			disp += ".* named " + token.getName(face) + ".*";
 		}
 
-		return OracleTextHelper.oracle_text_contains_regex(card, disp);
+		return OracleTextHelper.oracle_text_contains_regex(card, MatchType.getOracleTextConversion(disp, true));
     }
 	   
 }

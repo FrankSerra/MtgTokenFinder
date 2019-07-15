@@ -59,11 +59,11 @@ public class OracleTextHelper {
 	
 	public static boolean oracle_text_contains_regex(Card c, String text) {
 		if(c.oracle_text != null) {
-    		return c.oracle_text.replace("\r", "").replace("\n", "").toLowerCase().matches(text.toLowerCase());
+    		return MatchType.getOracleTextConversion(c.oracle_text.replace("\r", "").replace("\n", "").toLowerCase(), false).matches(text.toLowerCase());
     	}
     	else if(c.card_faces != null && c.card_faces.size() > 0) {
     		for (CardFace face : c.card_faces) {
-				if(face.oracle_text.replace("\r", "").replace("\n", "").toLowerCase().matches(text.toLowerCase()))
+				if(MatchType.getOracleTextConversion(face.oracle_text.replace("\r", "").replace("\n", "").toLowerCase(), false).matches(text.toLowerCase()))
 					return true;
 			}
     	}
