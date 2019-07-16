@@ -7,15 +7,13 @@
 
     <main role="main" class="container">
     <div class="accordion" id="accordionTokens">
-        <div class="card">
+        <div class="card" th:each="tbnr: ${tbnrs}">
             <div class="card-header">
-                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#foundTokens" aria-expanded="true" aria-controls="foundTokens">
-                    Token Results
-                </button>
+                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" th:data-target="${'#' + tbnr.idHash}" aria-expanded="true" aria-controls="foundTokens" th:text="${'Results: ''' + tbnr.searchTerm + ''''}"></button>
             </div>
-            <div class="card-body collapse show" id="foundTokens">
+            <div class="card-body collapse show" th:id="${tbnr.idHash}">
                 <div class="row justify-content-center">
-                    <div class="col w-50" th:each="result: ${results}">
+                    <div class="col w-50" th:each="result: ${tbnr.results}">
                         <ul class="list-group list-group-flush sourcerow">
                             <li class="list-group-item">
                                 <a th:insert="fragments/card_image_link.html :: card_image(${result})"></a>
@@ -31,6 +29,7 @@
                 </div>
             </div>
         </div>
+        <div th:insert="fragments/search_list.html :: search_list(full_list=${full_list}, title='Search terms', body='These are the terms you searched.')"></div>
     </div>         
     </main>
 

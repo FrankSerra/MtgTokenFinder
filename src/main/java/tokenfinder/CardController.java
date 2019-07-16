@@ -1,7 +1,9 @@
 package tokenfinder;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ScryfallData.ScryfallDataManager;
 import ScryfallData.Search;
 import ThymeleafEntities.SearchResult;
+import ThymeleafEntities.TokenByNameResult;
 import ThymeleafEntities.TokenPrintingsResult;
 import ThymeleafEntities.TokenResult;
 
@@ -112,7 +115,9 @@ public class CardController {
 	
 	@PostMapping("/tokensbyname")
     public String tokensbyname(@RequestParam(name="tokenlist", required=true, defaultValue="") String tokenlist, Model model) {
-		model.addAttribute("results", Search.tokenNameSearchResults(tokenlist));
+		ArrayList<TokenByNameResult> tbnrs = Search.tokenNameSearchResults(tokenlist);
+		model.addAttribute("tbnrs", tbnrs);
+		model.addAttribute("full_list", tbnrs.stream().map(TokenByNameResult::SearchTerm).collect(Collectors.toList()));
     	return "token_name_results";
     }
 }

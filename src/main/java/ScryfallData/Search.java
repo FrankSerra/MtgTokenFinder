@@ -18,6 +18,7 @@ import HelperObjects.RegexHelper;
 import HelperObjects.SearchHelper;
 import ThymeleafEntities.ContainsCreateResult;
 import ThymeleafEntities.SearchResult;
+import ThymeleafEntities.TokenByNameResult;
 import ThymeleafEntities.TokenGuess;
 import ThymeleafEntities.TokenPrintingsResult;
 import ThymeleafEntities.TokenResult;
@@ -27,15 +28,7 @@ public class Search {
 	private static ArrayList<Card> amassToken = null;
 	private static ArrayList<Card> treasureToken = null;
 	
-	private static ArrayList<String> search_string_to_list(String cardlist) {
-    	//Search terms
-		ArrayList<String> terms = new ArrayList<String>();
-		terms.addAll(Arrays.asList(cardlist.split("\\s*\\r?\\n\\s*")));
-		
-		//Clear obvious list cuts
-		terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "sideboard"));
-		terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "maybeboard"));
-		
+	private static ArrayList<String> search_string_remove_duplicates(ArrayList<String> terms) {
 		//Use a Set to remove duplicates, then put back into a sorted List
 		HashSet<String> uniqueTerms = new HashSet<String> (terms);
 		terms.clear();
@@ -52,9 +45,21 @@ public class Search {
 		
 		//Clear empties, then sort
 		terms.removeIf(p -> p.isEmpty());
-		Collections.sort(terms);		
+		Collections.sort(terms);	
 		
 		return terms;
+	}
+	
+	private static ArrayList<String> search_string_to_list(String cardlist) {
+    	//Search terms
+		ArrayList<String> terms = new ArrayList<String>();
+		terms.addAll(Arrays.asList(cardlist.split("\\s*\\r?\\n\\s*")));
+		
+		//Clear obvious list cuts
+		terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "sideboard"));
+		terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "maybeboard"));			
+		
+		return search_string_remove_duplicates(terms);
 	}
 	
 	private static void processForTipCards(ScryfallDataManager sdm, SearchResult searchResult, Card found) {
@@ -248,14 +253,17 @@ public class Search {
 		return new TokenPrintingsResult(firstResult.getTokenSummaryTitle(face), results);
 	}
 
-	public static ArrayList<Card> tokenNameSearchResults(String tokenlist) {
+	public static ArrayList<TokenByNameResult> tokenNameSearchResults(String tokenlist) {
 		ScryfallDataManager sdm = new ScryfallDataManager(false);
-		ArrayList<Card> results = new ArrayList<Card>();
+		ArrayList<TokenByNameResult> results = new ArrayList<TokenByNameResult>();
 		
-		String[] terms = tokenlist.split("\n");
+		ArrayList<String> terms = new ArrayList<String>();
+		terms.addAll(Arrays.asList(tokenlist.split("\n")));
 		
-		for(String t: terms) {
+		for(String t: search_string_remove_duplicates(terms)) {
 			String[] term = RegexHelper.extractPowerToughness(t);
+			TokenByNameResult tbnr = new TokenByNameResult(term[2]);
+			
 			ArrayList<Card> guesses = SearchHelper.findTokensByName(sdm.tokens, term[2].trim(), term[0], term[1], false, true);			
 			
 			Iterator<Card> it = guesses.iterator();
@@ -263,7 +271,7 @@ public class Search {
 				Card c = it.next();
 				boolean add = true;
 				
-				for(Card tok: results) {
+				for(Card tok: tbnr.results) {
 					if(MatchType.doesTokenPrintingMatch(tok, c, c.matching_face).match) {
 						add = false;
 					}
@@ -274,9 +282,12 @@ public class Search {
 					if(paren > -1) {
 						c.display_name = c.display_name.substring(0, paren-1);
 					}
-					results.add(c);
+					tbnr.results.add(c);
 				}
 			}
+			
+			if(tbnr.results.size() > 0)
+				results.add(tbnr);
 		}
 		
 		return results;

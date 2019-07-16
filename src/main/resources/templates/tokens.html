@@ -16,7 +16,7 @@
                 
         <div th:unless="${contains_create == null || contains_create.empty}" th:insert="fragments/contains_create.html :: contains_create(${contains_create})"></div>
 
-        <div th:insert="fragments/search_list.html :: search_list(${full_list})"></div>
+        <div th:insert="fragments/search_list.html :: search_list(full_list=${full_list}, title='Decklist', body='This is a cleaned version of the decklist you submitted.')"></div>
     </main>
 
     <footer th:insert="fragments/footer.html :: footer"></footer>

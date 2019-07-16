@@ -1,13 +1,11 @@
-<div th:fragment="search_list(full_list)">
+<div th:fragment="search_list(full_list, title, body)">
     <div class="accordion" id="accordionSearchList">
         <div class="card">
             <div class="card-header">
-                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#searchList" aria-expanded="true" aria-controls="searchList">
-                Decklist
-                </button>
+                <button class="btn btn-block btn-primary" type="button" data-toggle="collapse" data-target="#searchList" aria-expanded="true" aria-controls="searchList" th:text="${title}"></button>
             </div>
             <div class="card-body collapse show" id="searchList">
-                <h5 class="text-center text-no-select">This is a cleaned version of the decklist you submitted.</h5>
+                <h5 class="text-center text-no-select" th:text="${body}"></h5>
                 <blockquote class="blockquote" >
                     <span th:each="result: ${full_list}"><span class="text-left mb-2" th:text="${result}"></span><br /></span>
                 </blockquote>
