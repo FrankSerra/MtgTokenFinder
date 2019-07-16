@@ -116,7 +116,7 @@ public class CardController {
 		TokenByNameResultsContainer tbnrc = Search.tokenNameSearchResults(tokenlist);
 		model.addAttribute("tbnrs", tbnrc.tbnrs);
 		model.addAttribute("full_list", tbnrc.terms);
-		model.addAttribute("errors", tbnrc.errors);
+		model.addAttribute("errors", tbnrc.errors.size() > 0 ? tbnrc.errors : null);
     	return "token_name_results";
     }
 }
