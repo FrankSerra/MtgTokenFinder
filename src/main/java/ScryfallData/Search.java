@@ -19,6 +19,7 @@ import HelperObjects.SearchHelper;
 import ThymeleafEntities.ContainsCreateResult;
 import ThymeleafEntities.SearchResult;
 import ThymeleafEntities.TokenByNameResult;
+import ThymeleafEntities.TokenByNameResultsContainer;
 import ThymeleafEntities.TokenGuess;
 import ThymeleafEntities.TokenPrintingsResult;
 import ThymeleafEntities.TokenResult;
@@ -253,16 +254,18 @@ public class Search {
 		return new TokenPrintingsResult(firstResult.getTokenSummaryTitle(face), results);
 	}
 
-	public static ArrayList<TokenByNameResult> tokenNameSearchResults(String tokenlist) {
+	public static TokenByNameResultsContainer tokenNameSearchResults(String tokenlist) {
 		ScryfallDataManager sdm = new ScryfallDataManager(false);
 		ArrayList<TokenByNameResult> results = new ArrayList<TokenByNameResult>();
 		
 		ArrayList<String> terms = new ArrayList<String>();
+		ArrayList<String> notfound = new ArrayList<String>();
 		terms.addAll(Arrays.asList(tokenlist.split("\n")));
-		
-		for(String t: search_string_remove_duplicates(terms)) {
+		terms = search_string_remove_duplicates(terms);
+				
+		for(String t: terms) {
 			String[] term = RegexHelper.extractPowerToughness(t);
-			TokenByNameResult tbnr = new TokenByNameResult(term[2]);
+			TokenByNameResult tbnr = new TokenByNameResult(t);
 			
 			ArrayList<Card> guesses = SearchHelper.findTokensByName(sdm.tokens, term[2].trim(), term[0], term[1], false, true);			
 			
@@ -288,9 +291,11 @@ public class Search {
 			
 			if(tbnr.results.size() > 0)
 				results.add(tbnr);
+			else
+				notfound.add(t);
 		}
 		
-		return results;
+		return new TokenByNameResultsContainer(results, terms, notfound);
 	}
 	
 	public static SearchResult tokenResults(String cardlist, boolean matchExact, boolean includeSilver) {

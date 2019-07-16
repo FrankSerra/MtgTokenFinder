@@ -6,6 +6,8 @@
     <nav th:insert="fragments/header.html :: navbar"></nav>
 
     <main role="main" class="container">
+    <div th:insert="fragments/error_alerts.html :: error_alerts('The following tokens were not found:', ${errors})"></div>
+
     <div class="accordion" id="accordionTokens">
         <div class="card" th:each="tbnr: ${tbnrs}">
             <div class="card-header">
