@@ -25,9 +25,10 @@ public class CardController {
     }
     
     @GetMapping("/search")
-    public String search(Model model) {
+    public String search(@RequestParam(name="mode", required=false, defaultValue="") String mode, Model model) {
     	model.addAttribute("sites", URL_Processor.SupportedSites);
     	model.addAttribute("exclusions", URL_Processor.SiteExclusions);
+    	model.addAttribute("searchmode", mode.isEmpty() ? null : mode);
         return "search";
     }
     
