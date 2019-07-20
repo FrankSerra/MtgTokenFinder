@@ -54,7 +54,7 @@ public class Card implements Comparable<Card> {
 	
 	public String buildColorPhrase(List<String> color_identity) {
     	String disp = "";
-    	if(color_identity.size() == 0) {
+    	if(color_identity==null || color_identity.size() == 0) {
 			disp += "Colorless";
 		}
 		else {

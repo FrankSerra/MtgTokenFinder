@@ -43,10 +43,10 @@ public class MatchType {
 	}
 	
 	public static MatchType doesTokenMatch(Card c, String name, String power, String toughness) {
-		return doesTokenMatch(c, name, power, toughness, false);
+		return doesTokenMatch(c, name, power, toughness, false, false);
 	}
 	
-	public static MatchType doesTokenMatch(Card c, String name, String power, String toughness, boolean ignoreCase) {
+	public static MatchType doesTokenMatch(Card c, String name, String power, String toughness, boolean ignoreCase, boolean allowContains) {
 		power = getConversion(power);
 		toughness = getConversion(toughness);
 		
@@ -55,24 +55,31 @@ public class MatchType {
 		}
 		
 		//Do matching
-		if((ignoreCase ? c.name.toLowerCase() : c.name).equals(name)) {
-			if(power == null || (c.power != null && getConversion(c.power).equals(power))) {
-				if(toughness == null || (c.toughness != null && getConversion(c.toughness).equals(toughness))) { 	
-					return new MatchType(true, -1);
-				}
-			}
-		}
-		else if(c.card_faces != null) {
+		if(c.card_faces != null) {
 			for(int face=0; face<c.card_faces.size(); face++) {
 				CardFace cf = c.card_faces.get(face);
+				String cardName = ignoreCase ? cf.name.toLowerCase() : cf.name;
+				boolean matched = allowContains ? cardName.contains(name) : cardName.equals(name);
 				
-				if((ignoreCase ? cf.name.toLowerCase() : cf.name).equals(name)) {
+				if(matched) {
 					if(power == null || (cf.power != null && getConversion(cf.power).equals(power))) {
 						if(toughness == null || (cf.toughness != null && getConversion(cf.toughness).equals(toughness))) { 	
 							return new MatchType(true, face);
 						}
 					}
 		    	}
+			}
+		}
+		else
+		{
+			String cardName = ignoreCase ? c.name.toLowerCase() : c.name;
+			boolean matched = allowContains ? cardName.contains(name) : cardName.equals(name);
+			if(matched) {
+				if(power == null || (c.power != null && getConversion(c.power).equals(power))) {
+					if(toughness == null || (c.toughness != null && getConversion(c.toughness).equals(toughness))) { 	
+						return new MatchType(true, -1);
+					}
+				}
 			}
 		}
 		

@@ -75,7 +75,7 @@ public class SearchHelper {
     	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
     		Card c = i.next();
     		
-    		MatchType match = MatchType.doesTokenMatch(c, name, power, toughness, ignoreCase);
+    		MatchType match = MatchType.doesTokenMatch(c, name, power, toughness, ignoreCase, true);
 			if(match.match == true && ids.add(c.oracle_id)) {
 				String disp = "";
 				
@@ -90,7 +90,7 @@ public class SearchHelper {
 				disp += " " + c.getName(match.card_face);
 				
 				String oracle = c.getOracle(match.card_face);
-				if(!oracle.isEmpty()) {
+				if(oracle !=null && !oracle.isEmpty()) {
 					c.display_oracle = oracle;
 				}
 				
