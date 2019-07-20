@@ -37,8 +37,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" th:href="@{/search}">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/search(mode=text)}">Decklist</a>
+                    <a class="dropdown-item" th:href="@{/search(mode=url)}">URL Import</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/search(mode=tokens)}">Tokens by Name</a>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/about}">About</a>
