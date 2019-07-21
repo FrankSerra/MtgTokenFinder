@@ -1,11 +1,10 @@
 <div class="list-group" th:fragment="refer_links(source)" 
     th:with="role=${'menuitem'}, rel=${'noreferrer'}, target=${'_blank'}, class=${'list-group-item btn btn-outline-primary'}, onclick=${'$(''#modal-'+source.id+''').modal(''hide'')'}">
     <a th:role="@{${role}}" th:rel="@{${rel}}" th:class="@{${class}}" th:target="@{${target}}" th:onclick="@{${onclick}}" 
-        th:href="${source.scryfall_uri}" >Scryfall</a>
+        th:href="${source.scryfall_uri}">Scryfall</a>
     
     <a role="@{${role}}" th:rel="@{${rel}}" th:class="@{${class}}" th:target="@{${target}}" th:onclick="@{${onclick}}" 
-        th:href="${'https://shop.tcgplayer.com/product/productsearch?id=' + source.tcgplayer_id}" th:unless="${source.tcgplayer_id == null}">TCGPlayer</a>
+        th:href="${source.tcg_url}" th:unless="${source.tcgplayer_id == null}">TCGPlayer</a>
     <a role="@{${role}}" th:rel="@{${rel}}" th:class="${#strings.replace(class,'btn-outline-primary','btn-outline-secondary')}" th:target="@{${target}}" data-dismiss="modal"
-        href="#" th:if="${source.tcgplayer_id == null}">TCGPlayer link not found</a>
-    
+        href="#" th:if="${source.tcgplayer_id == null}">TCGPlayer link not found</a>    
 </div>

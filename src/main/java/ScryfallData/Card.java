@@ -27,6 +27,11 @@ public class Card implements Comparable<Card> {
 	public String calculated_normal;
 	public int 	  matching_face;
 	
+	//Thymeleaf getter
+	public String getTcg_url() {
+		return "https://shop.tcgplayer.com/product/productsearch?id=" + this.tcgplayer_id;
+	}
+	
 	//Color sorting
 	private static final String ORDER= "WUBRG";
 	private static final Comparator<String> WUBRG = new Comparator<String>() {

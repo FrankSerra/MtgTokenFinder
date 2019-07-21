@@ -162,8 +162,8 @@ public class SearchHelper {
     public static void addTokenAndSources(SearchResult searchResult, Card token, Card source) {
     	boolean found = false;
     	
-    	//Determine which card face is being used and trim the other side of the DFC token
-    	int matched_face = 99;
+    	//Determine which card face is being used
+    	int matched_face = -1;
     	if(token.card_faces != null) {
     		for(int i=0; i<token.card_faces.size();i++) {
     			if(source.oracle_text.toLowerCase().contains(token.card_faces.get(i).name.toLowerCase())) {
