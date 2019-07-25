@@ -194,6 +194,10 @@ public class SearchHelper {
     }
     
     public static String prepareSearchTerm(String term) {
+    	return prepareSearchTerm(term, true);
+    }
+    
+    public static String prepareSearchTerm(String term, boolean cutComments) {
     	term = StringEscapeUtils.unescapeHtml4(term).trim();
 		term = term.replace("\r", "").replace("SB: ", "").replaceAll("^[0-9]+\\w* ", "").trim();
 		
@@ -211,11 +215,13 @@ public class SearchHelper {
 			term = captureBetweenParens.group();
 		}
 		
-		Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
-		Matcher symbolCut = symbolCutPattern.matcher(term);
-		
-		if(symbolCut.find()) {
-			term = term.substring(0, symbolCut.start());
+		if(cutComments) {
+			Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
+			Matcher symbolCut = symbolCutPattern.matcher(term);
+			
+			if(symbolCut.find()) {
+				term = term.substring(0, symbolCut.start());
+			}
 		}
 		
 		term = term.replace(" / ", " // ");

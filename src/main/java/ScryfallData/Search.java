@@ -28,8 +28,11 @@ public class Search {
 	private static ArrayList<Card> copyToken = null;
 	private static ArrayList<Card> amassToken = null;
 	private static ArrayList<Card> treasureToken = null;
-	
 	private static ArrayList<String> search_string_remove_duplicates(ArrayList<String> terms) {
+		return search_string_remove_duplicates(terms, true);
+	}
+	
+	private static ArrayList<String> search_string_remove_duplicates(ArrayList<String> terms, boolean cutComments) {
 		//Use a Set to remove duplicates, then put back into a sorted List
 		HashSet<String> uniqueTerms = new HashSet<String> (terms);
 		terms.clear();
@@ -38,7 +41,7 @@ public class Search {
 		//Prepare search terms
 		String[] termsArray = terms.toArray(new String[0]);
 		for(int i=0; i<termsArray.length; i++) {
-			termsArray[i] = SearchHelper.prepareSearchTerm(termsArray[i]);
+			termsArray[i] = SearchHelper.prepareSearchTerm(termsArray[i], cutComments);
 		}
 		
 		terms = new ArrayList<String>();
@@ -261,7 +264,7 @@ public class Search {
 		ArrayList<String> terms = new ArrayList<String>();
 		ArrayList<String> notfound = new ArrayList<String>();
 		terms.addAll(Arrays.asList(tokenlist.split("\n")));
-		terms = search_string_remove_duplicates(terms);
+		terms = search_string_remove_duplicates(terms, false);
 				
 		for(String t: terms) {
 			String[] term = RegexHelper.extractPowerToughness(t);
