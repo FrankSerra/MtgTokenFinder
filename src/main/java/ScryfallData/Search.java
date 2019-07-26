@@ -322,12 +322,20 @@ public class Search {
 					if(found.all_parts != null) {			
 						boolean goteem = false;
 						for (Related_Card rc: found.all_parts) {
-							Card token = SearchHelper.findToken(sdm.tokens, rc.id);
-							if(token != null) {
-								goteem = true;
-								SearchHelper.addTokenAndSources(searchResult, token, found);	
-								if(OracleTextHelper.oracle_text_contains_create_multiple(found))
-									containsCreate.add(found);
+							if(rc.component.toLowerCase().equals("token")) {
+								Card token = SearchHelper.findToken(sdm.tokens, rc.id);
+								if(token != null) {
+									goteem = true;
+									SearchHelper.addTokenAndSources(searchResult, token, found);	
+									if(OracleTextHelper.oracle_text_contains_create_multiple(found))
+										containsCreate.add(found);
+								}
+							}
+							else if(rc.component.toLowerCase().equals("meld_result")) {
+								Card meld_card = SearchHelper.findCardByName(sdm.cards, true, rc.name, false);
+								if(meld_card != null && OracleTextHelper.oracle_text_contains_create(meld_card)) {
+									containsCreate.add(meld_card);
+								}
 							}
 						}
 						if(!goteem && OracleTextHelper.oracle_text_contains_create(found)) {
