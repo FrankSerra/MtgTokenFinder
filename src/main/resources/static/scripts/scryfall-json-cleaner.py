@@ -132,7 +132,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                         found = True
                         break
         if found is False:
-            for key in ['scryfall_uri', 'image_uris', 'power', 'toughness']:
+            for key in ['image_uris', 'power', 'toughness']:
                 try:
                     del card[key]
                 except:
@@ -155,7 +155,7 @@ with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
                         found = True
                         break
         if found is False:
-            for key in ['scryfall_uri', 'image_uris', 'power', 'toughness']:
+            for key in ['image_uris', 'power', 'toughness']:
                 try:
                     del card[key]
                 except:

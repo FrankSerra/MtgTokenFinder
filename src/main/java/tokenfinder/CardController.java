@@ -120,4 +120,10 @@ public class CardController {
 		model.addAttribute("errors", tbnrc.errors.size() > 0 ? tbnrc.errors : null);
     	return "token_name_results";
     }
+	
+	@GetMapping("/dead")
+	public String deadcards(Model model) {
+		model.addAttribute("results", Search.findDeadTokenCreators());
+		return "deadcards";
+	}
 }

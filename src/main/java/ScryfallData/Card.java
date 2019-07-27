@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import HelperObjects.ImageSize;
 import HelperObjects.SearchHelper;
 
 public class Card implements Comparable<Card> {
@@ -214,6 +215,25 @@ public class Card implements Comparable<Card> {
 		}
 		
 		return name;
+	}
+	
+	public boolean hasScryfallRelatedToken() {
+		if(this.all_parts == null) {
+			return false;
+		}
+		
+		for(Related_Card rc: this.all_parts) {
+			if(rc.component.equalsIgnoreCase("token")) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void setImages(boolean back) {
+		this.calculated_small = ScryfallDataManager.getImageApiURL(this, ImageSize.small, back);
+		this.calculated_normal = ScryfallDataManager.getImageApiURL(this, ImageSize.normal, back);
 	}
 
 }

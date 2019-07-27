@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.jni.Time;
 
 import HelperObjects.ImageSize;
 import HelperObjects.MatchType;
@@ -28,6 +30,7 @@ public class Search {
 	private static ArrayList<Card> copyToken = null;
 	private static ArrayList<Card> amassToken = null;
 	private static ArrayList<Card> treasureToken = null;
+	
 	private static ArrayList<String> search_string_remove_duplicates(ArrayList<String> terms) {
 		return search_string_remove_duplicates(terms, true);
 	}
@@ -66,38 +69,50 @@ public class Search {
 		return search_string_remove_duplicates(terms);
 	}
 	
+	private static List<Card> findTipCards(ScryfallDataManager sdm, Card found) {
+		List<Card> tipcards = new ArrayList<Card>();
+		
+		if(OracleTextHelper.oracle_text_contains(found, "experience counter"))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "Experience Counter"));
+		
+		if(OracleTextHelper.oracle_text_contains(found, "the monarch"))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "The Monarch"));
+		
+		if(OracleTextHelper.oracle_text_contains(found, "{E}"))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "Energy Reserve"));
+		
+		if(OracleTextHelper.oracle_text_contains(found, "the city's blessing"))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "City's Blessing"));
+		
+		if(OracleTextHelper.oracle_text_contains(found, "infect ") || 
+		   OracleTextHelper.oracle_text_contains(found, "infect.") || 
+		   OracleTextHelper.oracle_text_contains(found, "poison counter"))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "Poison Counter"));					
+		
+		if(OracleTextHelper.oracle_text_contains(found, "manifest th") || 
+		   OracleTextHelper.oracle_text_contains(found, "manifest one") || 
+		   OracleTextHelper.oracle_text_contains(found, "manifests "))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "Manifest"));
+		
+		if(OracleTextHelper.oracle_text_contains(found, "megamorph ") || 
+		   OracleTextHelper.oracle_text_contains_regex_multiline(found, "^Morph "))
+			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "Morph"));
+		
+		return tipcards;
+	}
+	
 	private static void processForTipCards(ScryfallDataManager sdm, SearchResult searchResult, Card found) {
 		//Check for tip cards
 		if(found != null) {
-			if(OracleTextHelper.oracle_text_contains(found, "experience counter"))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "Experience Counter"), found);
-			
-			if(OracleTextHelper.oracle_text_contains(found, "the monarch"))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "The Monarch"), found);
-			
-			if(OracleTextHelper.oracle_text_contains(found, "{E}"))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "Energy Reserve"), found);
-			
-			if(OracleTextHelper.oracle_text_contains(found, "the city's blessing"))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "City's Blessing"), found);
-			
-			if(OracleTextHelper.oracle_text_contains(found, "infect ") || 
-			   OracleTextHelper.oracle_text_contains(found, "infect.") || 
-			   OracleTextHelper.oracle_text_contains(found, "poison counter"))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "Poison Counter"), found);					
-			
-			if(OracleTextHelper.oracle_text_contains(found, "manifest th") || 
-			   OracleTextHelper.oracle_text_contains(found, "manifest one") || 
-			   OracleTextHelper.oracle_text_contains(found, "manifests "))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "Manifest"), found);
-			
-			if(OracleTextHelper.oracle_text_contains(found, "megamorph ") || 
-			   OracleTextHelper.oracle_text_contains_regex_multiline(found, "^Morph "))
-				SearchHelper.addTokenAndSources(searchResult, SearchHelper.findTipCard(sdm.tipcards, "Morph"), found);
+			for(Card tip: findTipCards(sdm, found)) {
+				SearchHelper.addTokenAndSources(searchResult, tip, found);
+			}
 		}		
 	}
 	
-	private static void processForManuallyCheckedTokens(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
+	private static List<Card> findManuallyCheckedTokens(ScryfallDataManager sdm, Card cc) {
+		List<Card> manual_tokens = new ArrayList<Card>();
+		
 		//Check for copy tokens
 		if(OracleTextHelper.oracle_text_contains(cc, "that's a copy of") || OracleTextHelper.oracle_text_contains(cc, "that are copies of")) {
 
@@ -122,7 +137,7 @@ public class Search {
 				copyToken = SearchHelper.findTokensByName(sdm.tokens, "Copy", null, null, true);
 			
 			if(copyToken != null && copyToken.size() > 0)
-				SearchHelper.addTokenAndSources(searchResult, copyToken.get(0), cc);	
+				manual_tokens.add(copyToken.get(0));	
 		}
 		
 		//Check for amass tokens
@@ -131,7 +146,7 @@ public class Search {
 				amassToken = SearchHelper.findTokensByName(sdm.tokens, "Zombie Army", "0", "0", true);
 			
 			if(amassToken != null && amassToken.size() > 0)
-				SearchHelper.addTokenAndSources(searchResult, amassToken.get(0), cc);
+				manual_tokens.add(amassToken.get(0));
 		}		
 		
 		//Check for Treasure tokens because Smothering Tithe is the bane of my existence
@@ -140,8 +155,16 @@ public class Search {
 				treasureToken = SearchHelper.findTokensByName(sdm.tokens, "Treasure", null, null, true);
 			
 			if(treasureToken != null && treasureToken.size() > 0)
-				SearchHelper.addTokenAndSources(searchResult, treasureToken.get(0), cc);
+				manual_tokens.add(treasureToken.get(0));
 		}
+		
+		return manual_tokens;
+	}
+	
+	private static void processForManuallyCheckedTokens(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
+		for(Card token: findManuallyCheckedTokens(sdm, cc)) {
+			SearchHelper.addTokenAndSources(searchResult, token, cc);
+		}	
 	}
 	
 	private static void processTokenGuesses(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
@@ -374,4 +397,48 @@ public class Search {
     	
     	return searchResult;
     }
+	
+	public static List<Card> findDeadTokenCreators() {
+		ScryfallDataManager sdm = new ScryfallDataManager(true);
+		List<Card> 			dead_cards = new ArrayList<Card>();
+		Set<String>			oracle_ids = new HashSet<String>();
+		Set<String>			negated_ids = new HashSet<String>();
+
+		//First remove all cards with officially-related tokens
+		Iterator<Card> it = sdm.cards.listIterator();
+		while(it.hasNext()) {
+			Card c = it.next();
+			if(c.hasScryfallRelatedToken() == true) {
+				negated_ids.add(c.oracle_id);
+			}
+			
+			if(OracleTextHelper.oracle_text_contains_create(c) == false) {
+				negated_ids.add(c.oracle_id);
+			}
+			
+			if(negated_ids.contains(c.oracle_id)) {
+				it.remove();
+			}
+		}
+		
+		for(Card c: sdm.cards) {
+			if(findTipCards(sdm, c).size() == 0) {
+				if(findManuallyCheckedTokens(sdm, c).size() == 0) {
+					for(TokenGuess tg : SearchHelper.prepareTokenGuess(c)) {
+						if(!tg.name.isEmpty()) {
+							if(SearchHelper.findTokensByName(sdm.tokens, tg.name, tg.power, tg.toughness, true).size() == 0) {
+								if(oracle_ids.add(c.oracle_id)) {
+									System.out.println(tg.name);
+									c.setImages(false);
+									dead_cards.add(c);
+								}
+							}
+					    }
+					}
+				}
+			}
+		}
+		Collections.sort(dead_cards);
+		return dead_cards;
+	}
 }

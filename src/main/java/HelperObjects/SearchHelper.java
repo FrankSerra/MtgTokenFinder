@@ -12,6 +12,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import ScryfallData.Card;
+import ScryfallData.CardFace;
 import ScryfallData.ScryfallDataManager;
 import ThymeleafEntities.SearchResult;
 import ThymeleafEntities.TokenGuess;
@@ -174,11 +175,8 @@ public class SearchHelper {
     	}
     	
 		//Calculated image links
-		token.calculated_small  = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.small, matched_face==1);
-		token.calculated_normal = ScryfallDataManager.getImageApiURL(token, HelperObjects.ImageSize.normal, matched_face==1);
-		
-		source.calculated_small  = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.small, matched_face==1);
-		source.calculated_normal = ScryfallDataManager.getImageApiURL(source, HelperObjects.ImageSize.normal, matched_face==1);
+		token.setImages(matched_face == 1);		
+		source.setImages(matched_face == 1);
     	
 		for (TokenResult tr: searchResult.tokenResults) {
 			if(tr.token.oracle_id.equals(token.oracle_id)) {
@@ -229,12 +227,15 @@ public class SearchHelper {
 		return term.trim();
     }
     
-    public static List<TokenGuess> prepareTokenGuess(Card cc) {
-    	String 				search_text = cc.oracle_text;
+    public static List<TokenGuess> prepareTokenGuessFromString(String search_text) {
+    	String 				original = search_text;
     	List<TokenGuess> 	all_guesses = new ArrayList<TokenGuess>();
     	TokenGuess			currentGuess;
     	String 				tokenName = "";
         String 				power = null, toughness = null;
+        
+        if(search_text == null)
+        	return all_guesses;
         
         //Need to explicitly pull "tokens named" first, otherwise they won't be processed right
     	Pattern patternNamed = Pattern.compile("(?<=(C|c)reates? )(.*)(?= tokens? named )");
@@ -251,15 +252,18 @@ public class SearchHelper {
 	    	
 	    	//Check if this uses the "token named N" oracle text pattern
 	    	Pattern namedN = Pattern.compile("(?<=token named ).*");
-	    	Matcher namedNmatch = namedN.matcher(cc.oracle_text);
+	    	Matcher namedNmatch = namedN.matcher(original);
 	    	if(namedNmatch.find()) {
 	    		tokenClause = namedNmatch.group();
 	    	}	 
 	    	
 	    	//Determine final search name
 	    	tokenName = RegexHelper.extractName(tokenClause);
-	        if(tokenName != null) {
-		        currentGuess = new TokenGuess(tokenName, power, toughness);
+	    	if(tokenName != null) {
+	    		if(tokenName.endsWith("."))
+		    		tokenName = tokenName.substring(0, tokenName.length()-1);
+	    		
+	    		currentGuess = new TokenGuess(tokenName, power, toughness);
 			    if(!all_guesses.contains(currentGuess)) {
 			    	all_guesses.add(currentGuess);
 			    }
@@ -288,6 +292,21 @@ public class SearchHelper {
 	    }
 	    
 	    return all_guesses;
+    }
+    
+    public static List<TokenGuess> prepareTokenGuess(Card cc) {
+    	List<TokenGuess> guesses = new ArrayList<TokenGuess>();
+    	
+    	if(cc.oracle_text != null) {
+    		guesses.addAll(prepareTokenGuessFromString(cc.oracle_text));
+    	}
+    	else {
+    		for(CardFace cf: cc.card_faces) {
+    			guesses.addAll(prepareTokenGuessFromString(cf.oracle_text));
+    		}
+    	}
+    	
+    	return guesses;
     }
     
     public static String letterToWord(String s) {
