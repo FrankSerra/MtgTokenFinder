@@ -1,9 +1,12 @@
 import json
 import re
+import requests
 
 print("Reading list...")
-with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
-    all_cards = json.load(fin)
+#with open("scryfall-default-cards.json", mode='r', encoding='utf-8') as fin:
+with requests.get(url="https://archive.scryfall.com/json/scryfall-default-cards.json") as r:
+    #all_cards = json.load(fin)
+    all_cards = r.json()
 
     #only paper cards in English
     all_cards = [x for x in all_cards if 'paper' in x['games'] if x['lang'] == 'en' if x['digital'] is False]
