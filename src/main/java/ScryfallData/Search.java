@@ -428,7 +428,6 @@ public class Search {
 						if(!tg.name.isEmpty()) {
 							if(SearchHelper.findTokensByName(sdm.tokens, tg.name, tg.power, tg.toughness, true).size() == 0) {
 								if(oracle_ids.add(c.oracle_id)) {
-									System.out.println(tg.name);
 									c.setImages(false);
 									dead_cards.add(c);
 								}
