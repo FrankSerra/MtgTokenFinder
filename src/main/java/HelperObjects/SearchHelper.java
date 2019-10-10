@@ -75,9 +75,11 @@ public class SearchHelper {
 					disp += c.getPower(match.card_face) + "/" + c.getToughness(match.card_face) + " ";
 				}
 
-				disp += c.buildColorPhrase(c.getColors(match.card_face));
+				if(!c.getFullTypeline(match.card_face).contains("Emblem")) {
+					disp += c.buildColorPhrase(c.getColors(match.card_face));
 
-				disp += " " + c.getTypes(match.card_face);
+					disp += " " + c.getTypes(match.card_face);
+				}
 
 				disp += " " + c.getName(match.card_face);
 

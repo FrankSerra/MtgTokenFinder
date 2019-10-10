@@ -354,7 +354,7 @@ public class Search {
 					if(found.all_parts != null) {			
 						boolean goteem = false;
 						for (Related_Card rc: found.all_parts) {
-							if(rc.component.toLowerCase().equals("token")) {
+							if(rc.component.toLowerCase().equals("token") || rc.component.toLowerCase().equals("combo_piece")) {
 								Card token = SearchHelper.findToken(sdm.tokens, rc.id);
 								if(token != null) {
 									goteem = true;
