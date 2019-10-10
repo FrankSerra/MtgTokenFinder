@@ -28,16 +28,16 @@ public class OracleTextHelper {
 	
 	public static int oracle_text_contains_create_count(Card c) {
     	if(c.oracle_text != null) {
-    		return (StringUtils.countMatches(c.oracle_text, "Create") + StringUtils.countMatches(c.oracle_text, " create"));
+    		return (StringUtils.countMatches(c.oracle_text, "Create") + StringUtils.countMatches(c.oracle_text, " create") - StringUtils.countMatches(c.oracle_text, " created"));
     	}
     	else if(c.card_faces != null && c.card_faces.size() == 2) {
     		return Math.max(
-    				StringUtils.countMatches(c.card_faces.get(0).oracle_text, "Create") + StringUtils.countMatches(c.card_faces.get(0).oracle_text, " create"), 
-    				StringUtils.countMatches(c.card_faces.get(1).oracle_text, "Create") + StringUtils.countMatches(c.card_faces.get(1).oracle_text, " create")
+    				StringUtils.countMatches(c.card_faces.get(0).oracle_text, "Create") + StringUtils.countMatches(c.card_faces.get(0).oracle_text, " create") - StringUtils.countMatches(c.card_faces.get(0).oracle_text, " created"),
+    				StringUtils.countMatches(c.card_faces.get(1).oracle_text, "Create") + StringUtils.countMatches(c.card_faces.get(1).oracle_text, " create") - StringUtils.countMatches(c.card_faces.get(1).oracle_text, " created")
     				);
     	}
     	else if(c.card_faces != null && c.card_faces.size() == 1) {
-    		return StringUtils.countMatches(c.card_faces.get(0).oracle_text, "Create") + StringUtils.countMatches(c.card_faces.get(0).oracle_text, " create");
+    		return StringUtils.countMatches(c.card_faces.get(0).oracle_text, "Create") + StringUtils.countMatches(c.card_faces.get(0).oracle_text, " create") - StringUtils.countMatches(c.card_faces.get(0).oracle_text, " created");
     	}
     	
     	return 0;
