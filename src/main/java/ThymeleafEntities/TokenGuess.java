@@ -1,7 +1,11 @@
 package ThymeleafEntities;
 
+import java.util.Objects;
+
 public class TokenGuess {
-	public String name, power, toughness;
+	public final String name;
+    public final String power;
+    public final String toughness;
 	
 	public TokenGuess(String _name, String _power, String _toughness) {
 		this.name 	   = _name;
@@ -13,7 +17,7 @@ public class TokenGuess {
     public boolean equals(Object obj) {
         if (obj != null && getClass() == obj.getClass()) {
             TokenGuess q = (TokenGuess)obj;
-            return name == q.name && power == q.power && toughness == q.toughness;
+            return Objects.equals(name, q.name) && Objects.equals(power, q.power) && Objects.equals(toughness, q.toughness);
         }
         return false;
     }

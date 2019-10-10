@@ -2,7 +2,6 @@ package HelperObjects;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -23,46 +22,39 @@ public class SearchHelper {
 	public static Card findCardByName(List<Card> cards, boolean matchExact, String name, boolean stripAccents) {
     	Card ret = null;
     	Card backup = null;
-    	
-    	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
-    		Card c = i.next();
 
-    		if(c.name.equalsIgnoreCase(name)) {
-    			if(ret == null)
-    				ret = c;
-    			else if(c.all_parts != null) {
+		for (Card c : cards) {
+			if (c.name.equalsIgnoreCase(name)) {
+				if (ret == null)
 					ret = c;
-    			}
-    		}
-    		else if(stripAccents && StringUtils.stripAccents(c.name).equalsIgnoreCase(StringUtils.stripAccents(name))) {
-    			ret = c;
-    		}
-    		else if(!matchExact && StringUtils.containsIgnoreCase(c.name, name)) {
-    			if(backup == null)
-    				backup = c;
-    			else if(c.all_parts != null) {
-    				backup = c;
-    			}
-    		}
-    		else if(c.card_faces != null) {
-    			for(int x=0; x<c.card_faces.size(); x++) {
-    				if(c.card_faces.get(x).name.equalsIgnoreCase(name)) {
-    					backup = c;
-    					break;
-    				}
-    			}
-    		}
-    	}
+				else if (c.all_parts != null) {
+					ret = c;
+				}
+			} else if (stripAccents && StringUtils.stripAccents(c.name).equalsIgnoreCase(StringUtils.stripAccents(name))) {
+				ret = c;
+			} else if (!matchExact && StringUtils.containsIgnoreCase(c.name, name)) {
+				if (backup == null)
+					backup = c;
+				else if (c.all_parts != null) {
+					backup = c;
+				}
+			} else if (c.card_faces != null) {
+				for (int x = 0; x < c.card_faces.size(); x++) {
+					if (c.card_faces.get(x).name.equalsIgnoreCase(name)) {
+						backup = c;
+						break;
+					}
+				}
+			}
+		}
     	return ret != null? ret : backup;
     }
     
     public static Card findToken(List<Card> cards, String scryfall_id) {
-    	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
-    		Card c = i.next();
-    		
-    		if(c.id.equals(scryfall_id))
-    			return c;
-    	}
+		for (Card c : cards) {
+			if (c.id.equals(scryfall_id))
+				return c;
+		}
     	return null;
     }
         
@@ -71,40 +63,38 @@ public class SearchHelper {
     }
    
     public static ArrayList<Card> findTokensByName(List<Card> cards, String name, String power, String toughness, boolean firstOnly, boolean ignoreCase) {
-    	ArrayList<Card> matches = new ArrayList<Card>();
-    	Set<String> ids = new HashSet<String>();
-    	
-    	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
-    		Card c = i.next();
-    		
-    		MatchType match = MatchType.doesTokenMatch(c, name, power, toughness, ignoreCase, true);
-			if(match.match && ids.add(c.oracle_id)) {
+    	ArrayList<Card> matches = new ArrayList<>();
+    	Set<String> ids = new HashSet<>();
+
+		for (Card c : cards) {
+			MatchType match = MatchType.doesTokenMatch(c, name, power, toughness, ignoreCase, true);
+			if (match.match && ids.add(c.oracle_id)) {
 				String disp = "";
-				
-				if(c.getPower(match.card_face) != null) {
+
+				if (c.getPower(match.card_face) != null) {
 					disp += c.getPower(match.card_face) + "/" + c.getToughness(match.card_face) + " ";
 				}
-				
+
 				disp += c.buildColorPhrase(c.getColors(match.card_face));
-				
+
 				disp += " " + c.getTypes(match.card_face);
-				
+
 				disp += " " + c.getName(match.card_face);
-				
+
 				String oracle = c.getOracle(match.card_face);
-				if(oracle !=null && !oracle.isEmpty()) {
+				if (oracle != null && !oracle.isEmpty()) {
 					c.display_oracle = oracle;
 				}
-				
+
 				c.display_name = disp;
-				
-				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
-				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
-				
+
+				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
+				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, ImageSize.normal, match.card_face == 1);
+
 				c.matching_face = match.card_face;
 				matches.add(c);
-				
-				if(firstOnly)
+
+				if (firstOnly)
 					break;
 			}
 		}
@@ -113,34 +103,32 @@ public class SearchHelper {
     }
     
     public static ArrayList<Card> findTokenPrintingsByName(List<Card> cards, Card firstResult, int face) {
-    	ArrayList<Card> matches = new ArrayList<Card>();
-    	
-	   	for (Iterator<Card> i = cards.iterator(); i.hasNext();) {
-    		Card c = i.next();
-    		
-    		MatchType match = MatchType.doesTokenPrintingMatch(c, firstResult, face);
-			if(match.match) {
-				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
-				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
-				
-				if(c.set.substring(0,1).equals("t")) {
+    	ArrayList<Card> matches = new ArrayList<>();
+
+		for (Card c : cards) {
+			MatchType match = MatchType.doesTokenPrintingMatch(c, firstResult, face);
+			if (match.match) {
+				c.calculated_small = ScryfallDataManager.getImageApiURL(c, ImageSize.small, match.card_face == 1);
+				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, ImageSize.normal, match.card_face == 1);
+
+				if (c.set.substring(0, 1).equals("t")) {
 					c.set = c.set.substring(1);
 				}
-				
+
 				c.set = c.set.toUpperCase();
-				
+
 				String mods = "";
-				if(c.foil) {
+				if (c.foil) {
 					mods += "FOIL ";
 				}
-				if(c.card_faces != null) {
+				if (c.card_faces != null) {
 					mods += "DFC ";
 				}
-				
-				if(!mods.isEmpty()) {
+
+				if (!mods.isEmpty()) {
 					c.set += " (" + mods.trim() + ")";
 				}
-				
+
 				matches.add(c);
 			}
 		}
@@ -204,18 +192,18 @@ public class SearchHelper {
 		if(term.matches("^\\/\\/.*") || term.matches("^#.*") || !term.matches(".*[a-zA-Z].*"))
 			return "";
 		
-		Matcher captureBetweenParens = Pattern.compile("(?<=(\\)|\\]))[\\w,'\" -_:!\\?&]+").matcher(term);
+		Matcher captureBetweenParens = Pattern.compile("(?<=[)\\]])[\\w,'\" -_:!?&]+").matcher(term);
 		if(captureBetweenParens.find()) {
 			term = captureBetweenParens.group();
 		}
 		
-		captureBetweenParens = Pattern.compile(".*(?=(\\(|\\[))").matcher(term);
+		captureBetweenParens = Pattern.compile(".*(?=[(\\[])").matcher(term);
 		if(captureBetweenParens.find()) {
 			term = captureBetweenParens.group();
 		}
 		
 		if(cutComments) {
-			Pattern symbolCutPattern = Pattern.compile("[\\(\\[\\*#]");
+			Pattern symbolCutPattern = Pattern.compile("[(\\[*#]");
 			Matcher symbolCut = symbolCutPattern.matcher(term);
 			
 			if(symbolCut.find()) {
@@ -230,7 +218,7 @@ public class SearchHelper {
     
     private static List<TokenGuess> prepareTokenGuessFromString(String search_text) {
     	String 				original = search_text;
-    	List<TokenGuess> 	all_guesses = new ArrayList<TokenGuess>();
+    	List<TokenGuess> 	all_guesses = new ArrayList<>();
     	TokenGuess			currentGuess;
     	String 				tokenName;
         String 				power, toughness;
@@ -239,7 +227,7 @@ public class SearchHelper {
         	return all_guesses;
         
         //Need to explicitly pull "tokens named" first, otherwise they won't be processed right
-    	Pattern patternNamed = Pattern.compile("(?<=(C|c)reates? )(.*)(?= tokens? named )");
+    	Pattern patternNamed = Pattern.compile("(?<=[Cc]reates? )(.*)(?= tokens? named )");
         Matcher matcherNamed = patternNamed.matcher(search_text);
 	    while(matcherNamed.find()) {
 	    	String tokenClause = matcherNamed.group();
@@ -272,7 +260,7 @@ public class SearchHelper {
 	    }
 	    
         //Match normal tokens
-    	Pattern pattern = Pattern.compile("(?<=(C|c)reates? )(.*)(?= token)");
+    	Pattern pattern = Pattern.compile("(?<=[Cc]reates? )(.*)(?= token)");
         Matcher matcher = pattern.matcher(search_text);
 	    while(matcher.find()) {
 	    	String tokenClause = matcher.group();  

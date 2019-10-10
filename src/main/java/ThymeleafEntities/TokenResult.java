@@ -14,7 +14,7 @@ public class TokenResult implements Serializable, Comparable<TokenResult> {
 	
 	public TokenResult(Card token, Card source, String error) {
 		this.token = token;
-		this.sources = new ArrayList<Card>();
+		this.sources = new ArrayList<>();
 		this.sources.add(source);
 		this.error = error;
 	}

@@ -43,14 +43,6 @@ div.card {
     }
 }
 
-img.dfc {
-    object-fit: cover;
-}
-
-div.dfc {
-    display: inline-block !important;
-}
-
 .text-no-select {
 	user-select: none;
 }

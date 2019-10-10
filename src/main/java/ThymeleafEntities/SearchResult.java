@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResult {
-	public List<String> errors, full_list;
-	public List<TokenResult> tokenResults;
-	public List<ContainsCreateResult> containsCreate;
+	public List<String> errors;
+	public final List<String> full_list;
+	public final List<TokenResult> tokenResults;
+	public final List<ContainsCreateResult> containsCreate;
 	
 	public SearchResult() {
-		this.full_list = new ArrayList<String>();
-		this.errors = new ArrayList<String>();
-		this.tokenResults = new ArrayList<TokenResult>();
-		this.containsCreate = new ArrayList<ContainsCreateResult>();
+		this.full_list = new ArrayList<>();
+		this.errors = new ArrayList<>();
+		this.tokenResults = new ArrayList<>();
+		this.containsCreate = new ArrayList<>();
 	}
 	
 	public SearchResult(List<String> full_list, List<String> errors, List<TokenResult> tokenResults, List<ContainsCreateResult> containsCreate) {

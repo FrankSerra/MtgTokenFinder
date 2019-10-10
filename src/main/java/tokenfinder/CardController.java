@@ -70,7 +70,7 @@ public class CardController {
     
 	@PostMapping("/fromurl")
     public String fromurl(@RequestParam(name="deckurl", required=true, defaultValue="") String deckurl, @RequestParam(name="includeSilver", required=true, defaultValue="") String includeSilver, Model model) {
-    	UrlProcessResponse resp=null;
+    	UrlProcessResponse resp;
     	try {
     		if(deckurl.isEmpty())
     			throw new URISyntaxException("", "");

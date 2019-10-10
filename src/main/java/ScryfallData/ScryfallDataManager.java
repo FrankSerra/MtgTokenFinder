@@ -14,9 +14,9 @@ import HelperObjects.ImageSize;
 import tokenfinder.CardController;
 
 public class ScryfallDataManager {
-	public ArrayList<Card> cards, tokens, tipcards;
+	ArrayList<Card> cards, tokens, tipcards;
 	
-	public ScryfallDataManager(boolean includeSilver) {
+	ScryfallDataManager(boolean includeSilver) {
 		try {
 			
 			this.cards = loadCards();
@@ -40,9 +40,8 @@ public class ScryfallDataManager {
             
             Gson gson = new Gson();
             Object response = gson.fromJson(br, collectionType);
-            ArrayList<Card> cards = (ArrayList<Card>) response;
-            
-            return cards;
+
+			return (ArrayList<Card>) response;
 		}
 		catch(Exception e) {
             throw new Exception(exceptionMsg);

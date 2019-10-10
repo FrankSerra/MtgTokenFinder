@@ -11,7 +11,7 @@ public class TokenByNameResult {
 	
 	public TokenByNameResult(String _term) {
 		this.searchTerm = _term.trim();
-		this.results = new ArrayList<Card>();
+		this.results = new ArrayList<>();
 		
 		this.idHash = this.searchTerm.hashCode();
 	}

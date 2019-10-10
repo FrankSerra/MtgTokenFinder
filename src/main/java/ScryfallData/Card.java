@@ -35,15 +35,10 @@ public class Card implements Comparable<Card> {
 	
 	//Color sorting
 	private static final String ORDER= "WUBRG";
-	private static final Comparator<String> WUBRG = new Comparator<String>() {
-	    @Override
-	    public int compare(String o1, String o2) {
-	       return ORDER.indexOf(o1.toUpperCase()) -  ORDER.indexOf(o2.toUpperCase()) ;
-	    }
-	};
+	private static final Comparator<String> WUBRG = Comparator.comparingInt(o -> ORDER.indexOf(o.toUpperCase()));
 	
 	//Getter methods
-	public String getTokenSummaryTitle(int face) {
+	String getTokenSummaryTitle(int face) {
 		String ret = "";
 		String power = this.getPower(face);
 		String toughness = this.getToughness(face);
@@ -59,21 +54,21 @@ public class Card implements Comparable<Card> {
 	}
 	
 	public String buildColorPhrase(List<String> color_identity) {
-    	String disp = "";
+    	StringBuilder disp = new StringBuilder();
     	if(color_identity==null || color_identity.size() == 0) {
-			disp += "Colorless";
+			disp.append("Colorless");
 		}
 		else {
 			color_identity.sort(WUBRG);
 			for(int idx=0; idx<color_identity.size(); idx++) {
 				if(idx > 0)
-					disp += "-";
+					disp.append("-");
 				
-				disp += SearchHelper.letterToWord(color_identity.get(idx));
+				disp.append(SearchHelper.letterToWord(color_identity.get(idx)));
 				
 			}
 		}
-    	return disp;
+    	return disp.toString();
     }
 	
 	public String buildOracleColorPhrase(List<String> color_identity) {
@@ -99,53 +94,37 @@ public class Card implements Comparable<Card> {
     }
     
     public String getPower(int face) {
-    	switch(face) {
-    	case -1:
-    		return this.power;
-    	default:
-    		return this.card_faces.get(face).power;
-    	}
-    }
+		if (face == -1) {
+			return this.power;
+		}
+		return this.card_faces.get(face).power;
+	}
     
     public String getToughness(int face) {
-    	switch(face) {
-    	case -1:
-    		return this.toughness;
-    	default:
-    		return this.card_faces.get(face).toughness;
-    	}
-    }
+		if (face == -1) {
+			return this.toughness;
+		}
+		return this.card_faces.get(face).toughness;
+	}
     
     public String getName(int face) {
-    	switch(face) {
-    	case -1:
-    		return this.name;
-    	default:
-    		return this.card_faces.get(face).name + " (DFC with: " + this.card_faces.get((face*-1)+1).name + ")";
-    	}
-    }
+		if (face == -1) {
+			return this.name;
+		}
+		return this.card_faces.get(face).name + " (DFC with: " + this.card_faces.get((face * -1) + 1).name + ")";
+	}
     
     public String getNameOnly(int face) {
-    	switch(face) {
-    	case -1:
-    		return this.name;
-    	default:
-    		return this.card_faces.get(face).name;
-    	}
-    }
+		if (face == -1) {
+			return this.name;
+		}
+		return this.card_faces.get(face).name;
+	}
     
     public String getTypes(int face) {
     	//won't return the word "token"
-    	String types = "";
-    	switch(face) {
-    	case -1:
-    		types = this.type_line;
-    		break;
-    	default:
-    		types = this.card_faces.get(face).type_line;
-    		break;
-    	}
-    	    	
+    	String types = this.getFullTypeline(face);
+
     	Pattern pattern = Pattern.compile(".*(?= [^\\w])");
     	Matcher match = pattern.matcher(types);
     	
@@ -158,37 +137,29 @@ public class Card implements Comparable<Card> {
     }
     
     public String getFullTypeline(int face) {
-    	//won't return the word "token"
-    	String types = "";
-    	switch(face) {
-    	case -1:
-    		types = this.type_line;
-    		break;
-    	default:
-    		types = this.card_faces.get(face).type_line;
-    		break;
-    	}
+    	String types;
+		if (face == -1) {
+			types = this.type_line;
+		} else {
+			types = this.card_faces.get(face).type_line;
+		}
     	
     	return types;
     }
     
     public String getOracle(int face) {
-    	switch(face) {
-    	case -1:
-    		return this.oracle_text;
-    	default:
-    		return this.card_faces.get(face).oracle_text;
-    	}
-    }
+		if (face == -1) {
+			return this.oracle_text;
+		}
+		return this.card_faces.get(face).oracle_text;
+	}
     
     public List<String> getColors(int face) {
-    	switch(face) {
-    	case -1:
-    		return this.colors;
-    	default:
-    		return this.card_faces.get(face).colors;
-    	}
-    }
+		if (face == -1) {
+			return this.colors;
+		}
+		return this.card_faces.get(face).colors;
+	}
     
     public void trimCardFace(int face) {
     	if(face > 1)
@@ -205,8 +176,7 @@ public class Card implements Comparable<Card> {
 			if(power == 0) {
 				int tough = this.toughness == null ? 0 : this.toughness.compareTo(o.toughness);
 				if(tough == 0) {
-					int oracle = this.oracle_text == null ? 0 : this.oracle_text.compareTo(o.oracle_text);
-					return oracle;
+					return this.oracle_text == null ? 0 : this.oracle_text.compareTo(o.oracle_text);
 				}
 				else return tough;
 			}
@@ -217,7 +187,7 @@ public class Card implements Comparable<Card> {
 		return name;
 	}
 	
-	public boolean hasScryfallRelatedToken() {
+	boolean hasScryfallRelatedToken() {
 		if(this.all_parts == null) {
 			return false;
 		}

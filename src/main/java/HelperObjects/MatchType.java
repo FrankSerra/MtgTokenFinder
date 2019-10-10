@@ -9,25 +9,25 @@ import ScryfallData.Card;
 import ScryfallData.CardFace;
 
 public class MatchType {
-	public int card_face;
-	public boolean match;
+	final int card_face;
+	public final boolean match;
 	private static final String conversionSymbols = "Xx*";
 	private static final String conversionSymbolsRegex = "Xx\\*";
 	private static final String conversionReplacement = "&";
 	
-	public MatchType(boolean _match, int _face) {
+	private MatchType(boolean _match, int _face) {
 		this.match = _match;
 		this.card_face = _face;
 	}
 	
-	public static String getConversion(String s) {
+	private static String getConversion(String s) {
 		//Make X/X and */* interchangeable - temporarily change both to "&"
 		if(s != null && conversionSymbols.contains(s))
 			s = conversionReplacement;
 		return s;
 	}
 	
-	public static String getOracleTextConversion(String s, boolean already_regex) {
+	static String getOracleTextConversion(String s, boolean already_regex) {
 		Matcher match;
 		String replaced;
 		if(already_regex) {
@@ -46,7 +46,7 @@ public class MatchType {
 		return doesTokenMatch(c, name, power, toughness, false, false);
 	}
 	
-	public static MatchType doesTokenMatch(Card c, String name, String power, String toughness, boolean ignoreCase, boolean allowContains) {
+	static MatchType doesTokenMatch(Card c, String name, String power, String toughness, boolean ignoreCase, boolean allowContains) {
 		power = getConversion(power);
 		toughness = getConversion(toughness);
 		
@@ -98,9 +98,9 @@ public class MatchType {
     	return doesTokenPrintingMatch(c, name, power, toughness, colors, oracle);
 	}
 	
-	public static MatchType doesTokenPrintingMatch(Card c, String name, String power, String toughness, List<String> colors, String oracle_text) {
+	private static MatchType doesTokenPrintingMatch(Card c, String name, String power, String toughness, List<String> colors, String oracle_text) {
 		if(colors == null) {
-			colors = new ArrayList<String>();
+			colors = new ArrayList<>();
 		}
 		
 		if(c.name.equals(name)) {

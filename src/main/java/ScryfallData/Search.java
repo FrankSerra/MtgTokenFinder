@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.jni.Time;
 
 import HelperObjects.ImageSize;
 import HelperObjects.MatchType;
@@ -52,7 +51,7 @@ public class Search {
 		terms.addAll(Arrays.asList(termsArray));
 		
 		//Clear empties, then sort
-		terms.removeIf(p -> p.isEmpty());
+		terms.removeIf(String::isEmpty);
 		Collections.sort(terms);	
 		
 		return terms;
@@ -60,8 +59,7 @@ public class Search {
 	
 	private static ArrayList<String> search_string_to_list(String cardlist) {
     	//Search terms
-		ArrayList<String> terms = new ArrayList<String>();
-		terms.addAll(Arrays.asList(cardlist.split("\\s*\\r?\\n\\s*")));
+		ArrayList<String> terms = new ArrayList<>(Arrays.asList(cardlist.split("\\s*\\r?\\n\\s*")));
 		
 		//Clear obvious list cuts
 		terms.removeIf(p -> StringUtils.containsIgnoreCase(p, "sideboard"));
@@ -71,7 +69,7 @@ public class Search {
 	}
 	
 	private static List<Card> findTipCards(ScryfallDataManager sdm, Card found) {
-		List<Card> tipcards = new ArrayList<Card>();
+		List<Card> tipcards = new ArrayList<>();
 		
 		if(OracleTextHelper.oracle_text_contains(found, "experience counter"))
 			tipcards.add(SearchHelper.findTipCard(sdm.tipcards, "Experience Counter"));
@@ -112,13 +110,13 @@ public class Search {
 	}
 	
 	private static List<Card> findManuallyCheckedTokens(ScryfallDataManager sdm, Card cc) {
-		List<Card> manual_tokens = new ArrayList<Card>();
+		List<Card> manual_tokens = new ArrayList<>();
 		
 		//Check for copy tokens
 		if(OracleTextHelper.oracle_text_contains(cc, "that's a copy of") || OracleTextHelper.oracle_text_contains(cc, "that are copies of")) {
 
 			//Strip the copy text so it won't show up later
-			Pattern pattern = Pattern.compile("(C|c)reate.*cop(y|ies)");
+			Pattern pattern = Pattern.compile("[Cc]reate.*cop(y|ies)");
 			if(cc.oracle_text != null) {
 				Matcher m = pattern.matcher(cc.oracle_text);
 				while(m.find()) {
@@ -137,7 +135,7 @@ public class Search {
 			if(copyToken == null)
 				copyToken = SearchHelper.findTokensByName(sdm.tokens, "Copy", null, null, true);
 			
-			if(copyToken != null && copyToken.size() > 0)
+			if(copyToken.size() > 0)
 				manual_tokens.add(copyToken.get(0));	
 		}
 		
@@ -146,7 +144,7 @@ public class Search {
 			if(amassToken == null)
 				amassToken = SearchHelper.findTokensByName(sdm.tokens, "Zombie Army", "0", "0", true);
 			
-			if(amassToken != null && amassToken.size() > 0)
+			if(amassToken.size() > 0)
 				manual_tokens.add(amassToken.get(0));
 		}		
 		
@@ -155,7 +153,7 @@ public class Search {
 			if(treasureToken == null)
 				treasureToken = SearchHelper.findTokensByName(sdm.tokens, "Treasure", null, null, true);
 			
-			if(treasureToken != null && treasureToken.size() > 0)
+			if(treasureToken.size() > 0)
 				manual_tokens.add(treasureToken.get(0));
 		}
 
@@ -164,7 +162,7 @@ public class Search {
 			if(foodToken == null)
 				foodToken = SearchHelper.findTokensByName(sdm.tokens, "Food", null, null, true);
 
-			if(foodToken != null && foodToken.size() > 0) {
+			if(foodToken.size() > 0) {
 				manual_tokens.add(foodToken.get(0));
 				OracleTextHelper.oracle_text_remove(cc, "[Cc]reate.* Food token");
 			}
@@ -180,7 +178,7 @@ public class Search {
 	}
 	
 	private static void processTokenGuesses(ScryfallDataManager sdm, SearchResult searchResult, Card cc) {
-		ArrayList<Card> guess = new ArrayList<Card>();
+		ArrayList<Card> guess = new ArrayList<>();
 		boolean			foundGuesses = false;
 		
 		//Calculated image links
@@ -196,39 +194,37 @@ public class Search {
 			//Check for emblems
 			if(OracleTextHelper.oracle_text_contains(cc, "emblem ")) {
 				//Emblems need to search for each individual card face
-				
+				boolean hasEmblem = false;
+
 				//If single-face card
 				if(cc.card_faces == null) {
-					boolean hasEmblem = false;
 					for(Card gc: guess) {
-						if(gc.name.equals(cc.name + " Emblem"))
+						if (gc.name.equals(cc.name + " Emblem")) {
 							hasEmblem = true;
-					}
-					if(!hasEmblem) {
-						List<Card> g = SearchHelper.findTokensByName(sdm.tokens, cc.name+" Emblem", null, null, true);
-						if(g != null) {
-							SearchHelper.addTokenAndSources(searchResult, g.get(0), cc);
+							break;
 						}
 					}
 				}
 				//If card is double-faced
 				else {
 					for(CardFace cf: cc.card_faces) {
-						boolean hasEmblem = false;
 						for(Card gc: guess) {
 							if(gc.name.equals(cf.name + " Emblem")) {
 								hasEmblem = true;
 								break;
 							}
 						}
-						if(!hasEmblem) {
-							List<Card> g = SearchHelper.findTokensByName(sdm.tokens, cc.name+" Emblem", null, null, true);
-							if(g != null) {
-								SearchHelper.addTokenAndSources(searchResult, g.get(0), cc);
-							}
-						}
 					}
 				}
+
+				//If no emblem found, search for it
+				if(!hasEmblem) {
+					List<Card> g = SearchHelper.findTokensByName(sdm.tokens, cc.name+" Emblem", null, null, true);
+					if(g.size() > 0) {
+						SearchHelper.addTokenAndSources(searchResult, g.get(0), cc);
+					}
+				}
+
 			}
 
 	    	//Perform confidence matching
@@ -272,7 +268,7 @@ public class Search {
 	
 	public static TokenPrintingsResult tokenPrintings(String oracleid, int face) {
 		ScryfallDataManager sdm = new ScryfallDataManager(true);
-		ArrayList<Card>		results = null;
+		ArrayList<Card>		results;
 		Card 				firstResult = null;
 		
 		//find first result for oracleid
@@ -289,41 +285,40 @@ public class Search {
 			}
 			
 			results = SearchHelper.findTokenPrintingsByName(sdm.tokens, firstResult, face);
+
+			return new TokenPrintingsResult(firstResult.getTokenSummaryTitle(face), results);
 		}
 				
-		return new TokenPrintingsResult(firstResult.getTokenSummaryTitle(face), results);
+		return new TokenPrintingsResult("NOT FOUND", null);
 	}
 
 	public static TokenByNameResultsContainer tokenNameSearchResults(String tokenlist) {
 		ScryfallDataManager sdm = new ScryfallDataManager(false);
-		ArrayList<TokenByNameResult> results = new ArrayList<TokenByNameResult>();
-		
-		ArrayList<String> terms = new ArrayList<String>();
-		ArrayList<String> notfound = new ArrayList<String>();
-		terms.addAll(Arrays.asList(tokenlist.split("\n")));
+		ArrayList<TokenByNameResult> results = new ArrayList<>();
+
+		ArrayList<String> notfound = new ArrayList<>();
+		ArrayList<String> terms = new ArrayList<>(Arrays.asList(tokenlist.split("\n")));
 		terms = search_string_remove_duplicates(terms, false);
 				
 		for(String t: terms) {
 			String[] term = RegexHelper.extractPowerToughness(t);
 			TokenByNameResult tbnr = new TokenByNameResult(t);
 			
-			ArrayList<Card> guesses = SearchHelper.findTokensByName(sdm.tokens, term[2].trim(), term[0], term[1], false, true);			
-			
-			Iterator<Card> it = guesses.iterator();
-			while(it.hasNext()) {
-				Card c = it.next();
+			ArrayList<Card> guesses = SearchHelper.findTokensByName(sdm.tokens, term[2].trim(), term[0], term[1], false, true);
+
+			for (Card c : guesses) {
 				boolean add = true;
-				
-				for(Card tok: tbnr.results) {
-					if(MatchType.doesTokenPrintingMatch(tok, c, c.matching_face).match) {
+
+				for (Card tok : tbnr.results) {
+					if (MatchType.doesTokenPrintingMatch(tok, c, c.matching_face).match) {
 						add = false;
 					}
 				}
-				
-				if(add) {
+
+				if (add) {
 					int paren = c.display_name.indexOf("(");
-					if(paren > -1) {
-						c.display_name = c.display_name.substring(0, paren-1);
+					if (paren > -1) {
+						c.display_name = c.display_name.substring(0, paren - 1);
 					}
 					tbnr.results.add(c);
 				}
@@ -342,7 +337,7 @@ public class Search {
 		ScryfallDataManager sdm = new ScryfallDataManager(includeSilver);
 		SearchResult searchResult = new SearchResult();
 
-		List<Card> containsCreate = new ArrayList<Card>();
+		List<Card> containsCreate = new ArrayList<>();
     	
     	try { 		
 			for (String term: search_string_to_list(cardlist)) {
@@ -404,7 +399,7 @@ public class Search {
     		e.printStackTrace();
     	}
 		
-    	searchResult.errors.removeIf(p -> p.isEmpty());
+    	searchResult.errors.removeIf(String::isEmpty);
 
     	if(searchResult.errors.size() == 0)
     		searchResult.errors = null;
@@ -414,9 +409,9 @@ public class Search {
 	
 	public static List<Card> findDeadTokenCreators() {
 		ScryfallDataManager sdm = new ScryfallDataManager(true);
-		List<Card> 			dead_cards = new ArrayList<Card>();
-		Set<String>			oracle_ids = new HashSet<String>();
-		Set<String>			negated_ids = new HashSet<String>();
+		List<Card> 			dead_cards = new ArrayList<>();
+		Set<String>			oracle_ids = new HashSet<>();
+		Set<String>			negated_ids = new HashSet<>();
 
 		//First remove all cards with officially-related tokens
 		Iterator<Card> it = sdm.cards.listIterator();
