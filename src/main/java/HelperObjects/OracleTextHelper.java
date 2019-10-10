@@ -57,7 +57,7 @@ public class OracleTextHelper {
     	return false;
     }
 	
-	public static boolean oracle_text_contains_regex(Card c, String text) {
+	static boolean oracle_text_contains_regex(Card c, String text) {
 		if(c.oracle_text != null) {
     		return MatchType.getOracleTextConversion(c.oracle_text.replace("\r", "").replace("\n", "").toLowerCase(), false).matches(text.toLowerCase());
     	}
@@ -70,6 +70,19 @@ public class OracleTextHelper {
     	
     	return false;
     }
+
+    public static void oracle_text_remove(Card c, String text) {
+		String line;
+		if(c.oracle_text != null) {
+			c.oracle_text = c.oracle_text.replaceAll(text, "");
+
+		}
+		else if(c.card_faces != null && c.card_faces.size() > 0) {
+			for (CardFace face : c.card_faces) {
+				face.oracle_text = face.oracle_text.replaceAll(text, "");
+			}
+		}
+	}
 	
 	public static boolean oracle_text_contains_regex_multiline(Card c, String text) {
 		Pattern pattern = Pattern.compile(text, Pattern.MULTILINE);

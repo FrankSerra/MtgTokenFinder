@@ -48,6 +48,7 @@ public class SearchHelper {
     			for(int x=0; x<c.card_faces.size(); x++) {
     				if(c.card_faces.get(x).name.equalsIgnoreCase(name)) {
     					backup = c;
+    					break;
     				}
     			}
     		}
@@ -77,7 +78,7 @@ public class SearchHelper {
     		Card c = i.next();
     		
     		MatchType match = MatchType.doesTokenMatch(c, name, power, toughness, ignoreCase, true);
-			if(match.match == true && ids.add(c.oracle_id)) {
+			if(match.match && ids.add(c.oracle_id)) {
 				String disp = "";
 				
 				if(c.getPower(match.card_face) != null) {
@@ -118,7 +119,7 @@ public class SearchHelper {
     		Card c = i.next();
     		
     		MatchType match = MatchType.doesTokenPrintingMatch(c, firstResult, face);
-			if(match.match == true) {
+			if(match.match) {
 				c.calculated_small = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.small, match.card_face == 1);
 				c.calculated_normal = ScryfallDataManager.getImageApiURL(c, HelperObjects.ImageSize.normal, match.card_face == 1);
 				
@@ -186,7 +187,7 @@ public class SearchHelper {
 			}
     	}
     	
-    	if(found == false) {
+    	if(!found) {
     		searchResult.tokenResults.add(new TokenResult(token, source, ""));
     	}
     }
@@ -227,12 +228,12 @@ public class SearchHelper {
 		return term.trim();
     }
     
-    public static List<TokenGuess> prepareTokenGuessFromString(String search_text) {
+    private static List<TokenGuess> prepareTokenGuessFromString(String search_text) {
     	String 				original = search_text;
     	List<TokenGuess> 	all_guesses = new ArrayList<TokenGuess>();
     	TokenGuess			currentGuess;
-    	String 				tokenName = "";
-        String 				power = null, toughness = null;
+    	String 				tokenName;
+        String 				power, toughness;
         
         if(search_text == null)
         	return all_guesses;
@@ -295,7 +296,7 @@ public class SearchHelper {
     }
     
     public static List<TokenGuess> prepareTokenGuess(Card cc) {
-    	List<TokenGuess> guesses = new ArrayList<TokenGuess>();
+    	List<TokenGuess> guesses = new ArrayList<>();
     	
     	if(cc.oracle_text != null) {
     		guesses.addAll(prepareTokenGuessFromString(cc.oracle_text));
@@ -338,6 +339,11 @@ public class SearchHelper {
     	//It is not possible to construct a regex statement that satisfies Smothering Tithe while also satisfying normal creature text
 		if(token.name.equals("Treasure")) {
 			return OracleTextHelper.oracle_text_contains(card, " Treasure token");
+		}
+		//Same for Food tokens
+		else if(token.name.equals("Food")) {
+			System.out.println("Food token found.");
+			return OracleTextHelper.oracle_text_contains(card, " Food token");
 		}
 		
     	//Oracle phrasing is one of: 

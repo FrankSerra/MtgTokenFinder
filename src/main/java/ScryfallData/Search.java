@@ -30,6 +30,7 @@ public class Search {
 	private static ArrayList<Card> copyToken = null;
 	private static ArrayList<Card> amassToken = null;
 	private static ArrayList<Card> treasureToken = null;
+	private static ArrayList<Card> foodToken = null;
 	
 	private static ArrayList<String> search_string_remove_duplicates(ArrayList<String> terms) {
 		return search_string_remove_duplicates(terms, true);
@@ -37,7 +38,7 @@ public class Search {
 	
 	private static ArrayList<String> search_string_remove_duplicates(ArrayList<String> terms, boolean cutComments) {
 		//Use a Set to remove duplicates, then put back into a sorted List
-		HashSet<String> uniqueTerms = new HashSet<String> (terms);
+		HashSet<String> uniqueTerms = new HashSet<> (terms);
 		terms.clear();
 		terms.addAll(uniqueTerms);
 		
@@ -47,7 +48,7 @@ public class Search {
 			termsArray[i] = SearchHelper.prepareSearchTerm(termsArray[i], cutComments);
 		}
 		
-		terms = new ArrayList<String>();
+		terms = new ArrayList<>();
 		terms.addAll(Arrays.asList(termsArray));
 		
 		//Clear empties, then sort
@@ -157,6 +158,17 @@ public class Search {
 			if(treasureToken != null && treasureToken.size() > 0)
 				manual_tokens.add(treasureToken.get(0));
 		}
+
+		//Check for Food tokens because they have the same problem as Treasure
+		if(OracleTextHelper.oracle_text_contains(cc, " Food token")) {
+			if(foodToken == null)
+				foodToken = SearchHelper.findTokensByName(sdm.tokens, "Food", null, null, true);
+
+			if(foodToken != null && foodToken.size() > 0) {
+				manual_tokens.add(foodToken.get(0));
+				OracleTextHelper.oracle_text_remove(cc, "[Cc]reate.* Food token");
+			}
+		}
 		
 		return manual_tokens;
 	}
@@ -204,8 +216,10 @@ public class Search {
 					for(CardFace cf: cc.card_faces) {
 						boolean hasEmblem = false;
 						for(Card gc: guess) {
-							if(gc.name.equals(cf.name + " Emblem"))
+							if(gc.name.equals(cf.name + " Emblem")) {
 								hasEmblem = true;
+								break;
+							}
 						}
 						if(!hasEmblem) {
 							List<Card> g = SearchHelper.findTokensByName(sdm.tokens, cc.name+" Emblem", null, null, true);
@@ -408,11 +422,11 @@ public class Search {
 		Iterator<Card> it = sdm.cards.listIterator();
 		while(it.hasNext()) {
 			Card c = it.next();
-			if(c.hasScryfallRelatedToken() == true) {
+			if(c.hasScryfallRelatedToken()) {
 				negated_ids.add(c.oracle_id);
 			}
 			
-			if(OracleTextHelper.oracle_text_contains_create(c) == false) {
+			if(!OracleTextHelper.oracle_text_contains_create(c)) {
 				negated_ids.add(c.oracle_id);
 			}
 			
