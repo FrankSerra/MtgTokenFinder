@@ -9,7 +9,8 @@ with requests.get(url="https://archive.scryfall.com/json/scryfall-default-cards.
     all_cards = r.json()
 
     #only paper cards in English
-    all_cards = [x for x in all_cards if 'paper' in x['games'] if x['lang'] == 'en' if x['digital'] is False]
+    #if 'paper' in x['games'] //this line is failing for Theros Beyond Death tokens
+    all_cards = [x for x in all_cards if x['lang'] == 'en' if x['digital'] is False]
 
     #Initial set of desirable cards
     clean_cards = [x for x in all_cards if x['border_color'] not in ['gold'] \
